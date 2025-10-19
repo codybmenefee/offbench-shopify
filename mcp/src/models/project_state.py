@@ -28,10 +28,8 @@ class ProjectState:
     # Confidence history for tracking improvement
     confidence_history: List[Dict[str, float]] = field(default_factory=list)
     
-    # Generated deliverables
-    generated_sow: Optional[str] = None
-    generated_implementation_plan: Optional[str] = None
-    generated_technical_specs: Optional[str] = None
+    # Generated deliverables removed - AI agents now write deliverables on-the-fly
+    # using templates as reference examples rather than storing filled versions
     
     # Timestamps
     created_at: datetime = field(default_factory=datetime.now)
@@ -77,9 +75,6 @@ class ProjectState:
             "analysis": self.analysis.to_dict() if self.analysis else None,
             "additional_context": self.additional_context,
             "confidence_history": self.confidence_history,
-            "has_sow": self.generated_sow is not None,
-            "has_implementation_plan": self.generated_implementation_plan is not None,
-            "has_technical_specs": self.generated_technical_specs is not None,
             "created_at": self.created_at.isoformat(),
             "last_updated": self.last_updated.isoformat(),
         }
