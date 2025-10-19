@@ -1,2 +1,2 @@
-web: cd mcp/src && python main.py
+web: cd mcp/src && python railway_start.py
 
