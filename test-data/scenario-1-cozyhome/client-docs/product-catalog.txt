@@ -1,0 +1,169 @@
+COZYHOME PRODUCT CATALOG
+Internal Reference Document
+Last Updated: December 2023
+Version: 2.1
+
+==============================================================================
+
+PRODUCT CATEGORIES & SKU STRUCTURE
+-----------------------------------
+
+Our SKU format: [CATEGORY]-[STYLE]-[SIZE/VARIANT]
+Example: WA-MOD-1824 = Wall Art, Modern, 18x24"
+
+CATEGORY CODES:
+- WA = Wall Art
+- TX = Textiles (pillows, throws, curtains)
+- FU = Furniture
+- AC = Accessories
+- LT = Lighting
+
+==============================================================================
+
+1. WALL ART (WA)
+----------------
+Subcategories:
+- Modern (MOD)
+- Vintage (VIN)  
+- Abstract (ABS)
+- Nature (NAT)
+
+Sizes: 12x16, 18x24, 24x36, 30x40
+Price range: $45 - $185
+
+Popular SKUs:
+WA-MOD-1824 - Modern Geometric Print 18x24 - $65
+WA-VIN-2436 - Vintage Botanical 24x36 - $95
+WA-ABS-3040 - Abstract Watercolor 30x40 - $145
+
+Inventory notes: Wall art is our best seller. We stock 5-10 of each popular design, 2-3 of specialty pieces. Restocking takes 3-4 weeks from our print partner.
+
+==============================================================================
+
+2. TEXTILES (TX)
+----------------
+Subcategories:
+- Pillows (PIL)
+- Throws (THR)
+- Curtains (CUR)
+
+Materials: Cotton, linen, velvet, wool blend
+
+Popular SKUs:
+TX-PIL-VEL18 - Velvet Pillow 18" - $38
+TX-THR-COT50 - Cotton Throw 50x60 - $55
+TX-CUR-LIN84 - Linen Curtains 84" - $89/panel
+
+Inventory notes: Seasonal variations. Stock more throws in fall/winter. Pillows are year-round steady sellers.
+
+==============================================================================
+
+3. FURNITURE (FU)
+-----------------
+Subcategories:
+- Shelving (SHE)
+- Tables (TAB)
+- Seating (SEA)
+
+Note: Furniture is drop-shipped from our supplier. We don't hold inventory on these items - they show as "Made to Order" on the website. Lead time is 4-6 weeks.
+
+Popular SKUs:
+FU-SHE-WAL5 - Walnut Bookshelf 5-tier - $285
+FU-TAB-OAK36 - Oak Side Table 36" - $195
+FU-SEA-ACC01 - Accent Chair - $425
+
+Inventory management: These don't actually sync inventory counts since they're drop-shipped. We just mark them as available unless supplier tells us otherwise.
+
+==============================================================================
+
+4. ACCESSORIES (AC)
+-------------------
+Subcategories:
+- Vases (VAS)
+- Trays (TRA)
+- Frames (FRA)
+- Misc (MIS)
+
+Wide variety of one-off pieces. High turnover. Low inventory depth.
+
+Popular SKUs:
+AC-VAS-CER12 - Ceramic Vase 12" - $34
+AC-TRA-MAR16 - Marble Tray 16" - $58
+AC-FRA-BRS8 - Brass Frame 8x10 - $42
+
+==============================================================================
+
+5. LIGHTING (LT)
+----------------
+Subcategories:
+- Table Lamps (TAB)
+- Floor Lamps (FLO)
+- Pendants (PEN)
+
+Popular SKUs:
+LT-TAB-BRS18 - Brass Table Lamp 18" - $125
+LT-FLO-MOD60 - Modern Floor Lamp 60" - $245
+LT-PEN-GLO10 - Globe Pendant 10" - $95
+
+Inventory notes: Bulbs not included. We used to include them but stopped last year to save costs.
+
+==============================================================================
+
+QUICKBOOKS MAPPING
+------------------
+
+In QuickBooks, David set up Classes that sort of match our categories but not exactly:
+- Wall Art (maps to WA)
+- Textiles (maps to TX)
+- Furniture (maps to FU)
+- Accessories & Lighting (maps to AC and LT combined)
+
+Income accounts:
+- Product Sales - Wall Art
+- Product Sales - Textiles  
+- Product Sales - Furniture
+- Product Sales - Other
+
+Sarah's note: This mapping isn't perfect and causes some confusion. Some products could fit multiple categories. For example, decorative wall shelves - are those Furniture or Accessories?
+
+==============================================================================
+
+PRICING NOTES
+-------------
+- Prices in Shopify include taxes (set to auto-calculate based on customer location)
+- We offer discount codes frequently (10-25% off)
+- Free shipping on orders $75+ 
+- How does shipping cost get recorded in QuickBooks? Need to ask David.
+
+==============================================================================
+
+CURRENT INVENTORY PROCESS
+--------------------------
+When new products arrive:
+1. Sarah counts items
+2. Updates Shopify inventory
+3. Emails David with counts
+4. David updates QuickBooks
+
+When products sell:
+- Shopify automatically decrements
+- Sarah emails David weekly (sometimes) with sales
+- David manually decrements QB (sometimes gets behind)
+
+This is why we keep having syncing issues!
+
+==============================================================================
+
+FUTURE PLANS
+------------
+- Adding more local artisan partnerships (could add 50-100 SKUs this year)
+- Retail location planned for Q3 2024 (will that be separate inventory?)
+- Possibly adding gift bundles (how do bundles work with inventory tracking?)
+
+==============================================================================
+
+NOTES
+-----
+This is an internal working document. Some information may be out of date.
+Our actual SKU count is probably closer to 280 now, not 250.
+

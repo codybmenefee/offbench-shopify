@@ -1,21 +1,39 @@
 """
-Simple ChatGPT App Template - MCP Server
-A minimal template for building ChatGPT apps with FastMCP.
+Discovery to Implementation Confidence Tool - MCP Server
+Autonomous agent tools for processing discovery documents and generating implementation deliverables.
 """
 
+import sys
 from fastmcp import FastMCP
-from tools.math_tools import register_math_tools
-from tools.ux_widget import register_ux_widget_tools
+from tools.discovery_tools import register_discovery_tools
+from tools.template_tools import register_template_tools
 
 # Create FastMCP instance
-mcp = FastMCP()
+mcp = FastMCP(
+    name="Discovery Agent"
+)
 
-# Register tools
-register_math_tools(mcp)
-register_ux_widget_tools(mcp)
+# Register discovery tools
+register_discovery_tools(mcp)
+
+# Register template tools
+register_template_tools(mcp)
 
 if __name__ == "__main__":
-    mcp.run(
-        transport="http",
-        port=8123
-    )
+    # Support both transports via command line
+    # stdio for Cursor/Claude Desktop
+    # http for ChatGPT apps
+    
+    transport = "http"  # default
+    if len(sys.argv) > 1 and sys.argv[1] == "--stdio":
+        transport = "stdio"
+    
+    if transport == "stdio":
+        # For Cursor and Claude Desktop
+        mcp.run(transport="stdio")
+    else:
+        # For ChatGPT apps
+        mcp.run(
+            transport="http",
+            port=8123
+        )

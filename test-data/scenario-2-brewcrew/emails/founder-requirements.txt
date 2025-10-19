@@ -1,0 +1,80 @@
+From: Emma Sullivan <emma@brewcrew.com>
+To: Rachel Torres <rachel@brewcrew.com>
+Cc: Marcus Williams <marcus@lazertechnologies.com>
+Date: Wednesday, January 17, 2024, 7:42 PM
+Subject: Must-haves for Klaviyo integration (before I forget!)
+
+Hey Rachel (and Marcus),
+
+I'm jumping on a red-eye tomorrow morning and wanted to brain-dump some must-haves for the Klaviyo project before I forget. Feel free to forward to the Lazer team.
+
+MUST-HAVES (like seriously can't launch without these):
+
+1. **SUBSCRIPTION DATA EVERYWHERE**
+   - I need to see subscription status in every single customer profile in Klaviyo
+   - Active vs cancelled vs paused - this is THE most important segment
+   - If someone cancels, we need to know immediately so we can trigger win-back campaigns
+
+2. **PRODUCT PREFERENCE TRACKING**
+   - Every customer should be tagged with their roast preference (light/medium/dark)
+   - Also track origin preference if possible (Ethiopian lovers, Colombia fans, etc.)
+   - This is how we personalize. Can't send dark roast promos to someone who only buys light.
+
+3. **REVENUE TRACKING THAT ACTUALLY WORKS**
+   - I need to see $ attributed to each email campaign
+   - ROI tracking is critical. If I'm spending money on email marketing, I need to prove it's working
+   - Historical data would be great too but at minimum, track going forward
+
+4. **REORDER REMINDERS (duh)**
+   - This is literally the whole point of Phase 1
+   - Timing needs to be smart - base it on product size
+   - If someone ignores the first reminder, follow up with a discount
+   - Don't be annoying though. Max 2 reminders then leave them alone.
+
+5. **WIN-BACK FLOW FOR CANCELLED SUBS**
+   - When someone cancels, wait like a week, then start a win-back sequence
+   - Maybe 3-4 emails over a month? First one is empathetic, last one is "here's 25% off to come back"
+   - This is where we're losing the most revenue. Retention is our biggest problem.
+
+NICE-TO-HAVES (but let's talk budget):
+
+- Birthday emails (do we even collect birthdays? we should)
+- Referral program tracking (if they refer a friend, tag them as advocates)
+- Product review requests after delivery
+- VIP tier recognition (customers over $500 lifetime spend)
+
+THINGS I'M WORRIED ABOUT:
+
+- **Spam filters** - If we start sending more emails, will we end up in spam? Do we need to warm up our sending?
+- **Unsubscribes** - What if our unsubscribe rate goes up because we're emailing more? How do we monitor that?
+- **Data privacy** - Are we allowed to email everyone in our database? What about people who didn't explicitly opt in?
+- **Email fatigue** - How do we make sure we're not over-emailing people? Like if someone's in multiple flows, do they get 3 emails in one day?
+
+RANDOM THOUGHTS:
+
+- Can we A/B test subject lines in Klaviyo? That would be sick.
+- What about SMS? Is that part of this or separate?
+- Does Klaviyo have a mobile app? I want to check campaign performance on my phone.
+- Can we see which products are driving the most repeat orders? That would help us plan inventory.
+
+TIMELINE PRESSURE:
+
+Rachel already told you, but I'll say it again - we need this ASAP. Our churn rate is killing us. Every week we delay is lost revenue. I know good work takes time but please don't let this drag into March.
+
+Also, Kevin mentioned something about testing? Yes please. I don't want to accidentally email our entire customer base with a broken link or wrong discount code. Whatever QA process you recommend, I'm on board.
+
+OK that's it. Sorry for the wall of text. Let me know if you have questions. I'll be back from my trip on Saturday.
+
+Thanks!
+Emma
+
+--
+Emma Sullivan
+Founder & CEO, BrewCrew Coffee
+emma@brewcrew.com
+(917) 555-0142
+
+P.S. - Rachel, did you send Lazer our brand voice guide? They should probably read that before building any email templates.
+
+P.P.S. - Marcus, do you folks do email design too or is that on us? Our emails right now are pretty basic. Would be cool to make them more on-brand but not sure if that's in scope.
+

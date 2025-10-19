@@ -1,0 +1,374 @@
+FITFUEL TEAM CHAT EXPORT
+Channel: #operations
+Date Range: January 8-10, 2024
+Participants: 
+- Marcus Chen (Owner/CEO)
+- Sarah Park (Store Manager - Downtown Location)
+- Jason Rivera (Store Manager - Westside Location)
+- Kelly Wu (Warehouse Manager)
+- David Kim (IT/Operations)
+
+==============================================================================
+
+January 8, 2024
+
+[11:23 AM] Sarah Park
+@everyone we have a MAJOR problem. Customer just tried to buy the last pair of size M leggings at downtown. I rang it up, sold it, customer left happy. Then Jason texts me 10 min later saying he just sold the same SKU at Westside. 
+
+[11:24 AM] Sarah Park
+Now Shopify shows -1 inventory for that SKU. How did this happen?? 
+
+[11:26 AM] Jason Rivera
+Wait what? I definitely had 2 pairs in stock here. I checked before I sold them.
+
+[11:27 AM] Kelly Wu
+Ugh, this again. Inventory is out of sync between locations. I thought we fixed this last week?
+
+[11:29 AM] David Kim
+We didn't really "fix" it, we just manually corrected the counts. The underlying problem is that Shopify doesn't know which location has what in real-time.
+
+[11:31 AM] Sarah Park
+So what do we do? Do I call my customer back and tell her we oversold?
+
+[11:33 AM] Marcus Chen
+No, don't call the customer. Jason, can you ship your pair to Sarah's location so she can fulfill that order?
+
+[11:35 AM] Jason Rivera
+Yeah I can do that. But this is going to keep happening unless we fix the system.
+
+[11:37 AM] Marcus Chen
+I know. David, can you explain what's going on technically?
+
+[11:40 AM] David Kim
+Sure. So we have Shopify set up with "multiple locations" but it's not actually syncing properly. When Sarah sells something in-store, it should decrement Downtown location. When Jason sells something, it should decrement Westside location. But the POS app we're using doesn't always update the right location.
+
+[11:43 AM] Kelly Wu
+Also, when I receive inventory at the warehouse, I update Shopify but I don't always know which store it's going to yet. So I just add it to "warehouse" location. Then when it ships to a store, I'm supposed to transfer it in Shopify, but honestly I forget sometimes.
+
+[11:46 AM] Sarah Park
+This is so confusing. Can we just have ONE inventory count for each product instead of splitting it by location?
+
+[11:48 AM] Jason Rivera
+But then we don't know where the product actually is. Like if someone orders online, do we ship from Downtown, Westside, or warehouse? We need location tracking.
+
+[11:51 AM] Marcus Chen
+Jason's right. We need multi-location. But it needs to WORK.
+
+[11:53 AM] David Kim
+The problem is our current POS app (we're using Shopify POS) is supposed to handle this but it's clunky. Plus we have Stocky for purchase orders which is a separate app.
+
+[11:56 AM] Kelly Wu
+Wait, do we even need Stocky? What does that do that Shopify doesn't?
+
+[11:58 AM] David Kim
+Stocky helps with purchase orders, reordering, forecasting. Shopify can track inventory but doesn't have great tools for "when should I reorder" and "how much should I order."
+
+[12:02 PM] Marcus Chen
+We bought Stocky specifically for that reason. It cost money so we should use it.
+
+[12:04 PM] Sarah Park
+OK so back to the immediate problem. Our inventory counts are wrong. Who's going to fix them?
+
+[12:06 PM] Kelly Wu
+I can do a manual audit but it'll take me like 3-4 hours. We have ~180 SKUs across all locations.
+
+[12:08 PM] Jason Rivera
+Can we split the work? Sarah and I can count our store inventory, Kelly counts warehouse?
+
+[12:10 PM] Kelly Wu
+That works. But we need to do it at the same time so no sales happen during the count. Otherwise we'll be off again immediately.
+
+[12:12 PM] Marcus Chen
+OK, let's do it tomorrow morning before stores open. 8am count. Everyone update your location in Shopify by 9am. David, you supervise to make sure it's done right.
+
+[12:14 PM] David Kim
+👍
+
+[12:15 PM] Sarah Park
+Fine, but this is just a band-aid. We need a real solution.
+
+[12:17 PM] Marcus Chen
+Agreed. David, start looking into integration options. Maybe there's a better app or we need a custom integration.
+
+[12:19 PM] David Kim
+I'll research it. In the meantime, everyone PLEASE make sure you're selecting the right location in POS when you make a sale.
+
+[12:21 PM] Jason Rivera
+I always do! Are you saying I'm doing it wrong?
+
+[12:23 PM] David Kim
+Not blaming anyone. Just saying it's easy to mess up. The UI isn't super clear about which location you're selling from.
+
+[12:25 PM] Sarah Park
+That's true. I've definitely hit the wrong location by accident before.
+
+[12:27 PM] Kelly Wu
+Same. Especially when I'm rushing during a busy period.
+
+---
+
+January 9, 2024
+
+[08:47 AM] David Kim
+Everyone done with inventory counts?
+
+[08:48 AM] Sarah Park
+Downtown done. Updating Shopify now.
+
+[08:49 AM] Jason Rivera
+Westside done. Just uploaded.
+
+[08:51 AM] Kelly Wu
+Warehouse done. Numbers in Shopify.
+
+[08:53 AM] David Kim
+Great. Let me verify everything adds up...
+
+[08:58 AM] David Kim
+OK found some discrepancies. @Sarah Park you have the "FitFuel Logo Tank - Size S" as 8 units. @Jason Rivera you have it as 3 units. But our purchase records show we only ordered 10 total of that SKU. You're saying we have 11.
+
+[09:01 AM] Sarah Park
+Let me recount... Oh wait, I think I counted the same rack twice. My bad. It's actually 5, not 8.
+
+[09:03 AM] David Kim
+OK that makes more sense. Updating...
+
+[09:07 AM] Jason Rivera
+Question - when customers order online, where does that inventory come from? Like which location decrements?
+
+[09:10 AM] David Kim
+Good question. Right now it's set to "automatically select best location" which I think prioritizes warehouse first, then stores. But honestly I'm not 100% sure how Shopify decides.
+
+[09:12 AM] Marcus Chen
+Wait, so if someone orders online and we have inventory at Westside but not warehouse, does it pull from Westside?
+
+[09:14 AM] David Kim
+In theory yes. But then Jason has to ship it, which isn't ideal. We usually prefer to ship from warehouse.
+
+[09:16 AM] Kelly Wu
+Yeah, stores shouldn't be fulfilling online orders unless warehouse is out. That's not what they're set up for.
+
+[09:18 AM] Jason Rivera
+I've never shipped an online order from my store. I didn't even know I was supposed to.
+
+[09:20 AM] Marcus Chen
+You're not. Kelly is right, warehouse should handle online orders. David, can we change the Shopify settings to always pull from warehouse?
+
+[09:23 AM] David Kim
+I think so. Let me check the location priority settings...
+
+[09:28 AM] David Kim
+OK I updated it. Warehouse is now priority 1 for online orders. Downtown is priority 2, Westside is priority 3. So it'll only pull from stores if warehouse is sold out.
+
+[09:30 AM] Sarah Park
+What if warehouse is sold out and both stores have the item? Does it matter which store ships it?
+
+[09:32 AM] David Kim
+Shopify will pick based on... something. I think geographic proximity to customer? Or maybe just first available? The documentation isn't super clear.
+
+[09:34 AM] Marcus Chen
+This is getting complicated. Maybe we DO need that integration project to manage all this.
+
+[09:36 AM] Kelly Wu
+What integration project?
+
+[09:38 AM] Marcus Chen
+I've been talking to a company called Lazer Technologies. They specialize in Shopify integrations. Maybe they can help us with multi-location inventory management.
+
+[09:41 AM] Jason Rivera
+Are they expensive?
+
+[09:43 AM] Marcus Chen
+Don't know yet. David, can you talk to them and see what they propose?
+
+[09:45 AM] David Kim
+Sure. What specifically do we want them to solve?
+
+[09:48 AM] Marcus Chen
+The inventory sync issues. The location priority stuff. And I want better visibility into when we need to reorder products. Stocky is supposed to do that but I don't think we're using it right.
+
+[09:51 AM] Kelly Wu
++1 on reorder alerts. I'm constantly running out of popular items because I forget to order more until it's too late.
+
+[09:53 AM] Sarah Park
+Also can we get low-stock alerts? Like if a SKU drops below 5 units total, notify us?
+
+[09:56 AM] David Kim
+That's a good feature. I'll ask Lazer if they can do that.
+
+[09:58 AM] Marcus Chen
+Great. David, set up a call with them and include me, Kelly, Sarah, and Jason so we can all give input.
+
+[10:00 AM] David Kim
+Will do.
+
+---
+
+January 10, 2024
+
+[02:15 PM] Kelly Wu
+@David Kim quick question about the Stocky app. I'm trying to create a purchase order for more leggings but it's showing weird numbers. Says "suggested order quantity: 47" but that seems way too high.
+
+[02:17 PM] David Kim
+Stocky calculates that based on sales velocity and lead time. What's the lead time set to for that product?
+
+[02:19 PM] Kelly Wu
+Um... I don't know? How do I check that?
+
+[02:21 PM] David Kim
+In Stocky, go to the product detail page. There's a field called "Lead Time (days)". If it's not set, Stocky might be using a default.
+
+[02:24 PM] Kelly Wu
+It says 30 days. But our supplier usually delivers in like 7-10 days.
+
+[02:26 PM] David Kim
+There's your problem. If Stocky thinks it takes 30 days to restock, it's suggesting you order enough to last 30 days. Update the lead time to 10 days and see if the suggested quantity changes.
+
+[02:29 PM] Kelly Wu
+OK I changed it to 10 days. Now it says "suggested order quantity: 18". That's more reasonable.
+
+[02:31 PM] David Kim
+Good. You should go through all products and make sure lead times are accurate. Otherwise Stocky's recommendations will be off.
+
+[02:34 PM] Kelly Wu
+That's going to take forever. We have like 180 SKUs.
+
+[02:36 PM] Marcus Chen
+Do the top sellers first. The other stuff can wait.
+
+[02:38 PM] Kelly Wu
+Fine. But this is exactly why I was just using my Excel spreadsheet before. It was simpler.
+
+[02:41 PM] David Kim
+Excel doesn't scale. We're growing and need a real system.
+
+[02:43 PM] Sarah Park
+Speaking of growth, Marcus mentioned possibly opening a third location next year?
+
+[02:45 PM] Marcus Chen
+Yeah, if things go well this year. Thinking about a location in the suburbs.
+
+[02:48 PM] Jason Rivera
+That's going to make inventory even more complicated.
+
+[02:50 PM] Marcus Chen
+Which is why we need to get the system right NOW before we expand.
+
+[02:52 PM] David Kim
+Agreed. I'll make sure the Lazer integration can handle 3+ locations.
+
+[02:55 PM] Kelly Wu
+Also, are we ever going to do inventory transfers between stores? Like if Sarah runs out of something and Jason has extra?
+
+[02:58 PM] Sarah Park
+That would be helpful. I've had to turn away customers because we were out of something, but Jason had it in stock.
+
+[03:01 PM] Jason Rivera
+Yeah, I'm open to that. But someone needs to coordinate the transfers. I don't have time to be constantly shuttling product between stores.
+
+[03:04 PM] Marcus Chen
+We could do it once a week. Like every Monday, review inventory levels and transfer stock where needed.
+
+[03:06 PM] Kelly Wu
+That sounds reasonable. But we need a system to track transfers. Can't just move stuff without updating Shopify.
+
+[03:09 PM] David Kim
+Shopify has a transfer order feature. Kelly, you'd create a transfer order from Jason's location to Sarah's location, then both stores confirm when it's sent/received.
+
+[03:12 PM] Jason Rivera
+More manual work...
+
+[03:14 PM] Marcus Chen
+It's manual for now but if the integration can automate or streamline it, that would be ideal.
+
+[03:16 PM] David Kim
+Adding that to the list for Lazer.
+
+[03:19 PM] Sarah Park
+Can we also talk about product variants? Like, some products have 5 sizes (XS, S, M, L, XL) and tracking each size at each location is a nightmare.
+
+[03:23 PM] David Kim
+Yeah, variants are tricky. Each size is technically a separate SKU in Shopify's system, but they're grouped under one product.
+
+[03:26 PM] Sarah Park
+Right, and when I'm doing inventory counts, I have to count each size separately. It's tedious.
+
+[03:29 PM] Kelly Wu
+And when I create a purchase order, I have to specify quantities for EACH size. I wish I could just say "order 50 units of this shirt mixed sizes."
+
+[03:32 PM] Marcus Chen
+Can we do that in Stocky?
+
+[03:34 PM] David Kim
+Not automatically. You'd have to manually distribute the 50 units across sizes. Unless we build custom logic.
+
+[03:37 PM] Marcus Chen
+Let's see what Lazer says. Maybe they have experience with variant management.
+
+[03:40 PM] David Kim
+I'll add it to the discussion topics.
+
+[03:43 PM] Jason Rivera
+One more thing - seasonal products. We have winter gear that sells great Dec-Feb but sits on shelves the rest of the year. Can we tag those products so we don't over-order?
+
+[03:47 PM] Kelly Wu
+YES. I way over-ordered winter jackets last year because I didn't realize they were seasonal. We're still sitting on inventory from 2023.
+
+[03:50 PM] David Kim
+We can use product tags in Shopify. Tag seasonal items as "seasonal-winter" or whatever, then factor that into reorder logic.
+
+[03:53 PM] Kelly Wu
+But how does Stocky know not to suggest reordering them in July?
+
+[03:55 PM] David Kim
+It doesn't automatically. You'd have to manually adjust or ignore its suggestions for seasonal products.
+
+[03:58 PM] Marcus Chen
+Or the integration could have smarter logic based on time of year.
+
+[04:00 PM] David Kim
+Maybe. That's getting pretty advanced though.
+
+[04:02 PM] Marcus Chen
+Well, we're paying for an integration. Might as well make it good.
+
+[04:05 PM] David Kim
+Fair point. I'll bring up seasonal inventory management with Lazer.
+
+[04:08 PM] Sarah Park
+OK I think we've covered everything. Can someone summarize what we're asking Lazer to help with?
+
+[04:11 PM] David Kim
+Let me list it out:
+1. Multi-location inventory sync (prevent overselling)
+2. Location priority for online orders (warehouse first)
+3. Low-stock alerts (threshold TBD)
+4. Reorder recommendations using Stocky
+5. Transfer orders between stores (streamline process)
+6. Product variant management (if possible)
+7. Seasonal inventory tagging/logic (if possible)
+
+[04:15 PM] Marcus Chen
+That's a lot. Might need to prioritize or do it in phases.
+
+[04:17 PM] David Kim
+Agreed. I'll work with Lazer on a phased approach.
+
+[04:20 PM] Kelly Wu
+When's the kickoff call?
+
+[04:22 PM] David Kim
+Tomorrow at 2pm. I'll send calendar invites.
+
+[04:24 PM] Sarah Park
+👍
+
+[04:24 PM] Jason Rivera
+👍
+
+[04:25 PM] Kelly Wu
+See you there.
+
+==============================================================================
+End of chat export
+

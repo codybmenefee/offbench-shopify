@@ -1,0 +1,163 @@
+BREWCREW COFFEE - INITIAL SALES CALL TRANSCRIPT
+Date: January 11, 2024
+Duration: 32 minutes
+Attendees:
+- Marcus Williams, Solutions Consultant, Lazer Technologies
+- Rachel Torres, Marketing Director, BrewCrew Coffee
+
+==============================================================================
+
+[00:00:15] Marcus Williams: Hey Rachel, thanks for taking the time today. Can you hear me okay?
+
+[00:00:18] Rachel Torres: Yes, perfect! Thanks for getting on the call so quickly.
+
+[00:00:22] Marcus Williams: Of course. So I understand from your inquiry that you're looking to integrate Shopify with Klaviyo for marketing automation?
+
+[00:00:28] Rachel Torres: Exactly. We've been using Shopify for about two years now, and our customer base has grown to around 8,000 subscribers. We started using Klaviyo a few months ago but we're barely scratching the surface of what it can do.
+
+[00:00:42] Marcus Williams: Got it. And what's driving this integration project right now? What's the pain point you're trying to solve?
+
+[00:00:48] Rachel Torres: So, our whole business model is coffee subscriptions, right? People sign up, get coffee delivered monthly or bi-weekly. The problem is we have terrible retention. People subscribe, get maybe two or three shipments, then cancel.
+
+[00:01:05] Marcus Williams: Okay, and you think better email marketing will help with that?
+
+[00:01:08] Rachel Torres: Definitely. Right now our email game is super basic. We send a generic "welcome to BrewCrew" email when someone signs up, and that's about it. We're not doing any personalization, no segmentation, nothing sophisticated.
+
+[00:01:23] Rachel Torres: What we want to do with Klaviyo is segment our customers based on their purchase behavior and send targeted campaigns. Like, if someone buys light roast, don't send them emails about our dark roast promotions, you know?
+
+[00:01:37] Marcus Williams: Makes sense. What data from Shopify do you need in Klaviyo to make that happen?
+
+[00:01:42] Rachel Torres: Good question. At minimum we need customer information - name, email, obviously. And their order history so we can see what they've purchased. I think Klaviyo can track product preferences from that, right?
+
+[00:01:56] Marcus Williams: Yeah, Klaviyo is pretty smart about that. It can analyze purchase patterns. What else?
+
+[00:02:01] Rachel Torres: Um, subscription status would be huge. Like, is this customer currently subscribed or did they cancel? How many times have they ordered? When's their next shipment due?
+
+[00:02:13] Marcus Williams: That subscription data - are you using a Shopify app for subscriptions or built something custom?
+
+[00:02:18] Rachel Torres: We use Recharge. It's a Shopify app that handles all the subscription billing and stuff.
+
+[00:02:24] Marcus Williams: Okay, so we'd potentially need to pull data from Recharge too, not just Shopify.
+
+[00:02:29] Rachel Torres: Oh, I hadn't thought about that. Is that complicated?
+
+[00:02:32] Marcus Williams: Not necessarily, but it's another integration point we'd need to account for. Let me make a note of that.
+
+[00:02:38] Rachel Torres: Okay, cool.
+
+[00:02:42] Marcus Williams: So talk to me about your segmentation strategy. You mentioned light roast versus dark roast. What other segments are you thinking about?
+
+[00:02:50] Rachel Torres: Oh man, we have so many ideas. We want to segment by roast preference, obviously. Also by order frequency - monthly versus bi-weekly subscribers. Maybe by total lifetime value? Like, our VIP customers who've been with us for over a year should get special treatment.
+
+[00:03:09] Rachel Torres: Oh, and we want to identify customers who are at risk of churning. Like, if someone usually orders every 30 days but it's been 45 days, we should send them a "we miss you" email or offer a discount.
+
+[00:03:23] Marcus Williams: That's a good use case. Klaviyo can definitely handle that with flows. Have you mapped out all these segments and what emails they'd receive?
+
+[00:03:31] Rachel Torres: Not exactly. I have a rough idea in my head. Our founder Emma has tons of ideas too. She's very involved in the marketing side.
+
+[00:03:40] Marcus Williams: It would be helpful to document those before we start building. The more specific we can be about segmentation rules, the better.
+
+[00:03:47] Rachel Torres: Yeah, that makes sense. I can work on that.
+
+[00:03:51] Marcus Williams: Perfect. Now, the big one - you mentioned reorder reminders. Tell me more about that.
+
+[00:03:57] Rachel Torres: Right, so this is probably our highest priority. Our subscription model means people get coffee regularly, but we also have one-time purchasers. Those one-time buyers, we want to remind them to reorder before they run out of coffee.
+
+[00:04:13] Marcus Williams: How do you know when they're running out?
+
+[00:04:16] Rachel Torres: Well, we don't know exactly. But we can estimate based on the amount they bought. Like, if someone bought a 12-ounce bag and the average person drinks one cup a day, that's roughly two weeks of coffee. So we'd send a reminder at like, day 10?
+
+[00:04:33] Marcus Williams: That's an assumption though. Some people drink three cups a day, some drink three cups a week.
+
+[00:04:39] Rachel Torres: True. Maybe we could ask them in the email? Like "how much coffee do you drink per day" and adjust the timing from there?
+
+[00:04:47] Marcus Williams: That could work, though you're relying on them to respond. Another option is to track patterns - if someone reorders every 15 days, assume that's their pattern and send reminders based on that.
+
+[00:04:59] Rachel Torres: Oh, that's smart. Can Klaviyo do that?
+
+[00:05:02] Marcus Williams: With the right data flowing in, yes. It can look at historical order patterns and predict when they'll need to reorder.
+
+[00:05:10] Rachel Torres: Perfect. Yes, let's do that.
+
+[00:05:14] Marcus Williams: Okay, adding that to the list. Now, data privacy - are you collecting any consent for email marketing? Especially if you have customers in Europe or California?
+
+[00:05:24] Rachel Torres: Um, I think we have a checkbox at checkout? "Sign up for our newsletter" or something. Is that enough?
+
+[00:05:32] Marcus Williams: Probably depends on where your customers are located and what regulations apply. GDPR in Europe is pretty strict. Do you sell internationally?
+
+[00:05:40] Rachel Torres: We ship to Canada and we've had a few orders from Europe, but it's mostly US-based customers.
+
+[00:05:46] Marcus Williams: Got it. We should probably review your consent mechanism to make sure you're compliant. That might be outside the scope of the integration but it's worth flagging.
+
+[00:05:56] Rachel Torres: Okay, yeah. I'll talk to our ops manager about that.
+
+[00:06:01] Marcus Williams: Sounds good. Let me ask about timing - when do you want this live?
+
+[00:06:06] Rachel Torres: As soon as possible. Like, yesterday. Our retention is really hurting our growth.
+
+[00:06:13] Marcus Williams: I get it. Realistically, a project like this is probably 3-4 weeks of development and testing. Maybe 6 weeks to be safe.
+
+[00:06:22] Rachel Torres: Six weeks? That seems like a long time for an integration.
+
+[00:06:26] Marcus Williams: Well, it's not just connecting the APIs. We need to define all your segments, build the data flows, test everything, and then you'll want to QA the email campaigns on your end before going live.
+
+[00:06:38] Rachel Torres: Okay, yeah, that makes sense when you put it that way.
+
+[00:06:42] Marcus Williams: Plus there's the Recharge component we just discovered. That adds complexity.
+
+[00:06:47] Rachel Torres: Right. Okay, so six weeks. I'll manage expectations with Emma.
+
+[00:06:53] Marcus Williams: Great. Now budget-wise, what are you thinking?
+
+[00:06:57] Rachel Torres: Honestly, I have no idea what something like this costs. What's typical?
+
+[00:07:02] Marcus Williams: It varies a lot based on complexity. I'd ballpark this project somewhere between ten and twenty thousand, depending on how many custom segments and flows you want.
+
+[00:07:14] Rachel Torres: Wow, okay. That's more than I was expecting.
+
+[00:07:17] Marcus Williams: What were you expecting?
+
+[00:07:19] Rachel Torres: I don't know, maybe five thousand? Is there a way to do this in phases so it's not all at once?
+
+[00:07:27] Marcus Williams: Absolutely. We could start with Phase 1 - basic customer and order sync, plus one or two key flows like the reorder reminder. Then add more sophisticated segmentation in Phase 2.
+
+[00:07:39] Rachel Torres: That sounds better. Let me talk to Emma about budget. She controls the purse strings.
+
+[00:07:45] Marcus Williams: No problem. Before we wrap up, is there anything else you want to accomplish with this integration that we haven't talked about?
+
+[00:07:53] Rachel Torres: Let me think... Oh, one thing. We sometimes run promotions on specific products. Like, "20% off our new Ethiopian blend." It would be cool if those promotions could automatically trigger emails to customers who might be interested.
+
+[00:08:08] Marcus Williams: So based on their previous purchases, if they've bought Ethiopian coffee before, they get that promo email?
+
+[00:08:14] Rachel Torres: Exactly.
+
+[00:08:16] Marcus Williams: Yeah, that's doable with Klaviyo's segmentation. We'd just need to make sure product tags or collections are syncing properly from Shopify.
+
+[00:08:24] Rachel Torres: Perfect.
+
+[00:08:27] Marcus Williams: Alright Rachel, I think I have a good understanding of what you're looking for. Let me put together a proposal with Phase 1 and Phase 2 options, and we can schedule a follow-up call to dig deeper into the requirements.
+
+[00:08:40] Rachel Torres: Sounds great. When do you think you'll have the proposal ready?
+
+[00:08:44] Marcus Williams: I'll aim for end of this week. Friday or Monday.
+
+[00:08:49] Rachel Torres: Perfect. And should I include Emma and our ops manager in the next call?
+
+[00:08:54] Marcus Williams: Definitely. The more stakeholders we have aligned early, the better.
+
+[00:08:59] Rachel Torres: Okay, I'll coordinate with them. Thanks so much, Marcus.
+
+[00:09:03] Marcus Williams: Thank you, Rachel. Talk soon.
+
+[00:09:05] END OF CALL
+
+==============================================================================
+
+Call Notes:
+- Client has good ideas but needs to document segmentation strategy
+- Recharge subscription integration is a new wrinkle
+- Budget sensitivity - may need to phase the project
+- Data privacy/compliance needs review
+- Timeline expectation: 6 weeks
+- Next step: Proposal with phased approach
+

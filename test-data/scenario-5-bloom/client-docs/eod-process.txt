@@ -1,0 +1,293 @@
+BLOOM & CO. END-OF-DAY CLOSING PROCESS
+Written by: Priya Sharma, Shop Manager
+Date: January 18, 2024
+For: Lazer Technologies Integration Project
+
+==============================================================================
+
+OVERVIEW
+--------
+This document describes our current end-of-day closing procedure. We close at 5:30pm daily (6pm on Fridays). The entire process usually takes 45-60 minutes.
+
+My goal with the new integration is to cut this down to 30 minutes or less.
+
+==============================================================================
+
+STEP 1: CLOSE THE SHOP
+-----------------------
+Time: 5:30pm
+Duration: ~5 minutes
+
+- Flip "Open" sign to "Closed"
+- Lock front door
+- Turn off storefront lights (but keep back office lights on)
+- Finish helping any lingering customers (we don't kick people out mid-purchase)
+- Make sure all in-store purchases are completed in the POS
+
+Notes:
+- Sometimes we have a late rush around 5:15pm (people buying flowers on their way home)
+- On busy days we don't actually close till 5:45pm
+
+==============================================================================
+
+STEP 2: COUNT CASH DRAWER
+--------------------------
+Time: 5:35pm
+Duration: ~10 minutes
+
+- Remove cash drawer from register
+- Count bills by denomination (20s, 10s, 5s, 1s)
+- Count coins
+- Separate out the "starting cash" amount ($100 in small bills)
+- Put starting cash back in drawer for tomorrow
+- Put excess cash in envelope for bank deposit
+
+Expected cash: [whatever FloralPOS says we collected in cash today]
+Actual cash: [what we counted]
+
+If they match → great!
+If they don't match → recount, check for errors, make note in discrepancy log
+
+Notes:
+- We rarely have discrepancies (maybe once a month)
+- Most customers pay by card anyway, cash is only like 20% of transactions
+
+==============================================================================
+
+STEP 3: RECONCILE CASH WITH POS
+--------------------------------
+Time: 5:45pm
+Duration: ~5 minutes
+
+- Log into FloralPOS admin on the iPad
+- Go to End-of-Day Report
+- Check: "Cash Sales Today: $XXX"
+- Compare with actual cash counted
+- If discrepancy, make adjustment note in POS
+
+FloralPOS has a field for "Cash Over/Short" where we log the difference.
+
+Notes:
+- This is important for accounting
+- Linda's accountant wants to see this tracked
+- Small discrepancies (<$5) are usually coins we missed or gave as change
+
+==============================================================================
+
+STEP 4: RUN POS END-OF-DAY REPORT
+----------------------------------
+Time: 5:50pm
+Duration: ~5 minutes
+
+- Still in FloralPOS admin
+- Click "Generate End-of-Day Report"
+- Report shows:
+  • Total sales (broken down by payment type)
+  • Number of transactions
+  • Best-selling products
+  • Sales by category
+  • Tax collected
+
+- Print report (sometimes, if printer works)
+- Or email report to myself and Linda
+
+Notes:
+- This report is just for FloralPOS (in-store) sales
+- Doesn't include Shopify (online) sales
+- We use this to track daily performance and inventory movement
+
+==============================================================================
+
+STEP 5: CHECK SHOPIFY FOR ONLINE ORDERS
+----------------------------------------
+Time: 5:55pm
+Duration: ~10 minutes
+
+- Log into Shopify admin on the back office computer
+- Check: Orders > Unfulfilled
+- See if any new orders came in during the day
+- For each order:
+  1. Check if item is in stock (look at physical inventory)
+  2. If yes, mark order as "ready for pickup" or "ready to pack"
+  3. If no, email customer about out-of-stock (ugh, this happens too often)
+
+- Also check: Today's Shopify sales total
+  • Dashboard shows: "Today's Sales: $XXX"
+  • Write this number down
+
+Notes:
+- Most online orders are for next-day pickup, so we don't have to fulfill immediately
+- But I like to check so we can prepare for tomorrow morning
+- Occasionally someone orders online and shows up 20 min later expecting it ready (annoying)
+
+==============================================================================
+
+STEP 6: PACKAGE ORDERS FOR TOMORROW
+------------------------------------
+Time: 6:05pm
+Duration: ~15 minutes (varies by # of orders)
+
+- For orders marked "ready for pickup":
+  • Pull items from inventory
+  • Create arrangement or bouquet if it's a custom order
+  • Add gift card if customer requested one
+  • Package in bag or box
+  • Attach label with customer name and order number
+  • Place in "pickup" area at front desk
+
+- For delivery orders:
+  • Same process but note "DELIVERY" on label
+  • Set aside for Linda to deliver tomorrow
+
+Notes:
+- We usually have 2-5 pickup orders waiting at any given time
+- Delivery is 1-2 per week max
+- If order requires flowers we don't have, we skip this step and handle in the morning
+
+==============================================================================
+
+STEP 7: INVENTORY FRESHNESS CHECK ("THE WALK")
+-----------------------------------------------
+Time: 6:20pm
+Duration: ~10 minutes
+
+- Walk through the shop and inspect all fresh flowers
+- Look for:
+  • Wilting petals
+  • Brown edges
+  • Dried stems
+  • Overall "sad" appearance
+
+- For flowers past their prime:
+  • Remove from display
+  • Either mark down 50% (if still sellable)
+  • Or set aside for donation (if too wilted)
+
+- Update inventory counts in FloralPOS
+  • Manually adjust quantity down for removed items
+  • Example: Had 12 tulips, removed 3 wilted ones, update to 9
+
+Notes:
+- THIS IS CRITICAL but I don't always do it
+- If I'm tired or in a hurry, I skip the inventory update part
+- Which is why we oversell things (I know, I know)
+- An automated system would be great but I don't see how tech can tell if a flower is wilted
+
+==============================================================================
+
+STEP 8: MANUAL INVENTORY UPDATE (OPTIONAL)
+-------------------------------------------
+Time: 6:30pm
+Duration: ~10 minutes (when I actually do it)
+
+- If I removed a lot of flowers during "the walk", I update Shopify inventory too
+  • Log into Shopify
+  • Go to Products > Inventory
+  • Manually adjust quantities to match what's actually in the shop
+
+- But honestly? I only do this maybe twice a week
+- Linda does a "full inventory sync" on Sunday evenings
+- Which is why our Shopify inventory is often wrong midweek
+
+Notes:
+- This step is the biggest pain point
+- If the integration could auto-sync inventory from FloralPOS to Shopify, this would save SO much time
+- I'd still need to do "the walk" to remove wilted flowers, but at least the sync would be automatic
+
+==============================================================================
+
+STEP 9: COMBINED SALES REPORT (FOR LINDA)
+------------------------------------------
+Time: 6:40pm
+Duration: ~5 minutes
+
+- Linda wants to know daily sales across BOTH channels (in-store + online)
+- So I:
+  1. Look at FloralPOS report: "Today's total: $XXX"
+  2. Look at Shopify dashboard: "Today's sales: $YYY"
+  3. Open Google Sheets (Linda's "Daily Sales Tracker")
+  4. Add a new row with today's date
+  5. Enter POS sales, Shopify sales, and total
+  6. Save spreadsheet
+
+- Linda looks at this every morning to track performance
+
+Notes:
+- This is so manual and feels dumb
+- A combined report would be WAY better
+- Linda's accountant also needs these numbers for monthly books
+
+==============================================================================
+
+STEP 10: FINAL SHOP CHECK & LOCK UP
+------------------------------------
+Time: 6:45pm
+Duration: ~5 minutes
+
+- Walk through shop one more time
+- Make sure:
+  • No customers hiding somewhere (kidding, but I check)
+  • All lights off in customer area
+  • Cooler is running (for overnight flower storage)
+  • Back door is locked
+  • Alarm is set
+
+- Lock front door
+- Go home!
+
+==============================================================================
+
+TOTAL TIME: 60-75 minutes
+
+If we could automate:
+- Inventory sync between POS and Shopify (saves 10-15 min)
+- Combined sales reporting (saves 5 min)
+- Faster online order checking (saves 5 min)
+
+New total time: ~40 minutes
+
+That would be HUGE.
+
+==============================================================================
+
+QUESTIONS FOR INTEGRATION PROJECT
+----------------------------------
+
+1. Can the integration automatically sync inventory from FloralPOS to Shopify after I update it?
+   - Ideally in real-time or at least every 15 minutes
+
+2. Can we get an automated daily sales report that combines POS + Shopify?
+   - Email would be perfect
+   - Include: Date, POS sales, Shopify sales, total, tax collected
+
+3. Can Shopify orders automatically notify us faster?
+   - Right now we have to manually check
+   - Email or text notification would be great
+
+4. What happens if I forget to update inventory in FloralPOS?
+   - Will Shopify just show whatever's in the system?
+   - Or is there a way to alert us about discrepancies?
+
+5. Can we set a buffer for online inventory?
+   - Like show 2 fewer items online than we actually have
+   - To prevent overselling due to timing issues
+
+6. Is there a way to track which products sell best online vs in-store?
+   - Linda would love this data for inventory planning
+
+==============================================================================
+
+NOTES
+-----
+- This document reflects our CURRENT process, which is very manual
+- Open to suggestions for improvement
+- Main goal: Save time, reduce overselling, get better visibility into sales
+
+==============================================================================
+
+If you have questions about this process, reach out:
+Priya Sharma
+Shop Manager, Bloom & Co.
+priya@bloomandco.com
+(503) 555-7890
+

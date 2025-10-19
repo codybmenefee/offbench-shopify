@@ -1,0 +1,25 @@
+From: Sarah Chen <sarah@cozyhome.com>
+To: solutions@lazertechnologies.com
+Date: Monday, January 15, 2024, 9:47 AM
+Subject: Need help with Shopify and QuickBooks integration
+
+Hi there,
+
+I found your company through a referral from a friend who said you do great work with Shopify integrations. We're a small home décor business and we've been growing pretty fast over the last year, which is great, but it's creating some real headaches on the accounting side.
+
+Right now I'm spending probably 3 hours every single day just copying order information from Shopify into QuickBooks. It's tedious and I know I'm making mistakes because sometimes the numbers don't match up and my accountant gets frustrated with me.
+
+What we need is some way to automatically sync our orders from Shopify into QuickBooks. I think it should be pretty straightforward since it's just order data, right? We also need our inventory to stay in sync because we're constantly running into issues where we sell something on Shopify that's already sold out according to QuickBooks.
+
+Our online store is doing about 150-200 orders a week right now, and it's growing. We have around 250 products with different SKUs.
+
+Can you help us with this? What would something like this cost and how long would it take?
+
+Thanks!
+Sarah
+
+--
+Sarah Chen
+Owner, CozyHome
+www.cozyhome.com
+

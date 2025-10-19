@@ -1,0 +1,124 @@
+PETPAWZ OPERATIONS - PAIN POINTS & REQUIREMENTS
+From: Jessica Martinez, Operations Lead
+Created: Jan 10, 2024
+For: Lazer Technologies discovery
+
+==============================================================================
+
+CURRENT SITUATION
+-----------------
+We're drowning in manual work. Our order volume has grown way faster than we expected (which is good!) but our processes haven't kept up.
+
+DAILY WORKFLOW (PAINFUL)
+-------------------------
+1. Wake up, check Shopify for new orders (~40-60 overnight)
+2. Log into ShipStation 
+3. Manually import each order
+4. Select shipping method for each one (USPS vs UPS vs FedEx - it's not automatic)
+5. Print labels (printer jams at least 3 times per day)
+6. Pack orders
+7. Go back to Shopify and mark each order as fulfilled (THIS TAKES FOREVER)
+8. Copy tracking numbers back to Shopify one by one
+9. Repeat for afternoon orders
+10. Stay late because we got behind
+
+This process takes me and my assistant roughly 3-4 hours JUST on the label/tracking part.
+
+WHAT WE NEED
+------------
+• Orders should automatically flow from Shopify to ShipStation when customer pays
+• Shipping method should be pre-selected based on some logic (see below)
+• When label is created, tracking info needs to go back to Shopify automatically
+• Customer should get tracking email (Shopify handles this if we update it properly)
+
+SHIPPING CARRIERS WE USE
+-------------------------
+• USPS Priority Mail - most orders, affordable, reliable enough
+• UPS Ground - heavy orders (over 5 lbs? over 10 lbs? idk the exact cutoff)
+• FedEx Express - rush orders (we offer 2-day shipping as an upgrade)
+
+We have accounts with all three. ShipStation supports them all.
+
+Problem: Right now I manually decide which carrier to use for each order. I'd love to have this automated based on:
+- Weight
+- Customer's chosen shipping speed
+- Maybe cost? (ShipStation can compare rates)
+
+PRODUCT WEIGHT INFO
+--------------------
+Most of our products are light (dog toys, cat toys, small accessories) - under 1 lb
+Some products are heavier:
+- Large dog beds (8-15 lbs)
+- Bulk treat bags (3-5 lbs)
+- Crates and carriers (varies, 10-25 lbs)
+
+Shopify has weight info for most products. Some older products are missing it.
+
+SHIPPING SPEEDS WE OFFER
+-------------------------
+• Standard (5-7 business days) - Free over $50, otherwise $5.95
+• Expedited (2-3 business days) - $12.95
+• Express (1-2 business days) - $24.95
+
+VOLUME
+------
+Current: ~100 orders/day average
+Peak (holidays): Can hit 200-250/day in November/December
+Growing about 20% month over month
+
+WHAT WORKS / WHAT DOESN'T
+--------------------------
+ShipStation is actually pretty good. The problem is getting data in and out of it without manual work.
+
+Shopify notifications work fine when we remember to update tracking.
+
+Main issues:
+1. Manual entry is error-prone (I've shipped to wrong addresses by copying wrong order)
+2. Time consuming
+3. Tracking numbers sometimes don't get back to Shopify, customers email asking "where's my order?"
+4. Can't keep up with growth
+
+EDGE CASES / QUESTIONS
+-----------------------
+• What happens if ShipStation is down? (Happened once last month)
+• What about orders with multiple items that need multiple packages?
+• Some customers request hold for pickup at FedEx/UPS locations - how do we handle that?
+• Address validation - ShipStation does this, should we auto-correct or alert us?
+
+RETURNS
+-------
+We get maybe 5-10 returns per week. Usually wrong size, or pet didn't like it, or arrived damaged.
+
+Currently we:
+1. Customer emails us
+2. We send them a return label (generate manually in ShipStation)
+3. When item comes back, we process refund in Shopify
+
+This should probably stay manual? Or could it be automated too? Not sure if that's part of this project.
+
+NICE TO HAVES (if possible)
+----------------------------
+• Automatically batch orders by carrier for easier handoff to shipping area
+• Print packing slips with labels (ShipStation can do this)
+• Alert us if an order hasn't shipped within 24 hours
+• Some kind of dashboard showing daily shipping metrics
+
+CONCERNS
+--------
+• Can't have downtime - if the integration breaks, we need a backup plan
+• API limits - does ShipStation have rate limits? What happens if we hit them?
+• Cost - what's the monthly cost for this integration to run?
+
+TIMELINE
+--------
+We need this ASAP. Every day we delay costs us hours of labor.
+Ideally live by end of February? Is that realistic?
+
+==============================================================================
+
+Feel free to reach out with questions.
+Jessica Martinez
+Operations Lead, PetPawz
+jessica@petpawz.com
+(555) 234-5678
+

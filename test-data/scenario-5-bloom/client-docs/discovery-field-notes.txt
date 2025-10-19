@@ -1,0 +1,264 @@
+DISCOVERY FIELD NOTES - BLOOM & CO.
+Site Visit: January 12, 2024
+Consultant: Sophie Chen, Lazer Technologies
+Location: Bloom & Co. Flower Shop, 342 Main St, Portland OR
+
+==============================================================================
+
+GENERAL OBSERVATIONS
+--------------------
+- Small storefront, ~800 sq ft
+- 2 employees working during my visit (owner Linda + shop manager Priya)
+- Busy! 8 customers came in during my 90-min visit
+- Beautiful displays (professionally done, Linda has good eye for design)
+- POS system visible at checkout counter (iPad-based, brand name: FloralPOS)
+- Computer in back office for "online stuff" (Shopify)
+
+CURRENT WORKFLOW - IN-STORE SALES
+----------------------------------
+Customer walks in → browses/gets help → makes selection → checkout at counter
+
+POS System (FloralPOS):
+- Scan barcode OR search by product name
+- System shows price, inventory count
+- Process payment (card or cash)
+- Print receipt
+- System auto-decrements inventory
+
+Simple enough. Works well for in-store.
+
+CURRENT WORKFLOW - ONLINE SALES
+--------------------------------
+Customer orders via Shopify → Email notification to Linda → She fulfills from shop
+
+Problems:
+1. Shopify inventory is MANUALLY updated (Linda does this weekly, sometimes less)
+2. "We keep overselling tulips" - exact quote from shop manager
+3. Customer orders online, comes to pick up, item is sold out
+4. Awkward conversation, have to refund or substitute
+
+Major pain point here. THIS is why they need integration.
+
+INVENTORY MANAGEMENT CHAOS
+---------------------------
+Two separate inventory systems = constant headaches
+
+FloralPOS Inventory:
+- Updated in real-time at point of sale
+- Linda says this is "accurate-ish"
+- Does NOT account for flowers that are past their prime (see below)
+
+Shopify Inventory:
+- Updated manually by Linda
+- Usually on Sunday evenings
+- Often wrong by Wednesday
+- Priya: "I just tell online customers to call first if they want something specific"
+
+WHICH SHOULD BE SOURCE OF TRUTH?
+Linda thinks POS (updated more frequently)
+Priya thinks Shopify (that's where online orders come from)
+No clear answer. NEED TO RESOLVE THIS.
+
+PERISHABLE INVENTORY PROBLEM
+-----------------------------
+(This is a BIG deal that I don't think they've fully thought through)
+
+Flowers don't last forever. They have:
+- Roses: ~5-7 day shelf life
+- Tulips: ~3-5 days
+- Sunflowers: ~7-10 days
+- Orchids: ~2 weeks (more stable)
+
+Current process:
+- Linda walks the shop each morning
+- Identifies flowers past prime
+- Removes them from display
+- Marks them down OR donates to local nursing home
+
+But - she doesn't always update inventory counts when she does this!
+
+So POS says "12 tulips" but really only 8 are sellable.
+
+Shopify has no idea about flower freshness at all.
+
+Question for integration: How do we handle this?
+- Real-time freshness tracking (probably too complex for v1)
+- Buffer stock (online inventory always shows less than actual to account for waste)
+- Manual daily adjustments (defeats the purpose of automation)
+
+TBD.
+
+PRODUCT CATALOG
+---------------
+~150 SKUs total
+
+Categories:
+- Fresh Cut Flowers (single stems and bunches)
+- Bouquets (pre-made arrangements)
+- Plants (potted plants, succulents)
+- Supplies (vases, plant food, cards)
+
+Mixed perishability:
+- Flowers: highly perishable
+- Plants: somewhat perishable
+- Supplies: not perishable
+
+Integration needs to distinguish these.
+
+POS has product types set up correctly.
+Shopify... less organized. Linda admits she "just threw products in there" when setting up the store.
+
+PRICING
+-------
+Prices are supposed to match between POS and Shopify.
+In practice? Priya found 3 products with different prices during our walk-through.
+- Sunflowers: $2.50 in POS, $2.99 in Shopify
+- Rose bouquet: $45 in POS, $42 in Shopify (!!!)
+- Ceramic vase: $18 in POS, $18 in Shopify (this one matches)
+
+Who's right? Linda says POS prices are correct. Need to sync pricing too.
+
+PAYMENT PROCESSING
+------------------
+In-store: FloralPOS handles credit cards (integrated with some processor, didn't catch the name)
+Online: Shopify Payments
+
+No integration between these payment systems. That's fine, they're separate.
+
+But Linda wants to see TOTAL sales across both channels in one place.
+Currently she:
+1. Exports POS daily report (PDF)
+2. Checks Shopify sales dashboard
+3. Manually adds them up in a spreadsheet
+4. Sends to her accountant
+
+Takes her 15-20 minutes every day. Would love to automate this.
+
+END-OF-DAY CLOSING PROCESS
+---------------------------
+(Linda walked me through this, it's... a process)
+
+5:30pm - Close shop
+5:35pm - Count cash drawer, reconcile with POS
+5:45pm - Run POS end-of-day report
+5:50pm - Check Shopify for any new orders
+6:00pm - Package any orders for tomorrow's pickup/delivery
+6:10pm - Walk the shop, check flower freshness (remove wilted ones)
+6:20pm - Update inventory counts if needed (she usually doesn't)
+6:30pm - Lock up and go home
+
+She wants this to be faster and more accurate.
+
+DELIVERY & PICKUP
+-----------------
+In-store purchases: customer takes item immediately
+
+Online purchases: 
+- Local delivery (within 5 miles) - Linda or Priya delivers
+- Customer pickup - customer comes to shop (90% of online orders)
+
+No integration with delivery services (no DoorDash or anything).
+It's very manual and small-scale.
+
+Priya: "Sometimes people order online and show up 10 minutes later expecting their flowers ready. We haven't even seen the order yet!"
+
+Need faster notification system? Or set expectations better on Shopify?
+
+TAX HANDLING
+------------
+(Didn't get deep into this, but flagging it)
+
+Sales tax is collected in both systems.
+POS: automatically calculates based on Oregon tax rules
+Shopify: also set up for OR tax
+
+But Linda said her accountant complained last quarter about "discrepancies" in tax reporting.
+Didn't dig into details but sounds like the two systems report differently.
+
+Integration should probably include tax reconciliation? Or at least make sure both systems report consistently?
+
+FUTURE PLANS
+------------
+Linda mentioned wanting to open a second location within the next year.
+"Maybe in the Pearl District, somewhere with more foot traffic"
+
+If that happens, they'll need to track inventory across TWO physical locations plus online.
+That's way more complex. Out of scope for v1 but good to know for architecture planning.
+
+TECHNICAL DETAILS - POS SYSTEM
+-------------------------------
+Brand: FloralPOS (cloud-based)
+Hardware: iPad at checkout
+Internet: Yes (required for cloud POS)
+Support: Vendor support available
+
+Does it have an API?
+Linda: "I think so? The sales guy mentioned it."
+Priya: "We have a login to their dashboard if that helps."
+
+NEED TO GET API SPECS FROM FLORALPOS VENDOR.
+Linda said she'd connect me with their account rep.
+
+TECHNICAL DETAILS - SHOPIFY
+----------------------------
+Plan: Basic Shopify (might need to upgrade for API access?)
+Theme: Some free theme
+Customizations: Minimal
+Apps: Just POS integration prep (nothing installed yet)
+
+PAIN POINTS SUMMARY
+-------------------
+1. OVERSELLING (biggest issue) - Shopify inventory doesn't match reality
+2. MANUAL WORK - Linda spends hours each week updating inventory
+3. REPORTING - No unified view of sales across channels
+4. FRESHNESS - No way to track perishable inventory automatically
+5. PRICING - Inconsistencies between systems
+
+SUCCESS CRITERIA (per Linda)
+-----------------------------
+"I want to stop apologizing to customers for selling them flowers we don't have."
+"I want to close out my day in 30 minutes instead of an hour."
+"I want to know how much money I'm actually making without doing math every night."
+
+QUESTIONS TO FOLLOW UP ON
+--------------------------
+- FloralPOS API capabilities (waiting on vendor response)
+- How to handle perishable inventory in automation
+- Which system should be source of truth for inventory
+- Tax reconciliation requirements
+- Do they want same-day order fulfillment or next-day?
+- How much historical data to migrate (if any)
+- What happens when POS is offline? (Internet outage)
+- Do they want alerts for low inventory?
+
+BUDGET & TIMELINE
+------------------
+Linda: "I don't have a huge budget. What's realistic?"
+Me: "Probably $8k-12k depending on complexity."
+Linda: "Ouch. But if it saves me 10 hours a week, that's worth it."
+
+Timeline: She wants it done by spring (their busy season). That's March-ish.
+Tight but doable if we start soon.
+
+NEXT STEPS
+----------
+1. Get FloralPOS API docs from vendor
+2. Schedule three-way call (Linda, Priya, FloralPOS rep, Lazer team)
+3. Document their end-of-day process in detail (Linda will write this up)
+4. Clean up Shopify product catalog (Linda's homework)
+5. Proposal with phased approach
+
+GENERAL IMPRESSION
+------------------
+Small business with big ambitions. Linda is smart and motivated but stretched thin.
+They need this integration to scale.
+
+Current setup is held together with duct tape and manual work.
+Good opportunity for Lazer to add real value here.
+
+==============================================================================
+
+- Sophie Chen, BA
+- Lazer Technologies
+- sophie@lazertechnologies.com
+

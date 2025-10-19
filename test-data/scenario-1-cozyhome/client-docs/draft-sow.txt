@@ -1,0 +1,120 @@
+STATEMENT OF WORK (DRAFT)
+Lazer Technologies
+Project: CozyHome Shopify-QuickBooks Integration
+
+Date: January 17, 2024
+Status: DRAFT - Pending Discovery
+Client: CozyHome LLC
+Contact: Sarah Chen, Owner
+
+==============================================================================
+
+PROJECT OVERVIEW
+----------------
+Integrate CozyHome's Shopify e-commerce platform with QuickBooks Online to automate order processing, inventory management, and financial reporting.
+
+BUSINESS OBJECTIVES
+-------------------
+- Eliminate manual data entry (currently 3 hrs/day)
+- Reduce accounting errors
+- Improve inventory accuracy
+- Enable real-time financial visibility
+
+TECHNICAL SCOPE
+----------------
+
+Phase 1: Order Synchronization
+• Sync Shopify orders to QuickBooks Online as invoices
+• Frequency: Real-time (TBD)
+• Include: Customer info, line items, order totals
+• Map Shopify products to QuickBooks items
+
+Phase 2: Inventory Synchronization  
+• Sync inventory quantities between systems
+• Direction: [TO BE DETERMINED - conflicting requirements]
+• Frequency: [TBD]
+
+Phase 3: Reporting
+• Daily sales summary report to QuickBooks
+• Format: [TBD]
+
+SYSTEMS INVOLVED
+----------------
+Source System: Shopify (CozyHome store)
+- Current products: ~250 SKUs
+- Order volume: 150-200/week
+- [Need API credentials]
+
+Target System: QuickBooks Online
+- Edition: [Need to confirm]
+- Classes: Wall Art, Textiles, Furniture, Accessories
+- [Need API credentials and company ID]
+
+DATA MAPPING
+------------
+[TO BE COMPLETED AFTER DISCOVERY]
+
+Shopify Order Fields -> QuickBooks Invoice Fields:
+- Order Number -> Invoice Number
+- Customer Name -> Customer Name
+- [Additional mappings TBD]
+
+ASSUMPTIONS
+-----------
+- Client will provide API credentials for both systems
+- Shopify store is on a plan that supports API access
+- QuickBooks Online subscription supports API integration
+- Integration will run on cloud infrastructure (Lazer managed)
+
+OUT OF SCOPE
+------------
+- Historical data migration (only future orders)
+- [Need to clarify: Returns, refunds, exchanges?]
+- [Need to clarify: Tax calculation/validation?]
+- Custom reporting beyond daily sales summary
+
+SUCCESS CRITERIA
+-----------------
+- Orders sync within [TIMEFRAME TBD]
+- Inventory accuracy >95%
+- Zero manual data entry required for standard orders
+- [Need to define additional KPIs]
+
+TIMELINE
+--------
+Discovery & Design: 1-2 weeks
+Development: [TBD based on complexity]
+Testing: [TBD]
+Launch: [TARGET DATE TBD]
+
+PRICING
+-------
+[TO BE DETERMINED AFTER DISCOVERY]
+
+Estimated range: $8,000 - $15,000
+- Depends on data mapping complexity
+- Depends on custom logic requirements
+- Monthly hosting/maintenance: $200-400
+
+NEXT STEPS
+----------
+1. Discovery call scheduled: Thursday Jan 18, 2pm
+2. Clarify inventory system of record
+3. Confirm exact field mappings needed
+4. Define sync frequency requirements
+5. Discuss future retail location impact
+
+NOTES FROM INITIAL DISCUSSIONS
+-------------------------------
+- Sarah manages inventory in Shopify currently
+- David (accountant) says QuickBooks should be source of truth for inventory
+- Need to resolve this conflict
+- Future retail location planned - may impact architecture
+- No mention yet of how to handle refunds/returns
+- Payment processor details not discussed
+
+==============================================================================
+
+DRAFT - NOT FOR SIGNATURE
+This document will be finalized after discovery call.
+

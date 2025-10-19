@@ -108,6 +108,14 @@ Discovery Artifacts → Ingestion → Analysis → Plan Generation → Confidenc
 offbench-shopify/
 ├── README.md                 # Project overview (this file)
 ├── AGENTS.md                # Developer context and principles
+├── SCENARIOS.md             # Test scenarios for validation
+├── templates/               # Implementation document templates
+│   ├── README.md            # Template usage guide
+│   ├── client-facing-sow.md           # Statement of Work template
+│   ├── internal-implementation-plan.md # Implementation plan template
+│   ├── internal-technical-specs.md    # Technical specifications template
+│   └── examples/            # Populated template examples
+├── test-data/               # Discovery document test scenarios
 └── mcp/                     # MCP server implementation
     ├── src/
     │   ├── main.py          # Main server entry point

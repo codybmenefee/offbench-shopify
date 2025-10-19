@@ -1,0 +1,283 @@
+BREWCREW COFFEE - DISCOVERY SESSION TRANSCRIPT
+Date: January 16, 2024
+Duration: 48 minutes
+Attendees:
+- Marcus Williams, Solutions Consultant, Lazer Technologies
+- Sophie Chen, Business Analyst, Lazer Technologies
+- Rachel Torres, Marketing Director, BrewCrew Coffee
+- Kevin Park, Operations Manager, BrewCrew Coffee
+- Emma Sullivan (joined late), Founder & CEO, BrewCrew Coffee
+
+==============================================================================
+
+[00:00:12] Marcus Williams: Good morning everyone. Thanks for joining. Let me do quick intros. I'm Marcus, solutions consultant at Lazer. With me is Sophie, one of our business analysts who'll be helping with requirements gathering.
+
+[00:00:24] Sophie Chen: Hi everyone!
+
+[00:00:26] Rachel Torres: Hey! I'm Rachel, marketing director here. And this is Kevin, our operations manager.
+
+[00:00:32] Kevin Park: Hey folks. Thanks for having this call.
+
+[00:00:35] Marcus Williams: Perfect. Emma, your CEO, is joining too right Rachel?
+
+[00:00:39] Rachel Torres: She is, but she's running a few minutes late. Coffee roaster emergency. Literally. Let's start without her and she'll catch up.
+
+[00:00:47] Marcus Williams: No problem. Alright, so the goal today is to really dig into the requirements for the Shopify-Klaviyo integration. We talked high-level last week Rachel, but today I want to get specific about data flows, segments, and email triggers.
+
+[00:01:02] Rachel Torres: Sounds good.
+
+[00:01:04] Sophie Chen: I'll be taking notes and building out the requirements doc as we go. Feel free to jump in anytime if I miss something or get something wrong.
+
+[00:01:13] Marcus Williams: Let's start with the systems. Rachel, you mentioned you're on Shopify and using Recharge for subscriptions. Kevin, from an ops perspective, any other systems we should know about?
+
+[00:01:24] Kevin Park: We use ShipStation for fulfillment, but that's separate from this project I think. And QuickBooks for accounting. But yeah, for the marketing integration it's really just Shopify, Recharge, and Klaviyo.
+
+[00:01:37] Sophie Chen: Got it. And Klaviyo is already set up? Or are you implementing that as part of this?
+
+[00:01:43] Rachel Torres: We have Klaviyo already. We've been using it for like three months but very basic stuff. Just the out-of-box Shopify integration that syncs customers automatically.
+
+[00:01:54] Marcus Williams: Okay, so there's already some data flowing. That's good. What's not working about the current setup?
+
+[00:02:01] Rachel Torres: It's super basic. It just dumps customer records into Klaviyo but we're not getting the rich data we need for proper segmentation. Like, we can see someone placed an order, but we can't see WHAT they ordered unless we manually look it up.
+
+[00:02:17] Kevin Park: And the subscription data from Recharge doesn't sync at all. So we have no visibility in Klaviyo about who's an active subscriber versus a one-time buyer.
+
+[00:02:26] Marcus Williams: That's a big gap. So we need to sync product-level order data and subscription status.
+
+[00:02:32] Rachel Torres: Exactly.
+
+[00:02:35] Sophie Chen: Let me make sure I'm understanding. Right now Klaviyo knows "Jane Doe placed an order for $45" but not "Jane Doe bought a 12oz bag of Ethiopian Light Roast"?
+
+[00:02:47] Rachel Torres: Right. And we need to know the product details so we can segment people by coffee preference.
+
+[00:02:54] Marcus Williams: Makes sense. What product attributes do you need? Just the product name or also things like roast type, origin, tasting notes?
+
+[00:03:03] Rachel Torres: All of that ideally. We tag all our products in Shopify with attributes like roast level, origin, flavor profile. Those tags should flow through.
+
+[00:03:14] Kevin Park: Some products are gear too, not just coffee. Like mugs, grinders, accessories. We probably don't need to segment on that stuff as much.
+
+[00:03:24] Rachel Torres: True, but it'd still be useful to know. Like, if someone bought a French press, maybe we email them about coarse-ground coffee options.
+
+[00:03:33] Marcus Williams: Okay, so sync all product data including tags and categories. Sophie, you getting this?
+
+[00:03:38] Sophie Chen: Yep, got it. Product catalog with attributes, tags, categories.
+
+[00:03:44] Marcus Williams: Now let's talk segments. Rachel, you mentioned a few on our last call. Can you walk through your segmentation strategy?
+
+[00:03:52] Rachel Torres: Sure. So we've brainstormed a bunch of segments. Some are must-haves for Phase 1, others are nice-to-haves.
+
+[00:04:00] Marcus Williams: Let's focus on must-haves first.
+
+[00:04:03] Rachel Torres: Okay. Must-haves:
+1. Active subscribers versus one-time buyers
+2. Roast preference - light, medium, or dark
+3. At-risk customers who haven't ordered in a while
+4. New customers - people who placed their first order in the last 30 days
+
+[00:04:21] Marcus Williams: Good start. For "at-risk customers," what's the definition of "a while"?
+
+[00:04:27] Rachel Torres: Um, good question. For subscribers, probably if they've skipped two shipments? For one-time buyers, maybe 60 days since their last order?
+
+[00:04:38] Kevin Park: I'd say 45 days for one-time buyers. Our research shows people usually reorder within 30-40 days if they're going to reorder at all.
+
+[00:04:47] Rachel Torres: Okay, 45 days then.
+
+[00:04:50] Sophie Chen: And for subscribers who skip shipments - is that data in Recharge?
+
+[00:04:55] Kevin Park: Yeah, Recharge tracks subscription status and shipping schedules.
+
+[00:05:00] Marcus Williams: Do customers actively skip shipments or do they just cancel and resubscribe later?
+
+[00:05:06] Kevin Park: Both happen. Recharge lets them pause or skip, but some people just cancel.
+
+[00:05:12] Marcus Williams: We'll need to capture both statuses then. Active, paused, skipped, cancelled.
+
+[00:05:17] Rachel Torres: Yeah, and people who cancel are super important. We want to win them back.
+
+[00:05:23] Marcus Williams: Okay, so cancelled customers are their own segment. Do they get different messaging than at-risk customers?
+
+[00:05:30] Rachel Torres: Probably? I haven't written those emails yet but yeah, "please come back" messaging.
+
+[00:05:36] Sophie Chen: Rachel, it might be helpful for you to draft those email flows before we build the integration. That way we know exactly what data points you'll need in each email.
+
+[00:05:47] Rachel Torres: Good point. I can do that.
+
+[00:05:50] Marcus Williams: Alright, moving on. You mentioned nice-to-have segments. What are those?
+
+[00:05:55] Rachel Torres: VIP customers - people who've been with us over a year or spent over a certain amount. Maybe $500 lifetime value?
+
+[00:06:04] Rachel Torres: Um, seasonal buyers - people who only buy during holidays for gifts.
+
+[00:06:11] Rachel Torres: Oh, and geographic segments. We have different coffee offerings by region. Like, cold brew concentrate sells way better on the West Coast versus Midwest.
+
+[00:06:23] Marcus Williams: Interesting. So geography-based product recommendations?
+
+[00:06:26] Rachel Torres: Yeah, exactly.
+
+[00:06:28] Kevin Park: Is geography data available in Klaviyo from Shopify?
+
+[00:06:33] Marcus Williams: Shipping address should sync, so yes. You can segment by state or region.
+
+[00:06:39] Sophie Chen: These nice-to-haves, are they Phase 1 or Phase 2?
+
+[00:06:43] Rachel Torres: Probably Phase 2. Let's nail the basics first.
+
+[00:06:47] Marcus Williams: Smart. Okay, let's talk email flows. You mentioned reorder reminders as the big one. Walk me through exactly how that should work.
+
+[00:06:57] Rachel Torres: So, when someone makes a one-time purchase of coffee, we wait a certain number of days based on the product size, then send an email saying "Hey, you're probably running low on coffee. Want to reorder?"
+
+[00:07:12] Marcus Williams: And how do you determine the timing? Does a 12oz bag get a different reminder window than a 5lb bag?
+
+[00:07:20] Rachel Torres: It should, right? A 5lb bag lasts way longer.
+
+[00:07:24] Kevin Park: We could set default reminder windows per product. 12oz bag = 14 days, 2lb bag = 30 days, 5lb bag = 60 days. Something like that.
+
+[00:07:37] Marcus Williams: That's reasonable. Do you have those windows defined?
+
+[00:07:41] Kevin Park: Not formally, but I can come up with them.
+
+[00:07:44] Sophie Chen: Kevin, can you send those to us by end of week?
+
+[00:07:48] Kevin Park: Sure, I'll put together a product list with recommended reminder timings.
+
+[00:07:54] Marcus Williams: Great. Now, what if someone orders multiple products? Like, a 12oz bag and a 5lb bag in the same order?
+
+[00:08:03] Rachel Torres: Oh, I hadn't thought about that. Maybe send reminders for each product separately?
+
+[00:08:09] Kevin Park: That could get spammy. Maybe send one reminder based on the smallest product, since that runs out first?
+
+[00:08:17] Rachel Torres: Yeah, that makes more sense.
+
+[00:08:20] Marcus Williams: Okay, we can handle that logic. What if someone reorders before they get the reminder?
+
+[00:08:26] Rachel Torres: Then don't send it, obviously. Reset the timer based on their new order.
+
+[00:08:31] Marcus Williams: Right. And if they don't respond to the reminder?
+
+[00:08:35] Rachel Torres: Send a follow-up maybe a week later? With a discount code to sweeten the deal?
+
+[00:08:41] Marcus Williams: So a two-email sequence. Initial reminder, then follow-up with incentive.
+
+[00:08:46] Rachel Torres: Yep.
+
+[00:08:48] Sophie Chen: Are there any products that shouldn't trigger reorder reminders? Like the mugs and gear Kevin mentioned?
+
+[00:08:56] Kevin Park: Good catch. Yeah, no need to remind someone to reorder a mug. It's a one-time purchase.
+
+[00:09:02] Rachel Torres: Unless we're launching a new mug design and want to upsell them...
+
+[00:09:06] Kevin Park: That's a different type of campaign though, not a reorder reminder.
+
+[00:09:10] Rachel Torres: True.
+
+[00:09:12] Marcus Williams: So we need to flag which products are replenishable versus one-time purchases. Is there a product tag or collection we can use for that?
+
+[00:09:21] Kevin Park: We don't have that set up in Shopify currently, but I can add tags. Like "reorder-eligible" or something.
+
+[00:09:28] Marcus Williams: That would work. Add that to your action items Sophie?
+
+[00:09:32] Sophie Chen: Got it.
+
+[00:09:35] Emma Sullivan: Hey everyone, sorry I'm late! What did I miss?
+
+[00:09:39] Rachel Torres: Hey Emma! We're talking through email flows. Just covered the reorder reminder logic.
+
+[00:09:45] Emma Sullivan: Perfect, that's my favorite topic. Do we have time to talk about the welcome series for new customers?
+
+[00:09:52] Marcus Williams: Absolutely. What are you thinking Emma?
+
+[00:09:56] Emma Sullivan: So right now our welcome email is super generic. "Thanks for your order, here's your tracking." That's it. We're missing a huge opportunity to build a relationship.
+
+[00:10:09] Emma Sullivan: What I envision is a multi-email welcome series. Email 1: Thank you and brand story. Email 2: Coffee brewing tips. Email 3: Introduce our subscription options. Email 4: Customer testimonials and social proof.
+
+[00:10:27] Marcus Williams: That's a solid flow. Is this triggered by any order or just first-time customers?
+
+[00:10:33] Emma Sullivan: First-time customers only. No need to tell existing customers our brand story again.
+
+[00:10:38] Marcus Williams: Right. And timing between emails?
+
+[00:10:42] Emma Sullivan: Maybe 3 days apart? So day 1, day 4, day 7, day 10?
+
+[00:10:48] Rachel Torres: That might be too much too fast. What if we spread it out more? Day 1, day 5, day 10, day 18?
+
+[00:10:56] Emma Sullivan: Okay, I'm flexible on timing. As long as we're nurturing them.
+
+[00:11:01] Sophie Chen: And if they place a second order before the series ends, do we stop the welcome series?
+
+[00:11:08] Emma Sullivan: Hmm, good question. Yeah, probably? If they've already reordered, they're engaged. Don't need to keep welcoming them.
+
+[00:11:17] Marcus Williams: We can build that logic in. If second order happens, exit the welcome flow.
+
+[00:11:23] Emma Sullivan: Perfect.
+
+[00:11:26] Kevin Park: Emma, while you're here - can you weigh in on budget for this project? We were talking Phase 1 and Phase 2 approach.
+
+[00:11:34] Emma Sullivan: Yes, Marcus sent over the proposal. I'm comfortable with the Phase 1 budget, around twelve thousand. Phase 2 we can revisit once we see results from Phase 1.
+
+[00:11:45] Marcus Williams: Great, that works for us.
+
+[00:11:48] Emma Sullivan: One thing I want to make sure we're including - can we track revenue attribution from these emails? Like, if someone clicks the reorder reminder and buys, I want to see that in Klaviyo.
+
+[00:12:01] Marcus Williams: Yes, Klaviyo has built-in revenue tracking. As long as orders are syncing with proper attribution, you'll see which emails are driving sales.
+
+[00:12:10] Emma Sullivan: Excellent. That's critical for ROI analysis.
+
+[00:12:15] Marcus Williams: Definitely. Alright, we're coming up on time. Let me make sure I captured everything. Phase 1 includes:
+- Enhanced customer and order sync from Shopify
+- Subscription status sync from Recharge
+- Product details including tags and attributes
+- Four key segments: active subscribers, roast preference, at-risk, new customers
+- Two email flows: reorder reminders and welcome series
+- Revenue attribution tracking
+
+[00:12:45] Marcus Williams: Did I miss anything?
+
+[00:12:48] Rachel Torres: I don't think so. That covers the must-haves.
+
+[00:12:52] Kevin Park: What about testing? How do we QA all this before it goes live?
+
+[00:12:58] Marcus Williams: Good question. We'll set up a staging environment in Klaviyo where you can test the flows with sample data before we flip the switch on production.
+
+[00:13:08] Kevin Park: Okay, perfect.
+
+[00:13:11] Sophie Chen: I'll draft up the full requirements doc and send it over by Thursday. You all can review and add any details I missed.
+
+[00:13:19] Emma Sullivan: Sounds great.
+
+[00:13:21] Marcus Williams: And timeline - we're looking at about 4-5 weeks for Phase 1 build and testing. Does that work for you?
+
+[00:13:29] Rachel Torres: It'll have to. Earlier would be better but I get that these things take time.
+
+[00:13:35] Emma Sullivan: Just keep us posted on progress. I don't want any surprises.
+
+[00:13:40] Marcus Williams: Absolutely. We'll do weekly check-ins.
+
+[00:13:44] Emma Sullivan: Perfect.
+
+[00:13:46] Marcus Williams: Alright team, I think we're good. Thanks everyone for your time. Let's get this thing built.
+
+[00:13:52] Rachel Torres: Thanks Marcus, Sophie!
+
+[00:13:54] Kevin Park: Thanks guys.
+
+[00:13:56] Emma Sullivan: Appreciate it!
+
+[00:13:58] END OF CALL
+
+==============================================================================
+
+Action Items:
+- Kevin: Provide product list with reorder reminder timings (due end of week)
+- Kevin: Add "reorder-eligible" product tags in Shopify
+- Rachel: Draft email flow copy for review
+- Sophie: Requirements doc (due Thursday)
+- Lazer: Set up staging environment for testing
+- All: Weekly check-ins during build phase
+
+Open Questions:
+- Data privacy/GDPR compliance not discussed in detail
+- Historical data migration - should past orders be imported to Klaviyo?
+- Unsubscribe handling and email frequency caps
+- What happens to cancelled subscribers? How long do we keep trying to win them back?
+- Guest checkout customers - can we still email them?
+

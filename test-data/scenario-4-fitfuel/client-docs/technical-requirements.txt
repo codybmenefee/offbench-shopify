@@ -1,0 +1,419 @@
+FITFUEL - TECHNICAL REQUIREMENTS & SYSTEM ACCESS
+Prepared by: David Kim, IT/Operations Manager
+Date: January 11, 2024
+For: Lazer Technologies Integration Project
+
+==============================================================================
+
+SYSTEM OVERVIEW
+---------------
+
+Current Tech Stack:
+- E-commerce: Shopify Plus
+- Inventory Management: Stocky (Shopify app)
+- Point of Sale: Shopify POS (2 locations)
+- Accounting: QuickBooks Online (out of scope for Phase 1)
+- Communication: Slack (for alerts/notifications)
+- Hosting: All cloud-based (Shopify handles infrastructure)
+
+==============================================================================
+
+SHOPIFY DETAILS
+---------------
+
+Store URL: fitfuel.myshopify.com
+Public URL: www.fitfuel.com
+Plan: Shopify Plus
+Active since: June 2022
+
+APPS INSTALLED:
+- Stocky (inventory management)
+- Shopify POS
+- ShipStation (fulfillment - not part of this integration)
+- Klaviyo (email marketing - not part of this integration)
+
+MULTI-LOCATION SETUP:
+- Warehouse (primary fulfillment center)
+- Downtown Store (retail + online fulfillment backup)
+- Westside Store (retail + online fulfillment backup)
+
+PRODUCT CATALOG:
+- ~180 SKUs currently
+- 4 main categories: Tops, Bottoms, Accessories, Equipment
+- Many products have variants (sizes: XS, S, M, L, XL, XXL)
+  • Example: 1 product = "Performance Tank" with 6 size variants = 6 SKUs
+- Some products have color variants too (Black, Gray, Navy, etc.)
+
+INVENTORY SETTINGS:
+- "Track quantity" enabled for all products
+- "Continue selling when out of stock" DISABLED (we don't want overselling)
+- "Shopify tracks this product's inventory" enabled
+- Multi-location inventory enabled
+
+API ACCESS:
+- Admin API access: YES (Shopify Plus includes full API access)
+- Current API apps: Stocky, ShipStation, Klaviyo (all have API keys)
+- Available API scopes: read_products, write_products, read_inventory, write_inventory, read_locations, etc.
+
+CREDENTIALS:
+- Store owner: Marcus Chen (marcus@fitfuel.com)
+- Admin users: David Kim, Kelly Wu
+- API credentials: Will generate new API key for Lazer integration
+  • Can create private app or use custom app approach
+  • Recommend private app for this use case
+
+==============================================================================
+
+STOCKY APP DETAILS
+------------------
+
+Version: Latest (auto-updates via Shopify App Store)
+Subscription: $99/month
+
+CURRENT SETUP:
+- Connected to all 3 locations
+- Purchase orders tracked in Stocky
+- Reorder suggestions enabled (but not fully configured)
+
+CONFIGURATION ISSUES:
+- Lead times not set for most products (Kelly is working on this)
+- Reorder points are default values, not customized
+- Forecasting settings not optimized
+
+WHAT WORKS:
+- Can create purchase orders
+- Inventory updates when PO is received
+- Sales velocity calculations (basic)
+
+WHAT DOESN'T WORK WELL:
+- Multi-location reorder logic confusing
+- Suggested order quantities often wrong
+- No seasonal intelligence
+
+API ACCESS:
+- Stocky doesn't have its own separate API (it's a Shopify app)
+- Works through Shopify Admin API
+- Integration should use Shopify inventory and PO endpoints
+
+==============================================================================
+
+SHOPIFY POS DETAILS
+-------------------
+
+Devices:
+- Downtown Store: iPad Pro 12.9" (2021 model)
+- Westside Store: iPad Pro 11" (2020 model)
+
+POS Software Version: Latest (auto-updates)
+Hardware: Bluetooth card readers (Shopify official hardware)
+
+CONFIGURATION:
+- Each POS is assigned to its respective location
+- Staff can select location when starting shift
+  • PROBLEM: Sometimes staff forget to switch location
+  • Results in sales being attributed to wrong location
+
+SETTINGS:
+- Inventory sync: Enabled
+- Order fulfillment: Enabled (can fulfill online orders from POS)
+- Customer profiles: Enabled
+- Discounts: Enabled
+
+PERMISSIONS:
+- Store managers (Sarah, Jason) have full POS access
+- Seasonal staff have limited access (sales only, no inventory adjustments)
+
+==============================================================================
+
+NETWORK & INFRASTRUCTURE
+-------------------------
+
+INTERNET:
+- Warehouse: Business fiber (1 Gbps down / 500 Mbps up) - reliable
+- Downtown Store: Business cable (300 Mbps down / 30 Mbps up) - mostly reliable
+- Westside Store: Business cable (150 Mbps down / 20 Mbps up) - occasional outages
+
+BACKUP:
+- Warehouse has 4G failover (rarely needed)
+- Stores do not have failover (outages ~2-3 times per year, usually brief)
+
+WIFI:
+- All locations have dedicated WiFi for POS devices
+- Separate guest WiFi for customers
+
+SECURITY:
+- WPA2 encryption on all networks
+- Firewall at warehouse location
+- VPN access for remote work (not relevant for this integration)
+
+==============================================================================
+
+API RATE LIMITS & CONSTRAINTS
+------------------------------
+
+Shopify Plus Rate Limits:
+- Standard: 4 requests per second
+- Plus tier: Can request higher limits if needed
+- Bulk operations available for large data sets
+
+RECOMMENDED APPROACH:
+- Use webhooks for real-time inventory updates (instead of polling)
+- Batch read operations when possible
+- Cache data locally to reduce API calls
+
+Shopify Webhooks Available:
+- products/create
+- products/update
+- inventory_levels/update
+- orders/create
+- orders/fulfilled
+- Many others
+
+We should subscribe to relevant webhooks for the integration.
+
+==============================================================================
+
+AUTHENTICATION & SECURITY
+--------------------------
+
+API AUTHENTICATION:
+- Option 1: Private App (legacy but simpler)
+  • Generate API key and password
+  • Share with Lazer team securely
+  • Easy to revoke if needed
+
+- Option 2: Custom App (newer, OAuth-based)
+  • More secure, better for third-party integrations
+  • Requires OAuth flow
+  • More complex setup
+
+RECOMMENDATION: Private App for Phase 1 (faster to set up)
+Can migrate to Custom App later if needed.
+
+PERMISSIONS REQUIRED:
+- read_products (to get product catalog)
+- write_products (to update product details if needed)
+- read_inventory (to check inventory levels)
+- write_inventory (to adjust inventory quantities)
+- read_locations (to get location details)
+- read_orders (for sales data)
+- write_purchase_orders (for Stocky integration)
+
+SECURITY CONSIDERATIONS:
+- API credentials stored in secure password manager (1Password)
+- Access limited to authorized personnel
+- Regularly rotate API keys (every 6 months)
+- Monitor API usage for anomalies
+
+==============================================================================
+
+DATA SYNC REQUIREMENTS
+----------------------
+
+INVENTORY SYNC:
+- Frequency: Every 5-15 minutes (real-time not critical but close to it)
+- Direction: Bidirectional
+  • Shopify → Integration (when sales happen)
+  • Integration → Shopify (when adjustments are made)
+- Scope: All 180 SKUs across 3 locations
+
+LOW-STOCK ALERTS:
+- Check: Daily at 9am (or more frequent if possible)
+- Delivery: Email to Kelly, Marcus
+  • Optional: Slack notification to #operations channel
+- Threshold: Configurable per product (default 5 units total across all locations)
+
+REORDER SUGGESTIONS:
+- Check: Weekly on Monday mornings
+- Source: Stocky recommendations
+- Delivery: Email summary to Kelly
+- Include: SKU, current inventory, suggested order qty, supplier
+
+REPORTING:
+- Daily: Sales summary (total units sold, by location, by category)
+- Weekly: Low-stock report, bestsellers, slow-movers
+- Monthly: Inventory value, turnover rate
+
+==============================================================================
+
+INTEGRATION ARCHITECTURE (MY RECOMMENDATIONS)
+----------------------------------------------
+
+APPROACH:
+- Webhook-based for real-time events (inventory changes, orders)
+- Scheduled batch jobs for non-urgent tasks (reports, reorder checks)
+- API calls for manual actions (adjusting inventory, creating POs)
+
+HOSTING:
+- Lazer to host integration on their infrastructure (cloud)
+- We don't have on-premise servers
+- Prefer AWS or similar reliable cloud provider
+
+MONITORING:
+- Dashboard showing integration health
+  • Last sync time
+  • Error count
+  • API usage
+- Alerts if integration stops working
+  • Email to David Kim (me)
+  • Slack notification to #operations
+
+BACKUP / FAILOVER:
+- If integration goes down, Shopify still works (no dependency)
+- Manual processes can resume temporarily
+- Integration should catch up when it comes back online
+
+==============================================================================
+
+SYSTEM CONSTRAINTS & LIMITATIONS
+---------------------------------
+
+KNOWN ISSUES TO WORK AROUND:
+1. Shopify POS sometimes attributes sales to wrong location
+   - User error (staff select wrong location)
+   - Integration can't fix this, but can alert us to discrepancies
+
+2. Stocky reorder suggestions sometimes nonsensical
+   - Based on incomplete data (lead times not set)
+   - Integration should validate suggestions before alerting us
+
+3. Variant inventory is per-variant, not per-product
+   - If we want total inventory for "all sizes of shirt", need to sum variants
+   - Integration should handle this aggregation
+
+4. Transfer orders require manual confirmation
+   - Sending location creates transfer
+   - Receiving location must mark as received
+   - Integration could remind us but probably can't auto-confirm
+
+FUTURE CONSIDERATIONS:
+- We may add a 3rd retail location in 2025
+  • Integration should be scalable to 4+ locations
+
+- We're considering wholesale accounts (B2B)
+  • May need separate inventory allocation for wholesale vs retail
+  • Out of scope for Phase 1 but keep in mind
+
+- International expansion is possible
+  • Would require multi-currency support
+  • Way out of scope but mentioning it
+
+==============================================================================
+
+TESTING REQUIREMENTS
+--------------------
+
+TEST ENVIRONMENT:
+- Shopify has a "development store" feature
+- I can create a dev store that mirrors production
+- Use dev store for integration testing before going live
+
+TEST SCENARIOS:
+1. In-store sale at Downtown → verify inventory decrements correctly
+2. Online order → verify warehouse inventory decrements
+3. Manual inventory adjustment → verify sync to Shopify
+4. Low-stock threshold crossed → verify alert sent
+5. Transfer order between locations → verify both locations update
+6. Variant product handling → verify all sizes tracked correctly
+
+ACCEPTANCE CRITERIA:
+- Zero data loss (every inventory change tracked)
+- <5 minute sync latency for critical updates
+- Alerts delivered reliably (99% delivery rate)
+- No false positives on low-stock alerts
+
+==============================================================================
+
+TIMELINE & MILESTONES
+----------------------
+
+PHASE 1 (MVP):
+- Week 1-2: Setup, authentication, initial sync
+- Week 3-4: Inventory sync logic, webhook setup
+- Week 5: Low-stock alerts
+- Week 6: Testing & QA
+- Week 7: Go-live
+
+TARGET GO-LIVE: Early March 2024
+
+PHASE 2 (Enhancements):
+- Q2 2024: Seasonal intelligence, variant bulk ordering, advanced reporting
+
+==============================================================================
+
+SUPPORT & MAINTENANCE
+---------------------
+
+ONGOING SUPPORT NEEDED:
+- Bug fixes (as they arise)
+- API updates (if Shopify changes their API)
+- Feature enhancements (based on user feedback)
+- Performance tuning
+
+POINT OF CONTACT:
+- Primary: David Kim (david@fitfuel.com, 503-555-8821)
+- Backup: Marcus Chen (marcus@fitfuel.com)
+
+ESCALATION PATH:
+- Minor issues: Email David
+- Urgent issues: Call David (9am-6pm PT)
+- Critical system down: Call Marcus
+
+==============================================================================
+
+BUDGET & COST EXPECTATIONS
+--------------------------
+
+INITIAL BUILD:
+- Budget: $10,000 - $20,000 (estimate from Marcus)
+- Depends on complexity and phasing
+
+ONGOING COSTS:
+- Hosting: $100-300/month (Lazer to provide estimate)
+- Maintenance: $200-500/month (Lazer to provide estimate)
+- Stocky subscription: $99/month (existing, not changing)
+
+ROI JUSTIFICATION:
+- Kelly spends ~10 hours/week on manual inventory management
+- Sarah and Jason spend ~2 hours/week each on inventory issues
+- Total: ~14 hours/week = ~56 hours/month
+- At avg wage of $25/hour = $1,400/month in labor
+- Integration should save at least 50% of that = $700/month
+- Payback period: ~14-28 months (acceptable)
+
+==============================================================================
+
+QUESTIONS FOR LAZER
+-------------------
+
+1. Do you recommend private app or custom app authentication?
+2. What's your preferred hosting environment (AWS, GCP, etc.)?
+3. Can you provide uptime SLA?
+4. How do you handle Shopify API rate limits?
+5. Will you set up the webhooks or do we need to?
+6. Do you have experience with Stocky app integration?
+7. What monitoring/alerting tools do you use?
+8. Can we get a dev environment for testing before prod?
+
+==============================================================================
+
+CREDENTIALS TO SHARE (AFTER CONTRACT SIGNED)
+---------------------------------------------
+
+Will provide:
+- Shopify store URL and admin access
+- API credentials (private app key)
+- Stocky access (via Shopify admin)
+- Test environment credentials
+- Slack webhook URL (for notifications)
+
+Security: Will use secure method (1Password shared vault or encrypted email)
+
+==============================================================================
+
+Contact:
+David Kim
+IT/Operations Manager, FitFuel
+david@fitfuel.com
+(503) 555-8821
+

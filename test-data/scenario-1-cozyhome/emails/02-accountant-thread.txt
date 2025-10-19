@@ -1,0 +1,94 @@
+From: Marcus Williams <marcus@lazertechnologies.com>
+To: Sarah Chen <sarah@cozyhome.com>
+Date: Monday, January 15, 2024, 2:15 PM
+Subject: Re: Need help with Shopify and QuickBooks integration
+
+Hi Sarah,
+
+Thanks for reaching out! We definitely can help with this. Shopify to QuickBooks integrations are one of our specialties.
+
+I'd love to set up a quick call to understand your workflow better. A few quick questions:
+- Are you on QuickBooks Online or Desktop?
+- Do you need real-time syncing or would daily batches work?
+- Besides orders and inventory, anything else you'd like synced?
+
+Let me know what times work for you this week.
+
+Best,
+Marcus Williams
+Solutions Consultant
+Lazer Technologies
+
+---
+
+From: Sarah Chen <sarah@cozyhome.com>
+To: Marcus Williams <marcus@lazertechnologies.com>
+Date: Monday, January 15, 2024, 3:42 PM
+Subject: Re: Need help with Shopify and QuickBooks integration
+
+Hi Marcus,
+
+Great! We're on QuickBooks Online. Real-time would be ideal because I'm constantly checking both systems throughout the day. 
+
+As for what else to sync - good question. I think mostly just the orders and inventory. Oh, and it would be nice to get a daily sales summary into QuickBooks too, that would help a lot.
+
+I should probably loop in my accountant David on this conversation. Let me add him.
+
+Available for a call Thursday afternoon or Friday morning?
+
+Sarah
+
+---
+
+From: Sarah Chen <sarah@cozyhome.com>
+To: Marcus Williams <marcus@lazertechnologies.com>
+Cc: David Rodriguez <david@rdgaccounting.com>
+Date: Monday, January 15, 2024, 3:45 PM
+Subject: Re: Need help with Shopify and QuickBooks integration
+
+Adding David Rodriguez, my accountant.
+
+David - this is about that integration project we talked about. Can you weigh in on what you'd need from a QuickBooks perspective?
+
+---
+
+From: David Rodriguez <david@rdgaccounting.com>
+To: Sarah Chen <sarah@cozyhome.com>, Marcus Williams <marcus@lazertechnologies.com>
+Date: Tuesday, January 16, 2024, 9:23 AM
+Subject: Re: Need help with Shopify and QuickBooks integration
+
+Morning all,
+
+Good to be looped in. From an accounting standpoint, here's what I need:
+
+1. Each Shopify order needs to create an invoice in QuickBooks with the correct customer, line items, and tax information
+2. Inventory quantities in QuickBooks should be the source of truth - when we do physical counts, I update QB and that should flow to Shopify
+3. We need clean daily sales reports that roll up to the right income accounts
+
+Some technical stuff to consider:
+- We use QB classes for different product categories (wall art, textiles, furniture, accessories)
+- Customer records need to match between systems or we'll have duplicates
+- Payment information should sync too - whether it's credit card, PayPal, etc.
+
+One thing Sarah - I thought you were managing inventory in Shopify, not QuickBooks? We should clarify that before moving forward.
+
+Available for a call Thursday 2pm or Friday 10am.
+
+David Rodriguez, CPA
+RDG Accounting Services
+
+---
+
+From: Sarah Chen <sarah@cozyhome.com>
+To: David Rodriguez <david@rdgaccounting.com>, Marcus Williams <marcus@lazertechnologies.com>
+Date: Tuesday, January 16, 2024, 11:18 AM
+Subject: Re: Need help with Shopify and QuickBooks integration
+
+David - I do update Shopify inventory when we get new products in, but you're right that you adjust it during the counts. Maybe we need both to sync? I don't know, this is getting confusing.
+
+Marcus - can you help us figure out the best way to handle this on Thursday? Let's do 2pm. I'll send a Zoom link.
+
+Also just thought of something - we're planning to add a retail location later this year. Would that impact how we set this up?
+
+Sarah
+

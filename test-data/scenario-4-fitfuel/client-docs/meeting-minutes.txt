@@ -1,0 +1,337 @@
+FITFUEL INTERNAL PLANNING MEETING - MINUTES
+Lazer Integration Project Kickoff Prep
+
+Date: January 10, 2024
+Time: 3:00 PM - 4:15 PM
+Location: FitFuel Warehouse - Conference Room
+
+ATTENDEES:
+- Marcus Chen, Owner/CEO (chair)
+- Kelly Wu, Warehouse Manager
+- Sarah Park, Store Manager - Downtown
+- Jason Rivera, Store Manager - Westside  
+- David Kim, IT/Operations Manager (note taker)
+
+ABSENT:
+- None
+
+==============================================================================
+
+MEETING PURPOSE
+---------------
+Prepare for tomorrow's kickoff call with Lazer Technologies. Align on what we want from the integration project, prioritize features, and assign ownership.
+
+==============================================================================
+
+AGENDA ITEMS
+------------
+
+1. Current State Assessment
+2. Pain Points & Priorities
+3. Must-Haves vs Nice-to-Haves
+4. Budget Discussion
+5. Timeline & Milestones
+6. Roles & Responsibilities
+7. Questions for Lazer
+
+==============================================================================
+
+1. CURRENT STATE ASSESSMENT
+---------------------------
+
+Marcus: "Let's start by level-setting. David, can you summarize where we are with inventory management today?"
+
+David: "Sure. We're using Shopify Plus with Stocky for inventory. Three locations: warehouse, downtown, and westside. About 180 SKUs. The system works okay but we have constant issues with inventory accuracy, especially across multiple locations."
+
+Kelly: "I'd say it works 'okay' on good days. On bad days it's a nightmare. We oversold three times last week."
+
+Sarah: "Four times. Don't forget the yoga pants incident on Tuesday."
+
+Jason: "That was my sale. Customer was mad. I had to comp her next order."
+
+Marcus: "Right, so we're here because the current system isn't cutting it as we scale. What's our top 3 pain points? Kelly, you go first."
+
+Kelly:
+1. "Manual inventory updates take forever. I spend 10+ hours a week on this."
+2. "I never know when to reorder. Stocky suggestions are hit or miss."
+3. "We don't have good visibility into what's selling fast vs slow."
+
+Sarah:
+1. "Overselling. Makes us look unprofessional."
+2. "Can't easily see what inventory Jason has at Westside when I need it."
+3. "Inventory counts at my store are always wrong in Shopify."
+
+Jason:
+1. "Same as Sarah - overselling is embarrassing."
+2. "Transfer orders are clunky. When I send product to Sarah, it's a manual process."
+3. "I don't trust the inventory numbers in the system."
+
+David:
+1. "Multi-location logic in Shopify is confusing. Even I don't fully understand it."
+2. "No good alerting. We find out about problems after they happen."
+3. "Integrating Stocky with our workflow is harder than expected."
+
+Marcus: "OK so common themes: accuracy, manual work, and lack of visibility. That's what we need to solve."
+
+==============================================================================
+
+2. PAIN POINTS & PRIORITIES (DEEPER DIVE)
+------------------------------------------
+
+Marcus: "Let's dig deeper. Kelly, explain the manual work problem."
+
+Kelly: "Every day I'm updating inventory counts. When we receive shipments, I unpack, count, and enter into Shopify manually. When we do physical counts, same thing. When product moves between locations, I have to create transfer orders and make sure both locations confirm. It's death by a thousand clicks."
+
+Marcus: "Can't that be automated?"
+
+David: "Some of it, yes. Receiving inventory could trigger automatic updates if we had a better scanning system. Transfer orders could be streamlined with better workflow tools. But we'd need an integration layer to tie it together."
+
+Marcus: "That's what Lazer is for. Add 'streamlined receiving process' to the list. Next, overselling. Sarah, why does this keep happening?"
+
+Sarah: "Couple reasons. One, the inventory counts are wrong to begin with. Two, even when they're right, there's a lag between when someone buys in-store and when Shopify updates. So someone can buy the last unit in my store, and before it syncs, someone else buys it online."
+
+Jason: "Yeah, and Shopify doesn't know which location has what in real-time. It says '5 units available' but doesn't tell the customer those are split across three locations."
+
+David: "Technically Shopify does track by location, but the online store displays total availability, not per-location. And the sync delay Sarah mentioned is a real issue. POS updates aren't instant."
+
+Marcus: "So we need faster sync and better location-aware inventory. Got it. What about reordering? Kelly, you said Stocky's suggestions are hit or miss?"
+
+Kelly: "Yeah. Sometimes it tells me to order 50 units of something we barely sell. Other times it says order 5 units of our bestseller that we go through in a week. The logic doesn't make sense."
+
+David: "That's because lead times aren't set correctly. Stocky assumes a default lead time if you don't specify, and that throws off the calculations."
+
+Kelly: "I know, I know. I need to set lead times for all 180 products. But I haven't had time."
+
+Marcus: "Is there a way to automate that or make it easier?"
+
+David: "Not really. It's data entry. Kelly needs to work with our suppliers to get lead times and plug them in."
+
+Kelly: "I've been working on it. I'm about halfway done."
+
+Marcus: "Finish it by end of week. The integration will be useless if Stocky's data is garbage."
+
+Kelly: "Understood."
+
+Marcus: "Alright, anything else on pain points before we move on?"
+
+Jason: "Yeah, seasonality. We order way too much winter gear in October, then sit on it all summer. Can we be smarter about that?"
+
+David: "That's more of a forecasting/planning issue than a system issue. But maybe the integration can flag seasonal products and adjust reorder suggestions."
+
+Marcus: "Add it to the nice-to-have list."
+
+==============================================================================
+
+3. MUST-HAVES VS NICE-TO-HAVES
+-------------------------------
+
+Marcus: "Let's categorize. What do we HAVE to get out of Phase 1, and what can wait?"
+
+MUST-HAVES (Phase 1):
+✓ Multi-location inventory sync that prevents overselling
+✓ Real-time (or near real-time) updates across all locations
+✓ Low-stock alerts (email/Slack when inventory drops below threshold)
+✓ Better integration with Stocky for reorder recommendations
+✓ Streamlined transfer orders between stores
+
+NICE-TO-HAVES (Phase 2 or later):
+- Seasonal product intelligence
+- Variant bulk ordering (order 50 units mixed sizes)
+- Advanced reporting dashboard
+- Purchase order approval workflow
+- Budget tracking for inventory spending
+- Barcode scanning for receiving process
+
+Marcus: "Everyone agree on the must-haves?"
+
+All: [nodding/yes/agreed]
+
+Marcus: "Good. That's what we'll tell Lazer to focus on."
+
+==============================================================================
+
+4. BUDGET DISCUSSION
+--------------------
+
+Marcus: "Let's talk money. I got a rough estimate from Lazer, somewhere between $10k and $20k for the build, plus ongoing hosting and maintenance."
+
+Kelly: "That's a lot."
+
+Marcus: "Is it? Kelly, how much time do you spend on manual inventory work per week?"
+
+Kelly: "I don't know... 10 hours?"
+
+Marcus: "At your salary, that's roughly $600 a week, or $2,400 a month. If this integration saves even half your time, it pays for itself in less than a year."
+
+Sarah: "And that doesn't count the cost of overselling. We've comped at least $500 worth of orders in the last month because of inventory screwups."
+
+Jason: "Plus lost sales. If we're out of stock online because our counts are wrong, we're missing revenue."
+
+Marcus: "Exactly. So the ROI is there. I'm comfortable with a $15k budget for Phase 1. If it goes over, we'll discuss. But this is an investment in scaling the business."
+
+David: "What about ongoing costs? Lazer mentioned hosting and maintenance."
+
+Marcus: "What's the estimate?"
+
+David: "They said $300-500 a month total."
+
+Marcus: "That's fine. We spend $99/month on Stocky already. Another $400/month for a solution that actually works is worth it."
+
+Kelly: "Agreed."
+
+==============================================================================
+
+5. TIMELINE & MILESTONES
+-------------------------
+
+Marcus: "When do we want this live?"
+
+Kelly: "Yesterday."
+
+Marcus: "Realistically, David?"
+
+David: "Lazer said 6-8 weeks for build and testing. So if we start now, mid-March?"
+
+Marcus: "We need it before Q2. We're launching a bunch of new products in April and I don't want inventory chaos during that."
+
+David: "Then we need to push them. Target go-live: March 1st."
+
+Sarah: "That's aggressive."
+
+David: "It is, but Phase 1 scope is pretty focused. If they can't hit that, we'll know early and adjust."
+
+Marcus: "OK, March 1st is the goal. Milestones?"
+
+David (writing on whiteboard):
+- Week 1 (Jan 15-19): Kickoff, requirements gathering
+- Week 2 (Jan 22-26): Technical setup, API access
+- Week 3-4 (Jan 29-Feb 9): Build inventory sync logic
+- Week 5 (Feb 12-16): Build alerts and Stocky integration
+- Week 6 (Feb 19-23): Testing and QA
+- Week 7 (Feb 26-Mar 1): Final testing, training, go-live
+
+Marcus: "Looks good. Any concerns?"
+
+Kelly: "What if testing reveals major issues?"
+
+David: "Then we have a buffer week. Worst case we push to March 8th."
+
+Marcus: "I can live with that."
+
+==============================================================================
+
+6. ROLES & RESPONSIBILITIES
+----------------------------
+
+Marcus: "Who's doing what on our side?"
+
+David: "I'll be primary technical contact. I'll coordinate API access, testing, and deployment."
+
+Kelly: "I'll provide inventory data, set up lead times in Stocky, and test the alerts."
+
+Sarah: "Jason and I can test the in-store POS sync. Make sure our sales update correctly."
+
+Jason: "Yep. We can also test transfer orders."
+
+Marcus: "And I'll be executive sponsor. I'll make decisions if we need to change scope or budget. Weekly check-ins with David to track progress."
+
+David: "I'll send weekly status emails every Friday."
+
+Marcus: "Perfect."
+
+==============================================================================
+
+7. QUESTIONS FOR LAZER
+-----------------------
+
+David compiled a list:
+
+TECHNICAL QUESTIONS:
+1. How do you handle Shopify API rate limits?
+2. What's your experience with Stocky integration specifically?
+3. Can you set up a dev/staging environment for testing?
+4. What happens if the integration goes down? Failover plan?
+5. How do you monitor integration health?
+
+FUNCTIONAL QUESTIONS:
+6. Can we set different low-stock thresholds per product or category?
+7. How do we handle product variants (sizes, colors)?
+8. Can the integration suggest transfer orders between locations?
+9. What reporting comes out of the box?
+10. Can we customize alerts (email, Slack, SMS)?
+
+PROCESS QUESTIONS:
+11. What do you need from us to get started?
+12. How much of our team's time is required during build phase?
+13. What does QA/testing look like?
+14. Do you provide training for our team?
+15. What's the post-launch support model?
+
+COST QUESTIONS:
+16. Is $15k realistic for Phase 1 scope?
+17. What's included in ongoing maintenance?
+18. Are there any surprise costs we should know about?
+
+Marcus: "Good list. David, lead the technical discussion tomorrow. Kelly, you cover the functional/inventory stuff. I'll handle budget and timeline."
+
+All: Agreed.
+
+==============================================================================
+
+ACTION ITEMS BEFORE TOMORROW'S CALL
+------------------------------------
+
+□ David: Send Lazer the technical requirements doc
+□ Kelly: Finish setting lead times in Stocky (at least for top 50 SKUs)
+□ Sarah: Document specific overselling incidents (examples for Lazer)
+□ Jason: Same as Sarah, document problems
+□ Marcus: Review budget approval authority (for PO workflow discussion)
+
+==============================================================================
+
+OTHER NOTES
+-----------
+
+- Sarah mentioned possibly opening a third retail location in suburbs (Q3/Q4 2024)
+  • Not firm yet, but integration should scale to 4+ locations
+  • Marcus: "Let's not over-engineer for that now, but keep it in mind."
+
+- Kelly asked about barcode scanning
+  • Current process: manual data entry when receiving inventory
+  • Future enhancement: scan barcodes to auto-update Shopify
+  • Marcus: "Phase 2. Let's get the basics right first."
+
+- Jason asked about B2B wholesale accounts
+  • Marcus is talking to a few gyms about bulk orders
+  • Would require separate inventory allocation (B2B vs retail)
+  • Marcus: "Way down the road. Not relevant for Phase 1."
+
+- Discussion about whether to include accounting (QuickBooks) integration
+  • Kelly: "Would be nice to sync POs to QuickBooks."
+  • David: "That's a separate project. Let's not mix it with inventory."
+  • Marcus: "Agreed. Focus on inventory first, accounting later."
+
+==============================================================================
+
+MEETING WRAP-UP
+---------------
+
+Marcus: "Alright, I think we're aligned. Phase 1 is focused on multi-location inventory accuracy, low-stock alerts, and better Stocky integration. Budget is $15k. Timeline is 7 weeks, go-live March 1st. Everyone clear on their role?"
+
+All: Yes / Clear / Got it
+
+Marcus: "Good. Tomorrow's call is at 2pm. David, Kelly, Sarah, Jason - block your calendars. Let's make a good impression on Lazer and get this project moving."
+
+David: "Will do. Thanks everyone."
+
+==============================================================================
+
+Meeting adjourned: 4:15 PM
+
+Next meeting: Follow-up after Lazer kickoff call (TBD)
+
+Minutes recorded by: David Kim
+Distributed to: Meeting attendees + file
+
+==============================================================================
+

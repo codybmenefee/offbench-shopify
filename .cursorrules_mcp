@@ -1,0 +1,33 @@
+# Cursor MCP Configuration for Discovery Agent
+
+This project includes an MCP server that Cursor can use.
+
+## To Enable in Cursor:
+
+Add this to your Cursor MCP settings (Cursor Settings → Features → MCP):
+
+```json
+{
+  "mcpServers": {
+    "discovery-agent": {
+      "command": "python3",
+      "args": [
+        "/Users/codymenefee/Documents/Projects/offBench/mcp-servers/clients/shopify/offbench-shopify/mcp/src/main.py",
+        "--stdio"
+      ]
+    }
+  }
+}
+```
+
+## Available Tools:
+
+- find_project_folders() - List available test scenarios
+- ingest_documents(project_id) - Load discovery docs
+- analyze_discovery(project_id) - Analyze and score confidence
+- get_template(type) - Load templates
+- fill_template(project_id, type) - Generate deliverables
+- extract_open_questions(project_id) - Get clarifying questions
+- update_project_context(project_id, info) - Add context
+- recalculate_confidence(project_id) - Re-analyze
+

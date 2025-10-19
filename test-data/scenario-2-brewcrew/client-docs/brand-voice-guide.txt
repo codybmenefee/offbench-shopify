@@ -1,0 +1,269 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                    BREWCREW COFFEE                           ║
+║                  BRAND VOICE GUIDE                           ║
+║                                                              ║
+║                    Version 2.0                               ║
+║                 Updated: November 2023                       ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+==============================================================================
+BRAND OVERVIEW
+==============================================================================
+
+WHO WE ARE
+----------
+BrewCrew Coffee is more than a coffee company - we're a community of coffee lovers who believe great coffee should be accessible, sustainable, and fun.
+
+Founded in 2021 by Emma Sullivan, a former barista with a passion for direct-trade relationships, we source exceptional beans from small farms around the world and roast them fresh in Brooklyn.
+
+OUR MISSION
+-----------
+To bring world-class coffee to everyday people while supporting farmers and building community.
+
+OUR VALUES
+----------
+• QUALITY FIRST - We never compromise on bean quality
+• SUSTAINABILITY - Direct trade relationships, eco-friendly packaging
+• COMMUNITY - Coffee brings people together
+• EDUCATION - We teach our customers about coffee, not gatekeep
+• FUN - Coffee should be enjoyable, not pretentious
+
+==============================================================================
+BRAND VOICE
+==============================================================================
+
+CORE PERSONALITY TRAITS
+------------------------
+
+1. FRIENDLY & APPROACHABLE
+We're the coffee friend you want to grab a cup with, not the snobby barista who judges your order.
+
+DO: Use conversational language, contractions, casual tone
+DON'T: Use overly formal language, jargon without explanation, intimidating terminology
+
+Example (Good): "We're obsessed with this new Ethiopian coffee. Seriously, it tastes like blueberry pancakes."
+Example (Bad): "Our latest Ethiopian offering features notes of anthocyanin-rich fruit with a complex acidity profile."
+
+2. KNOWLEDGEABLE BUT NOT PRETENTIOUS
+We know our stuff about coffee, but we don't make you feel dumb if you don't.
+
+DO: Explain coffee concepts simply, share interesting facts, be helpful
+DON'T: Use insider terminology without context, make people feel uninformed, be condescending
+
+Example (Good): "Medium roast means we stop roasting just as the beans hit their sweet spot - full flavor without the burnt taste."
+Example (Bad): "Our medium roast achieves first crack completion at precisely 420°F using convective heat transfer."
+
+3. ENTHUSIASTIC & PASSIONATE
+We genuinely love coffee and it shows. Our excitement is infectious.
+
+DO: Use exclamation points (sparingly!), show enthusiasm, share stories
+DON'T: Overuse caps lock, be overly sales-y, fake excitement
+
+Example (Good): "You're gonna love this. Our roaster Maria literally danced when she tried this batch."
+Example (Bad): "BUY NOW!!! BEST COFFEE EVER!!!! LIMITED TIME!!!!"
+
+4. AUTHENTIC & TRANSPARENT
+We tell it like it is. No BS, no marketing fluff.
+
+DO: Be honest, admit mistakes, share behind-the-scenes stories
+DON'T: Overpromise, hide problems, use empty marketing speak
+
+Example (Good): "We're sold out of the Guatemala right now because literally everyone ordered it. Good news: More roasting Monday."
+Example (Bad): "Due to unprecedented demand, this exclusive offering has reached capacity. Please check back for future availability."
+
+==============================================================================
+WRITING GUIDELINES
+==============================================================================
+
+TONE VARIATIONS BY CHANNEL
+---------------------------
+
+EMAIL MARKETING (Most common use)
+Tone: Friendly, conversational, helpful
+Length: Short paragraphs, easy to scan
+Style: Second person ("you"), first person plural ("we")
+
+Example:
+"Hey Sarah,
+
+We noticed you're a fan of light roasts (great taste, by the way). 
+
+We just got in a new Ethiopian natural process that's basically sunshine in a cup. Bright, fruity, with notes of blueberry and strawberry. It's the kind of coffee that makes mornings actually good.
+
+Want to try it? Here's 15% off your first bag: [code]"
+
+SOCIAL MEDIA
+Tone: Playful, engaging, community-focused
+Length: Short and punchy
+Style: Questions, calls to action, emoji-friendly
+
+Example:
+"Coffee quiz: Are you a light roast or dark roast person? ☕
+(No wrong answers... but we might judge a little 😉)"
+
+WEBSITE COPY
+Tone: Informative but approachable, story-driven
+Length: Varies, but break up with headers and bullets
+Style: Mix of first person and second person
+
+CUSTOMER SERVICE
+Tone: Helpful, empathetic, solution-oriented
+Length: As long as needed to solve the problem
+Style: Personal, patient, friendly
+
+==============================================================================
+VOCABULARY & WORD CHOICES
+==============================================================================
+
+WORDS WE USE
+------------
+• Delicious, tasty, flavor-packed
+• Community, crew, team
+• Fresh, quality, exceptional
+• Sustainable, ethical, direct-trade
+• Discover, explore, try
+• Love, obsessed, excited
+• Morning, ritual, routine
+• Cozy, warm, comfort
+
+WORDS WE AVOID
+--------------
+• Gourmet (pretentious)
+• Premium (vague marketing speak)
+• Artisanal (overused)
+• Boutique (too fancy)
+• Leverage, synergy, disrupt (corporate jargon)
+• Elite, exclusive (gatekeeping)
+
+COFFEE TERMS - HOW WE EXPLAIN THEM
+-----------------------------------
+Light Roast → "Bright and fruity, shows off the bean's natural flavors"
+Medium Roast → "Balanced and smooth, like a hug in a mug"
+Dark Roast → "Bold and rich, classic coffee flavor"
+Single Origin → "Coffee from one specific place, so you can taste where it's from"
+Blend → "A mix of beans that we've perfected for flavor harmony"
+Natural Process → "Sun-dried with the fruit still on, makes it super fruity"
+Washed Process → "Clean flavor, lets the bean's natural taste shine through"
+
+==============================================================================
+CUSTOMER SEGMENTS & MESSAGING
+==============================================================================
+
+THE COFFEE CURIOUS (New customers)
+Messaging: Educational, welcoming, non-intimidating
+Focus: "We'll help you discover what you love"
+
+THE DAILY DRINKER (Subscribers)
+Messaging: Reliable, consistent, community-focused
+Focus: "Your coffee routine, perfected"
+
+THE COFFEE ENTHUSIAST (High-engagement customers)
+Messaging: Insider info, first access, deep dives
+Focus: "Thought you'd want to know about this..."
+
+THE GIFT GIVER (Holiday/occasional buyers)
+Messaging: Easy, thoughtful, quality-focused
+Focus: "The perfect gift for coffee lovers"
+
+==============================================================================
+EMAIL SUBJECT LINE FORMULA
+==============================================================================
+
+Our best-performing subject lines follow these patterns:
+
+1. CURIOSITY + BENEFIT
+"This coffee tastes like blueberry pancakes (yes, really)"
+"The brewing hack that changed our lives"
+
+2. DIRECT + VALUABLE
+"Your coffee's ready to ship"
+"15% off the beans you love"
+
+3. PERSONAL + CONVERSATIONAL
+"Sarah, you're gonna want this"
+"Quick question about your order"
+
+4. URGENCY (USE SPARINGLY)
+"Selling out fast: Ethiopian Natural"
+"Last chance for holiday delivery"
+
+AVOID:
+- All caps
+- Excessive punctuation (!!!)
+- Clickbait without payoff
+- Misleading urgency
+
+==============================================================================
+DOS & DON'TS QUICK REFERENCE
+==============================================================================
+
+DO:
+✓ Use contractions (we're, you're, it's)
+✓ Start sentences with "And" or "But" if it sounds natural
+✓ End sentences with prepositions if it sounds better
+✓ Use emoji sparingly (1-2 per email max)
+✓ Break grammar rules if it makes the voice stronger
+✓ Write like you talk
+✓ Read your copy out loud
+
+DON'T:
+✗ Use corporate speak or marketing fluff
+✗ Be afraid to show personality
+✗ Overuse exclamation points
+✗ Talk down to customers
+✗ Make assumptions about knowledge level
+✗ Sacrifice clarity for cleverness
+
+==============================================================================
+EXAMPLES IN ACTION
+==============================================================================
+
+REORDER REMINDER EMAIL
+Subject: Running low? We've got you covered.
+
+Hey Alex,
+
+It's been about two weeks since your last order of our Colombia Supremo. If you're anything like us, that bag's probably looking pretty empty right about now.
+
+Want to restock? We've got your usual ready to go. Just click below and we'll roast it fresh and ship it out tomorrow.
+
+[Reorder Button]
+
+P.S. If you loved the Colombia, you might dig our new Brazil. Similar smooth vibes, but with a little caramel sweetness. Just saying.
+
+Cheers,
+The BrewCrew Team
+
+---
+
+WIN-BACK EMAIL (CANCELLED SUBSCRIPTION)
+Subject: We miss you (and your coffee routine does too)
+
+Hey Jordan,
+
+We noticed you cancelled your subscription a while back. No hard feelings! But we wanted to check in.
+
+Was something off? Did we screw up your roast preference? Did life just get busy?
+
+We'd love to win you back. Here's 20% off if you want to give us another shot.
+
+[Restart Subscription]
+
+Or just reply and tell us what we could do better. Seriously, we want to hear it.
+
+Hope to brew for you again soon,
+Emma & the BrewCrew Team
+
+==============================================================================
+
+QUESTIONS OR FEEDBACK?
+Contact Rachel Torres, Marketing Director
+rachel@brewcrew.com
+
+This is a living document. Last updated November 2023.
+If you notice our voice drifting off-brand, speak up!
+
+==============================================================================
+

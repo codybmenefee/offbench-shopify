@@ -1,0 +1,269 @@
+========================================
+PETPAWZ SHIPPING PROCESS DOCUMENTATION
+Internal Wiki Page
+Last updated: December 2023
+Maintained by: Operations Team
+========================================
+
+TABLE OF CONTENTS
+1. Daily Workflow
+2. Carrier Selection
+3. Label Printing
+4. Packing & QC
+5. Handoff to Carriers
+6. Tracking Updates
+7. Problem Orders
+8. Returns Process
+
+========================================
+
+1. DAILY WORKFLOW
+-----------------
+
+MORNING SHIFT (8am-12pm)
+
+□ 8:00am - Check Shopify for new orders
+  - Filter by: Unfulfilled, Payment: Paid
+  - Typically 40-60 orders from overnight
+
+□ 8:15am - Export orders to CSV (ugh)
+  - Download from Shopify admin
+  - Used to manually import to ShipStation
+  - ShipStation import wizard is slow
+
+□ 8:30am - Review orders in ShipStation
+  - Check addresses (look for PO boxes, weird addresses)
+  - Verify shipping methods selected correctly
+  - Flag any problem orders
+
+□ 9:00am - Start printing labels
+  - Batch print by carrier (USPS first, usually biggest batch)
+  - Then UPS
+  - Then FedEx
+  - Printer jams frequently - keep an eye on it
+
+□ 9:30am - Warehouse team starts picking & packing
+  - Match labels to orders
+  - Pull inventory
+  - Pack items (bubble wrap for fragile stuff)
+  - Affix label
+  - Place in carrier-specific staging area
+
+AFTERNOON SHIFT (12pm-5pm)
+
+□ 12:00pm - Check for new orders
+  - Usually 20-30 orders by lunch
+  - Repeat label printing process
+
+□ 2:00pm - First carrier pickup
+  - USPS pickup scheduled for 2pm daily
+  - Make sure all USPS orders are ready
+
+□ 3:00pm - UPS pickup
+  - UPS driver comes around 3pm (sometimes earlier, sometimes later)
+
+□ 4:00pm - FedEx pickup
+  - FedEx usually here 4-4:30pm
+
+□ 4:30pm - Update Shopify with tracking
+  - MANUAL PROCESS (this is the pain point!)
+  - Jessica or assistant manually enters tracking numbers
+  - For each order, mark as fulfilled, add tracking number, select carrier
+  - Takes 30-60 minutes for 100 orders
+  - Sometimes we skip this if we're behind (bad, I know)
+
+□ 5:00pm - Final order check
+  - Any rush orders that came in late?
+  - If yes, process and include in tomorrow's first pickup
+
+========================================
+
+2. CARRIER SELECTION RULES (CURRENT MANUAL LOGIC)
+--------------------------------------------------
+
+We try to follow these guidelines but it's not enforced:
+
+USPS PRIORITY MAIL
+- Default for most orders
+- Good for: Lightweight (under 5 lbs), standard shipping
+- Cost: Cheapest for most orders
+- Speed: 2-5 business days usually
+
+UPS GROUND
+- Heavy orders (over 10 lbs)
+- Large packages
+- Cost: More expensive but better tracking
+- Speed: 1-5 business days depending on zone
+
+FEDEX EXPRESS
+- Expedited or Express shipping selected
+- Guaranteed 2-day or overnight
+- Cost: Most expensive
+- Speed: Reliable
+
+SPECIAL CASES:
+- PO Box addresses → MUST use USPS (only carrier that delivers to PO boxes)
+- Hawaii/Alaska → Usually USPS Priority or FedEx (UPS surcharges are crazy)
+- Business addresses → Prefer UPS/FedEx (signature options, dock delivery)
+
+========================================
+
+3. LABEL PRINTING
+-----------------
+
+Equipment:
+- 2 x Zebra label printers (4x6 thermal labels)
+- Backup: Regular printer with 8.5x11 paper + tape (emergencies only)
+
+Print Settings:
+- 4x6 labels
+- Auto-rotate in ShipStation
+- Include barcode
+
+Common Issues:
+- Printer jam → clear paper path, reload labels
+- Low ink warning on backup printer → replace cartridge
+- Wrong label size detected → restart printer
+
+Label Verification:
+- Scan barcode before affixing to package
+- Double-check address visible and legible
+- Verify carrier logo matches what we intended
+
+========================================
+
+4. PACKING & QC
+---------------
+
+Packing Materials:
+- Poly mailers (for soft goods, clothing, light items)
+- Cardboard boxes (various sizes for heavier items)
+- Bubble wrap (for anything fragile)
+- Packing peanuts (for large boxes with small items)
+- Branded tissue paper (nice touch, customers love it)
+
+Quality Checks:
+- Verify item matches order
+- Check for damage before packing
+- Include packing slip (print from Shopify)
+- Include business card / promo flyer
+- Seal securely
+
+Weight Verification:
+- Weigh package before affixing label
+- If actual weight differs significantly from estimated weight, regenerate label
+- Carriers will surcharge if weight is way off
+
+========================================
+
+5. HANDOFF TO CARRIERS
+-----------------------
+
+USPS:
+- Carrier comes to our location (scheduled daily pickup)
+- Scan packages using USPS handheld
+- Get pickup receipt
+- If we miss pickup, can drop at post office (3 blocks away)
+
+UPS:
+- Scheduled daily pickup
+- Driver scans packages
+- No paperwork needed
+- If we miss pickup, can drop at UPS Store (1 mile away)
+
+FedEx:
+- Scheduled daily pickup
+- Driver scans packages
+- Get manifest printout
+- If we miss pickup, can drop at FedEx location (2 miles away)
+
+========================================
+
+6. TRACKING UPDATES (PAIN POINT!)
+----------------------------------
+
+Current Process:
+1. After label is printed, tracking number is in ShipStation
+2. Someone (usually Jessica) manually copies tracking to Shopify
+3. When marked as fulfilled in Shopify, customer gets email with tracking link
+
+Problems:
+- Time-consuming (1 min per order x 100 orders = too long)
+- Errors (typos, wrong carrier selected, wrong order)
+- Delays (sometimes we don't do this until end of day)
+- Customers email asking for tracking
+
+What We Want:
+- Automatic sync of tracking from ShipStation back to Shopify
+- Immediate notification to customer when label is created
+- No manual work
+
+========================================
+
+7. PROBLEM ORDERS
+-----------------
+
+Address Issues:
+- Invalid address → contact customer, verify, update
+- PO Box but UPS selected → switch to USPS, regenerate label
+- Military address (APO/FPO) → use USPS only
+
+Out of Stock:
+- Inventory discrepancy → contact customer, offer refund or wait
+- Partial shipment → ship what's available, note on order, follow up
+
+Shipping Method Mismatch:
+- Customer ordered Express but we're behind → upgrade to Express, eat the cost
+- Customer ordered Standard but item is hazmat → might need ground only, call to confirm
+
+Fraud / Risk Orders:
+- Shopify fraud analysis flags high-risk orders
+- We hold these for manual review
+- Usually call customer to verify
+- About 1-2 per day
+
+========================================
+
+8. RETURNS PROCESS
+------------------
+
+Customer Initiates Return:
+- Emails support@petpawz.com
+- States reason (wrong size, defect, didn't like, etc.)
+
+We Respond:
+- Approve return (we're pretty generous)
+- Generate return label in ShipStation
+  • Manual process: Create new shipment, reverse addresses
+  • Usually send prepaid USPS label
+- Email label to customer as PDF
+
+Customer Ships Back:
+- Uses our prepaid label
+- We get tracking notification (eventually)
+
+We Receive Return:
+- Inspect item
+- Restock if good condition
+- Process refund in Shopify (full refund minus original shipping, usually)
+
+Issues with Current Process:
+- Totally manual
+- No automation
+- Tracking return shipments is annoying
+- Could this be part of the integration? Would be nice.
+
+========================================
+
+NOTES & TODOS
+-------------
+
+TODO: Document international shipping process (when we start doing that)
+TODO: Add section on hazmat items (we have some pet products that are restricted)
+TODO: Create troubleshooting guide for common ShipStation errors
+TODO: Figure out automation for all of this! (hence this Lazer project)
+
+========================================
+
+Questions? Contact Jessica (jessica@petpawz.com)
+

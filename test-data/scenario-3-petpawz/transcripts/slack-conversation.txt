@@ -1,0 +1,156 @@
+SLACK CONVERSATION EXPORT
+Channel: #operations
+Date Range: January 9, 2024
+Participants: Jessica Martinez (Ops), Mike Thompson (CS), Alex Kim (Warehouse Lead)
+
+==============================================================================
+
+January 9, 2024
+
+[09:23 AM] Jessica Martinez
+Morning team - quick question. Has anyone else noticed ShipStation being slow today? Labels are taking forever to generate.
+
+[09:24 AM] Alex Kim
+yeah i noticed that too. thought it was just our internet
+
+[09:25 AM] Jessica Martinez
+Checked internet, we're fine. Might be ShipStation API or something. I'll reach out to their support.
+
+[09:26 AM] Mike Thompson
+Great, because we're already getting "where's my tracking number" emails from last night's orders 😅
+
+[09:27 AM] Jessica Martinez
+I know, I know. That's why we need this integration project. Can't keep doing this manually.
+
+[09:45 AM] Jessica Martinez
+Update: ShipStation support says they had a brief outage this morning. Should be back to normal now. Testing...
+
+[09:47 AM] Jessica Martinez
+Yep, working now. OK let's catch up on these labels.
+
+[10:15 AM] Alex Kim
+@Jessica Martinez we have a problem order. #PZ-4728 - customer ordered 3 large dog beds. That's going to be like 35-40 lbs total. Too big for one box.
+
+[10:16 AM] Jessica Martinez
+Split it into 2 shipments. 2 beds in one, 1 in another. Use UPS for both since they're heavy.
+
+[10:17 AM] Alex Kim
+ok but customer only paid for standard shipping. ups ground?
+
+[10:18 AM] Jessica Martinez
+Yeah UPS Ground is fine for standard. We just eat the extra cost on the second package.
+
+[10:19 AM] Alex Kim
+got it. but then the customer only gets tracking for one package right? unless you enter both tracking numbers?
+
+[10:20 AM] Jessica Martinez
+Ugh you're right. I'll make sure to add both tracking numbers to the order. This is exactly the kind of thing that slips through the cracks.
+
+[10:21 AM] Mike Thompson
+Maybe note somewhere in the order that it's a split shipment? So if they call we know?
+
+[10:22 AM] Jessica Martinez
+Good idea. I'll add an order note in Shopify. "Split shipment - 2 packages"
+
+[11:34 AM] Alex Kim
+Another question - order #PZ-4891 is going to a PO Box but we already printed a UPS label. What do?
+
+[11:35 AM] Jessica Martinez
+Void the UPS label. Print new USPS label. This is why we need address validation...
+
+[11:36 AM] Alex Kim
+how do i void the label?
+
+[11:37 AM] Jessica Martinez
+In ShipStation, find the order, click the three dots, "Void Label". Then regenerate with USPS selected.
+
+[11:38 AM] Alex Kim
+done. but we already wasted a ups label. do we get charged for that?
+
+[11:39 AM] Jessica Martinez
+Only if it gets scanned by UPS. Since we voided it before that, we should be OK. But yeah, another reason we need automation to catch PO boxes up front.
+
+[02:47 PM] Mike Thompson
+Quick update from support side - we're getting a LOT of tracking inquiries today. More than usual. Is there a delay on updating Shopify?
+
+[02:48 PM] Jessica Martinez
+Yeah sorry Mike. We got behind on label printing because of the ShipStation issue this morning. I'm updating tracking numbers now but it takes forever.
+
+[02:49 PM] Mike Thompson
+All good, just letting you know. Is there a way I can see which orders have labels printed but not updated in Shopify? So I can at least manually send tracking to customers who ask?
+
+[02:51 PM] Jessica Martinez
+Not easily. I'd have to export from ShipStation and compare to Shopify. Takes time I don't have right now.
+
+[02:52 PM] Mike Thompson
+No worries. This is definitely on the list of things for the integration project to fix.
+
+[02:53 PM] Jessica Martinez
+TOP OF THE LIST 🎯
+
+[03:15 PM] Alex Kim
+usps driver is here, handing off 67 packages
+
+[03:16 PM] Jessica Martinez
+Nice! Make sure you get the pickup receipt.
+
+[03:17 PM] Alex Kim
+✅ got it
+
+[03:45 PM] Alex Kim
+ups driver came early today. handed off 23 packages. he was in a hurry lol
+
+[03:46 PM] Jessica Martinez
+Classic UPS
+
+[04:22 PM] Alex Kim
+fedex pickup done. 8 packages. slow day for fedex.
+
+[04:23 PM] Jessica Martinez
+We don't get many express orders mid-week. More on Fridays usually.
+
+[04:35 PM] Jessica Martinez
+OK I just finished updating all tracking numbers in Shopify. 98 orders today. Took me 45 minutes. MY FINGERS HURT.
+
+[04:36 PM] Mike Thompson
+🏆 hero
+
+[04:37 PM] Alex Kim
+seriously we need that automation like yesterday
+
+[04:38 PM] Jessica Martinez
+Meeting with Lazer Technologies next week to kick off the project. I'm going to bring all these examples of manual work we're doing.
+
+[04:40 PM] Mike Thompson
+Please do. And mention the customer complaints. We need to show the business case.
+
+[04:41 PM] Jessica Martinez
+Oh trust me, I have a whole document prepared. 😂
+
+[04:42 PM] Alex Kim
+when do they think it'll be ready? we're growing so fast we're going to have to hire another person just for label printing if we don't fix this soon
+
+[04:43 PM] Jessica Martinez
+TBD. Hoping by end of Feb but we'll see what they say. It's probably more complex than we think.
+
+[04:44 PM] Mike Thompson
+Even if it just automates the tracking sync, that would be huge.
+
+[04:45 PM] Jessica Martinez
+💯 agreed. Even if we still have to print labels manually, automatic tracking would save us probably 30-45 min a day.
+
+[04:46 PM] Alex Kim
+plus fewer mistakes. i've definitely grabbed the wrong label before and had to redo it.
+
+[04:48 PM] Jessica Martinez
+OK team, wrapping up for today. Same time tomorrow! 📦📦📦
+
+[04:49 PM] Mike Thompson
+see ya 👋
+
+[04:49 PM] Alex Kim
+later ✌️
+
+==============================================================================
+End of conversation export
+

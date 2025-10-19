@@ -1,0 +1,244 @@
+From: Derek Johnson <derek.johnson@floralpos.com>
+To: Sophie Chen <sophie@lazertechnologies.com>
+Cc: Linda Nguyen <linda@bloomandco.com>, Marcus Williams <marcus@lazertechnologies.com>
+Date: Wednesday, January 17, 2024, 2:14 PM
+Subject: FloralPOS API Documentation & Integration Specs
+
+Hi Sophie, Marcus,
+
+As promised, here's the API documentation and technical specs for integrating with FloralPOS. Let me know if you have questions!
+
+==============================================================================
+
+FLORALPOS REST API - TECHNICAL OVERVIEW
+----------------------------------------
+
+Base URL: https://api.floralpos.com/v2/
+Authentication: API Key (passed in header as "X-API-Key")
+Rate Limits: 1,000 requests/hour (standard tier)
+Response Format: JSON
+
+==============================================================================
+
+AUTHENTICATION
+--------------
+
+All requests require an API key in the header:
+
+Header: X-API-Key: {your_api_key_here}
+
+Linda can generate her API key from the FloralPOS admin dashboard under:
+Settings > Developers > API Keys > Generate New Key
+
+Keys can be revoked and regenerated at any time for security.
+
+==============================================================================
+
+AVAILABLE ENDPOINTS
+-------------------
+
+1. GET /inventory
+   - Returns list of all products with current inventory levels
+   - Parameters: 
+     • page (optional, default 1)
+     • limit (optional, default 50, max 200)
+     • category (optional filter by category)
+   
+   Response includes:
+   - sku (string)
+   - name (string)
+   - category (string)
+   - quantity_on_hand (integer)
+   - unit_price (decimal)
+   - barcode (string, optional)
+   - last_updated (timestamp)
+
+2. PUT /inventory/{sku}
+   - Update inventory quantity for a specific product
+   - Body: { "quantity": 25 }
+   - Response: Updated product object
+   
+   Note: This sets the absolute quantity, not a relative adjustment.
+   If you want to decrement by 1, you need to GET current qty first, 
+   then PUT with (current - 1).
+
+3. GET /sales
+   - Returns sales transactions for a date range
+   - Parameters:
+     • start_date (required, format: YYYY-MM-DD)
+     • end_date (required, format: YYYY-MM-DD)
+     • payment_method (optional filter: cash, card, other)
+   
+   Response includes array of transactions:
+   - transaction_id (string)
+   - date_time (timestamp)
+   - total_amount (decimal)
+   - tax_amount (decimal)
+   - payment_method (string)
+   - items (array of line items with sku, quantity, price)
+
+4. GET /products
+   - Returns full product catalog
+   - Similar to /inventory but includes more details (descriptions, tags, etc.)
+   - Use this for initial sync, then /inventory for ongoing updates
+
+5. GET /reports/daily-summary
+   - Returns end-of-day summary for a specific date
+   - Parameters: date (format: YYYY-MM-DD)
+   
+   Response includes:
+   - date (string)
+   - total_sales (decimal)
+   - total_transactions (integer)
+   - sales_by_payment_method (object)
+   - sales_by_category (object)
+   - tax_collected (decimal)
+
+==============================================================================
+
+WEBHOOKS (Limited Support)
+---------------------------
+
+We have BETA webhook support for certain events:
+- inventory_updated (fires when inventory is adjusted)
+- transaction_completed (fires when a sale is finalized)
+
+To enable webhooks:
+1. Linda needs to request webhook access (email support@floralpos.com)
+2. We'll enable it on her account
+3. She provides a webhook URL
+4. We send POST requests to that URL when events occur
+
+Note: Webhooks are in beta. Some customers have reported occasional missed events.
+Recommend using polling (GET requests every 15 min) as primary sync method,
+webhooks as optional real-time enhancement.
+
+==============================================================================
+
+DATA NOTES & QUIRKS
+-------------------
+
+Inventory Quantities:
+- FloralPOS allows negative inventory (if you sell something you don't have)
+- This is by design for flower shops (you can order more from supplier)
+- But may cause issues for online sales
+- Recommend adding validation on your side to prevent selling negative stock
+
+Pricing:
+- unit_price reflects current price in the system
+- If Linda manually discounts an item, that discount is NOT tracked separately
+- The API just shows the current active price
+- No price history is available via API
+
+Product Categories:
+- Categories are free-text, not a fixed taxonomy
+- Linda's categories: "Fresh Cut Flowers", "Bouquets", "Plants", "Supplies"
+- But she could add new categories at any time
+- Recommend syncing category field as-is to Shopify
+
+Barcodes:
+- Not all products have barcodes
+- Older products in Linda's catalog may have empty barcode field
+- SKU is the reliable unique identifier
+
+==============================================================================
+
+COMMON INTEGRATION PATTERNS
+----------------------------
+
+Pattern 1: Initial Product Sync
+1. GET /products (paginated if needed)
+2. Create/update matching products in Shopify
+3. Store SKU mapping (FloralPOS SKU <-> Shopify Product ID)
+
+Pattern 2: Ongoing Inventory Sync (Polling)
+1. Every 15 minutes, GET /inventory
+2. Compare to last known quantities
+3. Update Shopify for any changes
+4. Update local cache of quantities
+
+Pattern 3: Shopify Sale -> FloralPOS Update
+1. Shopify webhook fires when order is paid
+2. Your integration gets the order
+3. For each line item, PUT /inventory/{sku} with decremented quantity
+4. Handle errors (e.g. insufficient stock)
+
+Pattern 4: Daily Sales Reporting
+1. At end of day (6pm?), GET /reports/daily-summary for today
+2. Also get Shopify sales total for today
+3. Combine and send email report to Linda
+
+==============================================================================
+
+ERROR HANDLING
+--------------
+
+HTTP Status Codes:
+- 200: Success
+- 400: Bad Request (invalid parameters)
+- 401: Unauthorized (invalid API key)
+- 404: Not Found (SKU doesn't exist)
+- 429: Rate Limit Exceeded
+- 500: Server Error
+
+Rate Limit Headers:
+Every response includes:
+- X-RateLimit-Limit: 1000
+- X-RateLimit-Remaining: 847
+- X-RateLimit-Reset: 1642456800 (unix timestamp)
+
+If you hit rate limit, wait until reset time before retrying.
+
+==============================================================================
+
+TESTING
+-------
+
+We provide a sandbox environment for testing:
+- Base URL: https://sandbox-api.floralpos.com/v2/
+- Linda can request sandbox access (separate API key)
+- Sandbox has fake data, doesn't affect production
+
+Recommend testing all integration logic in sandbox first!
+
+==============================================================================
+
+SUPPORT
+-------
+
+If you run into issues:
+- Email: api-support@floralpos.com
+- Response time: Usually within 24 hours
+- For urgent issues, mention Linda's account in your email
+
+Full API documentation (with examples): https://docs.floralpos.com/api/v2
+
+==============================================================================
+
+KNOWN LIMITATIONS
+-----------------
+
+Things the API does NOT support:
+- Cannot create new products (must be created in FloralPOS admin first)
+- Cannot delete products
+- Cannot access customer data (PII restrictions)
+- No support for multi-location inventory (Linda only has 1 location currently)
+- No built-in freshness tracking or expiration dates
+
+If Linda needs any of these features, let me know and I can check if we have workarounds or if they're on our roadmap.
+
+==============================================================================
+
+Let me know if you need anything else!
+
+Best,
+Derek
+
+---
+
+Derek Johnson
+Account Manager
+FloralPOS Systems
+derek.johnson@floralpos.com
+(555) 123-4567
+

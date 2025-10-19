@@ -1,0 +1,252 @@
+BLOOM & CO. - THREE-WAY TECHNICAL CALL TRANSCRIPT
+Date: January 17, 2024
+Duration: 41 minutes
+Attendees:
+- Sophie Chen, Business Analyst, Lazer Technologies
+- Marcus Williams, Solutions Consultant, Lazer Technologies
+- Linda Nguyen, Owner, Bloom & Co.
+- Priya Sharma, Shop Manager, Bloom & Co.
+- Derek Johnson, Account Manager, FloralPOS Systems
+
+==============================================================================
+
+[00:00:08] Sophie Chen: Alright, looks like everyone's here. Thanks for joining, especially you Derek. We really appreciate FloralPOS jumping on this call.
+
+[00:00:16] Derek Johnson: Happy to help. We love seeing our clients grow their online presence.
+
+[00:00:21] Marcus Williams: Perfect. So Linda, Priya, Sophie did a site visit last week and identified the key integration points. Today we want to dig into the technical side, particularly what's possible with FloralPOS's API.
+
+[00:00:33] Linda Nguyen: Yes, and Derek, I should mention we've been really happy with FloralPOS for the in-store stuff. This isn't about switching systems, just connecting what we have.
+
+[00:00:43] Derek Johnson: I appreciate that, Linda. And yeah, we've got a pretty robust API. What are you looking to do exactly?
+
+[00:00:51] Marcus Williams: Main goal is bidirectional sync between FloralPOS and Shopify. Sales data and inventory quantities, primarily. Maybe pricing too.
+
+[00:01:01] Derek Johnson: Okay, yeah, we can do that. Our API has endpoints for inventory, sales transactions, product catalog, customer data if you need it. Pretty standard REST API stuff.
+
+[00:01:13] Sophie Chen: That's great. Can you walk us through what data is available through the API for inventory?
+
+[00:01:20] Derek Johnson: Sure. For each product we expose the SKU, product name, category, current quantity on hand, unit price, barcode, and some metadata like when it was last updated.
+
+[00:01:33] Priya Sharma: Does that include products that we've marked down? Like when flowers start to wilt and we discount them?
+
+[00:01:40] Derek Johnson: Um, good question. Let me think... The API would show the current price, so if you've marked it down in the POS, yes, that would sync. But there's no flag for like "this is discounted" versus "this is regular price."
+
+[00:01:56] Priya Sharma: Okay. And what about quantity? If we remove wilted flowers from inventory, does that update in the API automatically?
+
+[00:02:04] Derek Johnson: Only if you adjust the inventory count in FloralPOS. If you physically remove flowers but don't update the system, then no, the API won't know.
+
+[00:02:14] Linda Nguyen: Which is the problem, because I don't always update it right away.
+
+[00:02:19] Marcus Williams: So there's no automatic expiration or freshness tracking?
+
+[00:02:23] Derek Johnson: Not built into FloralPOS, no. Some of our larger clients have built custom solutions on top of our API, but out-of-the-box we just track quantity and sales.
+
+[00:02:35] Linda Nguyen: That's what I figured. So we'd have to manually mark things down as they age. Which I can do, I just need to be more disciplined about it.
+
+[00:02:45] Sophie Chen: Okay, let's table the perishability question for now. Derek, what about sales data? Can we pull daily sales totals?
+
+[00:02:54] Derek Johnson: Absolutely. We have a sales report endpoint that can give you transactions for any date range. You can filter by payment method, product category, employee, whatever you need.
+
+[00:03:06] Marcus Williams: And is that real-time or does it batch at end of day?
+
+[00:03:11] Derek Johnson: Real-time. As soon as a transaction is completed in the POS, it's available via the API within a few seconds.
+
+[00:03:19] Marcus Williams: Perfect. Now, the other direction - can we WRITE data to FloralPOS? Like if inventory sells on Shopify, can we decrement the quantity in FloralPOS automatically?
+
+[00:03:31] Derek Johnson: Yes, we have endpoints for inventory adjustments. You'd send a PUT request with the new quantity and it updates in the system.
+
+[00:03:40] Marcus Williams: Is there any validation or safety checks? Like if someone tries to set inventory to -5, does it reject that?
+
+[00:03:48] Derek Johnson: It should error out if you try to go negative, but I'd have to double-check the exact behavior. I can send you our API documentation after this call.
+
+[00:03:57] Sophie Chen: That would be super helpful. Also, rate limits - how many API calls can we make per hour or per day?
+
+[00:04:05] Derek Johnson: Standard tier is 1000 requests per hour. If you need more, we have an enterprise tier with higher limits, but that's probably overkill for your volume.
+
+[00:04:16] Linda Nguyen: 1000 per hour sounds like a lot. We're not that busy.
+
+[00:04:21] Marcus Williams: You'd be surprised how quickly you hit limits with constant syncing, but 1000/hour should be fine. We'll optimize to batch calls where possible.
+
+[00:04:31] Priya Sharma: I have a question. What happens if the internet goes down at the shop? We've had that happen a couple times.
+
+[00:04:39] Derek Johnson: FloralPOS is cloud-based, so if you're offline, the POS won't work. Transactions won't process. That's just the nature of cloud systems.
+
+[00:04:49] Priya Sharma: Right, I figured. So if we're offline, the integration also wouldn't work?
+
+[00:04:54] Marcus Williams: Correct. But once internet is restored, we can sync any missed data. We'd build in error handling for that scenario.
+
+[00:05:03] Linda Nguyen: That makes sense. Outages are rare, maybe once or twice a year.
+
+[00:05:09] Sophie Chen: Derek, one more technical question - authentication. How does API access work? Do we need API keys or OAuth or what?
+
+[00:05:19] Derek Johnson: We use API keys. Linda, you'd generate an API key from your FloralPOS dashboard and give it to the Lazer team. The key is tied to your store account.
+
+[00:05:30] Linda Nguyen: Okay, that sounds straightforward.
+
+[00:05:33] Derek Johnson: Yep. And you can revoke and regenerate keys if needed for security.
+
+[00:05:38] Marcus Williams: Great. Now let's talk about the sync logic. Linda, Priya, we need to decide which system is the source of truth for inventory.
+
+[00:05:48] Linda Nguyen: I've been thinking about that. I think FloralPOS should be the source, because we update it every time we sell something in-store. Shopify is less accurate.
+
+[00:05:59] Priya Sharma: But what about online sales? If Shopify sells something, that needs to update FloralPOS.
+
+[00:06:05] Marcus Williams: Right, so it's not really one-way. It's bidirectional. In-store sales decrement FloralPOS, which syncs to Shopify. Online sales decrement Shopify, which syncs to FloralPOS.
+
+[00:06:17] Linda Nguyen: Okay, yeah, that makes sense. Both systems talk to each other.
+
+[00:06:22] Sophie Chen: The trick is avoiding conflicts. Like if someone buys the last tulip in-store at the same moment someone orders it online, we have a problem.
+
+[00:06:33] Priya Sharma: That's happened before! We oversold a dozen roses on Valentine's Day. Customer was not happy.
+
+[00:06:41] Marcus Williams: We'd implement pessimistic locking or a buffer. Like Shopify always shows 1-2 fewer items than FloralPOS actually has, to account for that race condition.
+
+[00:06:53] Linda Nguyen: A buffer? So if I have 10 tulips in the shop, Shopify shows 8 available online?
+
+[00:06:59] Marcus Williams: Exactly. That way there's always some cushion for timing issues.
+
+[00:07:04] Linda Nguyen: Hmm, but then I'm not selling all my inventory online. That seems inefficient.
+
+[00:07:11] Marcus Williams: It's a tradeoff. You either have a buffer and occasionally miss a sale, or you don't have a buffer and occasionally oversell and disappoint customers.
+
+[00:07:21] Linda Nguyen: When you put it that way... Yeah, let's have the buffer. Disappointing customers is worse.
+
+[00:07:28] Priya Sharma: Agreed.
+
+[00:07:31] Sophie Chen: Okay, so to summarize the inventory sync logic:
+- FloralPOS is updated in real-time for in-store sales
+- Online sales from Shopify trigger inventory decrements in FloralPOS
+- Shopify always shows a buffer (2-3 units less) to prevent overselling
+- Sync happens every... how often?
+
+[00:07:50] Marcus Williams: Probably every 15 minutes? Derek, is that reasonable from a rate limit perspective?
+
+[00:07:57] Derek Johnson: Yeah, that's fine. Even if you're syncing 150 products every 15 minutes, you're only at like 600-700 API calls per hour.
+
+[00:08:07] Marcus Williams: Perfect. Linda, does 15-minute sync work for you or do you need more real-time?
+
+[00:08:14] Linda Nguyen: 15 minutes is fine. Most online orders are pickup anyway, and people don't expect instant fulfillment for flowers.
+
+[00:08:23] Sophie Chen: Great. Now let's talk pricing. Linda, you mentioned some prices don't match between the systems.
+
+[00:08:31] Linda Nguyen: Yeah, I think I messed up when I set up Shopify. The POS prices are correct.
+
+[00:08:37] Marcus Williams: Easy fix. We'll sync pricing from FloralPOS to Shopify during the initial setup. Going forward, if you change a price in FloralPOS, it'll update in Shopify.
+
+[00:08:48] Linda Nguyen: That's perfect.
+
+[00:08:51] Priya Sharma: What about products that are only sold in-store? Like we sell individual flower stems in the shop but don't offer them online.
+
+[00:09:00] Marcus Williams: We can filter those. Derek, is there a way to flag products as "online-eligible" or something in FloralPOS?
+
+[00:09:09] Derek Johnson: You can use product categories or tags. So you could tag certain products "online" and only sync those to Shopify.
+
+[00:09:18] Linda Nguyen: That works. I can go through and tag everything that should be online.
+
+[00:09:24] Sophie Chen: Add that to your homework list, Linda.
+
+[00:09:27] Linda Nguyen: Got it.
+
+[00:09:30] Marcus Williams: Now, the reporting piece. Linda, you want a unified sales report across both channels, right?
+
+[00:09:37] Linda Nguyen: Yes! Right now I'm manually adding up POS sales and Shopify sales every single day. It's tedious.
+
+[00:09:45] Marcus Williams: We can build a dashboard or automated report that pulls from both systems and gives you a combined total. What format do you want? Email, PDF, dashboard you log into?
+
+[00:09:58] Linda Nguyen: Honestly, even just an email every night with the totals would be amazing. I could forward that straight to my accountant.
+
+[00:10:06] Sophie Chen: We can do that. Daily email at like 6pm with total sales, broken down by channel and payment method?
+
+[00:10:14] Linda Nguyen: Perfect.
+
+[00:10:17] Priya Sharma: Can it also show inventory levels? Like which products are running low?
+
+[00:10:24] Marcus Williams: Sure, we can include a low-stock alert. What's the threshold? Under 5 units?
+
+[00:10:30] Linda Nguyen: Under 5 works for most things. Except like, roses, we usually stock 20-30. So maybe a percentage? Like under 25% of normal stock?
+
+[00:10:43] Marcus Williams: That gets complicated. Let's start with a fixed threshold of 5 units for Phase 1, and we can make it more sophisticated later if needed.
+
+[00:10:53] Linda Nguyen: Okay, fair enough.
+
+[00:10:56] Derek Johnson: By the way, FloralPOS has low-stock alerts built in. Not sure if you've enabled those Linda.
+
+[00:11:03] Linda Nguyen: Oh, I didn't know that! Where do I find that?
+
+[00:11:07] Derek Johnson: In the admin dashboard under Inventory Settings. You can set thresholds per product.
+
+[00:11:13] Linda Nguyen: I'll check that out. But still, having it in the daily email would be convenient.
+
+[00:11:19] Marcus Williams: We'll include it.
+
+[00:11:22] Sophie Chen: Derek, last technical question - does FloralPOS track sales tax?
+
+[00:11:28] Derek Johnson: Yes, you can configure tax rates in the system. It's calculated automatically at checkout.
+
+[00:11:34] Sophie Chen: And is tax data available via the API?
+
+[00:11:38] Derek Johnson: Yep, transaction data includes tax collected.
+
+[00:11:42] Marcus Williams: Great. Linda, your accountant mentioned tax discrepancies between the systems. We should make sure the tax reporting is consistent.
+
+[00:11:52] Linda Nguyen: Yes, please. I don't really understand the tax stuff, I just forward the reports to my accountant and he deals with it.
+
+[00:12:00] Marcus Williams: We'll make sure both systems are reporting tax the same way. Might need to loop in your accountant at some point to confirm.
+
+[00:12:08] Linda Nguyen: I can intro you if needed.
+
+[00:12:11] Sophie Chen: Alright, I think we've covered the main technical points. Derek, can you send us the API documentation?
+
+[00:12:19] Derek Johnson: Absolutely. I'll email it over this afternoon. Linda, I'll CC you.
+
+[00:12:24] Linda Nguyen: Thanks Derek.
+
+[00:12:27] Marcus Williams: And Linda, Priya, homework for you is to tag products for online, clean up pricing in FloralPOS, and document your end-of-day process in detail. We need to understand every step so we can streamline it.
+
+[00:12:42] Priya Sharma: I can write up the end-of-day process. I do it more often than Linda anyway.
+
+[00:12:48] Linda Nguyen: True, you're better at it. Thanks Priya.
+
+[00:12:52] Marcus Williams: Perfect. Anything else we should cover today?
+
+[00:12:57] Linda Nguyen: I don't think so. When can we get started?
+
+[00:13:01] Marcus Williams: Once we have the API docs and you've cleaned up the product data, we can start building. Probably 3-4 weeks of development.
+
+[00:13:10] Linda Nguyen: And we'd be live by early March?
+
+[00:13:13] Marcus Williams: That's the goal. March is your busy season right?
+
+[00:13:17] Linda Nguyen: Yeah, spring weddings and events. That's when we really need this working.
+
+[00:13:23] Marcus Williams: Understood. We'll prioritize it.
+
+[00:13:26] Derek Johnson: Linda, if you need any help from the FloralPOS side during the integration, just reach out. We're here to support.
+
+[00:13:33] Linda Nguyen: Thanks Derek, I appreciate that.
+
+[00:13:36] Sophie Chen: Alright team, I think we're good. I'll send out meeting notes and action items this afternoon. Thanks everyone!
+
+[00:13:43] All: Thanks! / Thank you! / Talk soon!
+
+[00:13:46] END OF CALL
+
+==============================================================================
+
+Action Items:
+- Derek: Send FloralPOS API documentation (today)
+- Linda: Tag products for online eligibility in FloralPOS
+- Linda: Clean up pricing in FloralPOS to match desired pricing
+- Priya: Document end-of-day closing process in detail
+- Sophie: Send meeting notes and requirements update
+- Marcus: Draft proposal and timeline
+- All: Aim for early March go-live
+
+Open Questions:
+- Exact buffer size for inventory (2 units? 3 units? percentage-based?)
+- How to handle perishable inventory (deferred to Phase 2?)
+- Same-day pickup orders - do we need special handling?
+- Historical data migration - do they want past sales imported?
+- What happens during internet outages - recovery process?
+

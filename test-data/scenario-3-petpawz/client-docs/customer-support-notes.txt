@@ -1,0 +1,143 @@
+CUSTOMER SUPPORT NOTES - SHIPPING ISSUES
+PetPawz Customer Support Team
+Compiled by: Mike Thompson, CS Manager
+Date: January 8, 2024
+
+==============================================================================
+
+OVERVIEW
+--------
+Tracking-related tickets are our #1 support issue right now. Probably 40% of all customer inquiries.
+
+COMMON CUSTOMER COMPLAINTS
+---------------------------
+
+1. "WHERE'S MY TRACKING NUMBER?"
+   - Happens when ops team forgets to update Shopify with tracking
+   - Or there's a delay (sometimes 6-8 hours after order is packed)
+   - Customers expect instant tracking
+   - Solution: Automatic sync would fix this
+
+2. "MY TRACKING LINK DOESN'T WORK"
+   - Usually because tracking number was entered wrong (typo)
+   - Or wrong carrier selected (USPS tracking number but label says UPS)
+   - Manual entry errors
+   - Solution: Automatic sync would fix this too
+
+3. "IT SAYS DELIVERED BUT I DIDN'T GET IT"
+   - Often a wrong address issue
+   - Sometimes porch pirates :(
+   - Occasionally USPS marks delivered early
+   - Not sure if integration helps this, but address validation might?
+
+4. "WHY DID MY ORDER SHIP IN 3 BOXES?"
+   - Happens when we have split shipments
+   - Customer only gets one tracking number
+   - Other packages are a surprise
+   - We need better communication about split shipments
+
+5. "CAN YOU HOLD MY PACKAGE FOR PICKUP?"
+   - Usually business customers who want office delivery held at UPS/FedEx facility
+   - We can do this but have to manually add instructions in ShipStation
+   - Would be nice if customer could specify at checkout?
+
+SHIPPING NOTIFICATION TIMING
+-----------------------------
+Currently:
+- Order placed → immediate confirmation email (good)
+- Order ships → tracking email... eventually? (bad)
+
+The delay is because Jessica or her team has to manually update Shopify after printing labels. If they're busy packing, this can take hours. Sometimes until end of day.
+
+Customers email us asking for tracking within 2-3 hours of ordering. They're impatient. Can't blame them.
+
+IDEAL: Tracking email goes out within 30 minutes of label printing.
+
+CARRIER PREFERENCE ISSUES
+--------------------------
+Some customers hate certain carriers.
+
+Example: Rural customers prefer USPS (delivers to PO boxes, goes everywhere)
+Example: Business customers prefer UPS/FedEx (signature required options)
+
+We don't have a way for customers to specify carrier preference. Should we?
+
+DAMAGED SHIPMENTS
+------------------
+Get maybe 2-3 per week. Usually:
+- Glass items (water bowls, treat jars)
+- Products with fragile parts
+
+Customers email photos of damaged items. We usually:
+1. Issue immediate refund or send replacement
+2. File claim with carrier (pain in the butt)
+3. Add note to account
+
+Is there a way to track which carriers damage stuff most? That would help us choose better carriers.
+
+RETURNS & EXCHANGES
+--------------------
+Return process is pretty manual:
+
+Customer emails → we respond with return instructions → generate return label in ShipStation → email label to customer → customer ships back → we process refund
+
+Takes 2-3 back-and-forth emails per return.
+
+Would be nice to have automated return portal:
+- Customer logs in, selects order, requests return
+- System generates label automatically
+- Emails it to them
+- Notifies us
+
+Is that part of this project? Probably not but throwing it out there.
+
+INTERNATIONAL ORDERS
+--------------------
+Wait - do we even ship internationally? 
+
+I just realized I've never seen an international order. We might not have that enabled in Shopify? Or maybe our products just aren't popular outside the US?
+
+Should probably confirm this with Jessica. If we do start international shipping, customs forms are a whole other thing.
+
+SUPPORT TICKET VOLUME
+----------------------
+Average: 80-100 tickets/day
+Shipping-related: 30-40 tickets/day
+
+If we can cut shipping inquiries in half through automation, that would be HUGE for our team.
+
+CUSTOMER EXPECTATIONS
+----------------------
+Our customers are pet owners. They love their pets. They want:
+- Fast shipping (Amazon Prime has ruined everyone)
+- Accurate tracking
+- Proactive communication
+- Easy returns
+
+Right now we're batting like .500 on those. Better automation would help us get to .900.
+
+OTHER NOTES
+-----------
+- We use Gorgias for customer support (integrates with Shopify already)
+- Most inquiries come through email, some through chat widget on site
+- Phone support for complex issues only
+
+- Peak season (Oct-Dec) our ticket volume doubles
+- This year we had to bring on 3 temp support reps just to keep up
+- Better automation = fewer temps needed
+
+QUESTIONS FOR INTEGRATION PROJECT
+----------------------------------
+- Will automation reduce tracking-related tickets?
+- Can we expose tracking info in customer account page on site?
+- What happens if label creation fails? Does customer still get a notification?
+- Can we track which orders have issues and proactively reach out?
+
+==============================================================================
+
+Let me know if you need clarification on any of this.
+
+Mike Thompson
+Customer Support Manager
+mike@petpawz.com
+

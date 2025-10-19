@@ -1,0 +1,333 @@
+FITFUEL INVENTORY TRACKING SYSTEM
+Current Process Documentation
+Written by: Kelly Wu, Warehouse Manager
+Date: January 11, 2024
+Status: This is what we're doing now (before integration)
+
+==============================================================================
+
+OVERVIEW
+--------
+Before we started using Shopify + Stocky seriously, I was managing inventory in Excel.
+Some of our team still prefers my spreadsheet because Shopify is complicated.
+
+This doc explains my old system (and why we need something better).
+
+==============================================================================
+
+THE SPREADSHEET STRUCTURE
+--------------------------
+
+File: "FitFuel_Inventory_Master_2024.xlsx"
+Location: Google Drive > Shared > Operations
+
+TABS:
+1. Current Inventory
+2. Reorder Tracking
+3. Purchase Orders
+4. Sales Velocity
+5. Supplier Info
+
+TAB 1: CURRENT INVENTORY
+-------------------------
+
+Columns:
+A - SKU (e.g. "FF-TANK-BLK-S")
+B - Product Name (e.g. "FitFuel Logo Tank Top - Black - Small")
+C - Category (Tops, Bottoms, Accessories, etc.)
+D - Warehouse Qty
+E - Downtown Store Qty
+F - Westside Store Qty
+G - Total Qty (sum of D+E+F)
+H - Min Stock Level (manually set per product)
+I - Status (OK, LOW, OUT)
+J - Last Updated (date)
+
+The Status column has a formula:
+- If Total Qty > Min Stock Level: "OK" (green)
+- If Total Qty <= Min Stock Level: "LOW" (yellow)
+- If Total Qty = 0: "OUT" (red)
+
+This gave me a quick visual of what needed reordering.
+
+PROBLEM WITH THIS SYSTEM:
+- Manually updating quantities after every sale = tedious
+- Often out of sync with reality
+- No integration with Shopify, so online sales don't auto-update
+- Doesn't account for pending orders
+
+TAB 2: REORDER TRACKING
+------------------------
+
+Columns:
+A - SKU
+B - Product Name
+C - Current Total Qty
+D - Min Stock Level
+E - Reorder Point (usually Min Stock + buffer)
+F - Reorder Qty (how many to order)
+G - Supplier
+H - Lead Time (days)
+I - Status (OK, REORDER SOON, REORDER NOW)
+
+I would check this tab weekly (usually Mondays) and create purchase orders for anything marked "REORDER NOW."
+
+PROBLEM:
+- Lead times were often wrong (I guessed them)
+- Reorder quantities were based on gut feel, not data
+- Didn't account for seasonal trends
+
+TAB 3: PURCHASE ORDERS
+-----------------------
+
+Log of all POs I've placed:
+A - PO Number (I made up my own numbering: PO-2024-001, PO-2024-002, etc.)
+B - Date Ordered
+C - Supplier
+D - Items (text list of SKUs and quantities)
+E - Total Cost
+F - Expected Delivery Date
+G - Actual Delivery Date
+H - Notes
+
+This was useful for tracking what we ordered and when it arrived.
+But again, totally manual. No integration with accounting or Shopify.
+
+TAB 4: SALES VELOCITY
+----------------------
+
+This tab tried to track how fast each product was selling:
+
+Columns:
+A - SKU
+B - Product Name
+C - Units Sold (Last 30 Days)
+D - Units Sold (Last 60 Days)
+E - Units Sold (Last 90 Days)
+F - Avg Units Per Day
+G - Days Until Out Of Stock (based on current inventory / avg daily sales)
+
+In theory, this helped me predict when we'd run out.
+In practice, I rarely updated the sales data so it was always stale.
+
+PROBLEM:
+- Sales data came from Shopify manually (I'd export a CSV and copy-paste)
+- Time-consuming to update
+- Didn't account for seasonality or growth trends
+
+TAB 5: SUPPLIER INFO
+---------------------
+
+Contact information for all our suppliers:
+
+A - Supplier Name
+B - Contact Person
+C - Email
+D - Phone
+E - Website
+F - Products They Supply
+G - Min Order Qty
+H - Typical Lead Time
+I - Notes (payment terms, quirks, etc.)
+
+This tab was actually useful and still is. Not much different from having it in a CRM or database.
+
+==============================================================================
+
+WHY WE NEED TO MOVE AWAY FROM EXCEL
+------------------------------------
+
+The spreadsheet worked when we were small (1 location, 50 SKUs).
+Now we have:
+- 3 locations (warehouse + 2 stores)
+- ~180 SKUs
+- Growing sales (50+ orders per day online, plus in-store)
+
+Excel can't keep up. Problems:
+1. Manual data entry = errors
+2. No real-time sync with Shopify
+3. Multiple people editing = version conflicts
+4. No integration with purchase order system
+5. Can't scale to 3+ locations
+
+==============================================================================
+
+WHAT STOCKY DOES (AND DOESN'T DO)
+----------------------------------
+
+We signed up for Stocky (Shopify app) about 6 months ago.
+It's supposed to replace my Excel system.
+
+WHAT STOCKY DOES WELL:
+- Pulls inventory data directly from Shopify (no manual export)
+- Suggests reorder quantities based on sales velocity
+- Tracks purchase orders (integrated with Shopify)
+- Forecasts future inventory needs
+
+WHAT STOCKY DOESN'T DO WELL (or at least we haven't figured out):
+- Multi-location logic is confusing
+  • Does it recommend ordering for warehouse? For stores? For total?
+  • Not clear
+- Lead times have to be manually set per product
+  • I haven't done this for all 180 SKUs yet
+  • So reorder suggestions are often wrong
+- Doesn't handle variants well
+  • If a product has 5 sizes, Stocky treats each size separately
+  • I wish it could suggest "order 50 units total, mixed sizes"
+- No seasonal intelligence
+  • It'll suggest reordering winter jackets in July (dumb)
+
+==============================================================================
+
+WHAT I WANT FROM THE INTEGRATION
+---------------------------------
+
+1. ACCURATE MULTI-LOCATION INVENTORY
+   - Each location should have correct counts
+   - Real-time sync (or close to it)
+   - Transfers between locations should be tracked automatically
+
+2. SMART LOW-STOCK ALERTS
+   - Alert me when total inventory across all locations drops below threshold
+   - Threshold should be configurable per product
+   - Email or Slack notification
+
+3. BETTER REORDER RECOMMENDATIONS
+   - Use Stocky but make it smarter
+   - Account for multi-location (warehouse needs more than stores)
+   - Factor in lead times (which I'll set correctly)
+   - Ignore seasonal products during off-season
+
+4. STREAMLINED PURCHASE ORDERS
+   - Create PO in Stocky
+   - Easy approval workflow (Marcus needs to approve large orders)
+   - Auto-update inventory when PO is received
+   - Track against budget (we have quarterly inventory budget)
+
+5. VARIANT MANAGEMENT
+   - Group product variants intelligently
+   - Show inventory for "all sizes of this shirt" not just each size separately
+   - Bulk reorder options for variants
+
+6. REPORTING
+   - Weekly inventory report (what's selling, what's not)
+   - Monthly inventory value report (for accounting)
+   - Low-stock dashboard I can check daily
+
+==============================================================================
+
+CURRENT PAIN POINTS (SPECIFIC EXAMPLES)
+----------------------------------------
+
+EXAMPLE 1: Overselling
+- Customer orders online (Shopify)
+- Inventory shows available at "any location"
+- Actually the product is at Westside store, not warehouse
+- We ship from warehouse usually
+- Now we have to coordinate transfer from Westside to warehouse
+- Delays the order, customer unhappy
+
+EXAMPLE 2: Forgetting to Reorder
+- Popular leggings sell out
+- I don't notice until someone asks "where are the black leggings?"
+- Rush order from supplier (costs extra for expedited shipping)
+- Out of stock for a week
+- Lost sales
+
+EXAMPLE 3: Over-Ordering Seasonal Items
+- Ordered 40 units of winter jackets in October
+- Sold 12 by March
+- Still have 28 units taking up warehouse space
+- Money tied up in dead inventory
+
+EXAMPLE 4: Inaccurate Inventory Counts
+- Shopify says we have 5 units
+- Customer orders 1 online
+- Go to fulfill, can only find 3 units in warehouse
+- 2 units are "missing" (probably sold in-store but not updated)
+- Have to refund customer or ship from store
+
+EXAMPLE 5: Transfer Order Chaos
+- Sarah (Downtown) needs more small tanks
+- Jason (Westside) has extra
+- I create transfer order in Shopify
+- Jason ships to Sarah
+- Sarah forgets to mark transfer as "received" in Shopify
+- Inventory shows items in transit forever
+- Counts are wrong
+
+==============================================================================
+
+MINIMUM VIABLE SOLUTION (Phase 1)
+----------------------------------
+
+If we can only fix a few things in Phase 1, prioritize:
+
+1. Multi-location inventory sync that actually works
+2. Low-stock alerts (email me daily with products under threshold)
+3. Stocky integration that respects lead times and multi-location
+
+That alone would save me probably 5-10 hours per week.
+
+NICE-TO-HAVES (Phase 2)
+-----------------------
+
+- Seasonal product intelligence
+- Variant bulk ordering
+- Automated transfer order suggestions
+- Budget tracking for POs
+- Better reporting
+
+==============================================================================
+
+TECHNICAL CONSTRAINTS
+---------------------
+
+Things I know that might matter:
+
+- We're on Shopify Plus plan (not basic)
+  • Should have access to all APIs
+
+- Stocky is a Shopify app, not a separate system
+  • So integration should be possible?
+
+- We use Shopify POS at both stores
+  • This is how in-store sales get into Shopify
+  • But sometimes the POS doesn't select the right location
+  • User error or UI issue, not sure
+
+- We have ~180 SKUs currently
+  • Planning to add 50-75 more this year
+  • Growth trajectory
+
+- We use QuickBooks for accounting
+  • Out of scope for this integration but mentioning it
+  • Eventually we might want Stocky POs to sync to QuickBooks
+  • But not Phase 1
+
+==============================================================================
+
+QUESTIONS FOR LAZER TEAM
+-------------------------
+
+1. Can the integration prevent overselling across multiple locations?
+2. How often does inventory sync? Real-time or batched?
+3. Can we set different reorder thresholds for different product categories?
+4. How does Stocky know which location to order for?
+5. Can we track transfer orders more easily?
+6. Is there a mobile-friendly dashboard for checking inventory?
+7. What happens if Shopify API goes down? Do we have a backup?
+
+==============================================================================
+
+CONTACT
+-------
+Kelly Wu
+Warehouse Manager, FitFuel
+kelly@fitfuel.com
+(503) 555-2341
+
+Notes: I'm the main inventory person but Sarah and Jason (store managers) will be using the system too. Whatever we build needs to be simple enough for them to use without constant questions to me.
+
+==============================================================================
+
