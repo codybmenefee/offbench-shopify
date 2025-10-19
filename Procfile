@@ -1,2 +1,2 @@
-web: cd mcp && python src/main.py
+web: cd mcp/src && python main.py
 
