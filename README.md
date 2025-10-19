@@ -1,31 +1,89 @@
-# Simple ChatGPT App Template
+# Discovery → Implementation Confidence Tool
 
-A minimal template for building ChatGPT apps using FastMCP. This template demonstrates both simple function tools and custom UI widgets.
+**For Lazer Technologies (Shopify Systems-Integrator)**
 
-## Features
+## Purpose
 
-- **Simple Math Tool**: Add two numbers together
-- **Hello World Widget**: Custom UI component that renders inline in ChatGPT
-- **Minimal Setup**: No API keys or complex configuration required
-- **Easy to Extend**: Clean structure for adding more tools
+Empower Lazer's projects by automating and elevating the discovery-to-plan workflow. We capture, process, and convert unstructured discovery artifacts (emails, call transcripts, SOWs, branding guides, etc.) into structured implementation deliverables — and then continuously drive clarity, alignment, and confidence across sales, implementation, and dev teams.
+
+## Core Value Proposition
+
+Transform weak, scattered discovery into systematic, high-confidence implementation plans. Reduce project risk, rework, and mis-scope by strengthening the foundation before a single line of code is written.
+
+## Key Features
+
+### 1. **Document Ingestion & Parsing**
+- Configurable sources: Google Drive folders or local directories
+- Support for multiple document types (emails, transcripts, SOWs, brand guides, etc.)
+- Automated extraction of key information
+
+### 2. **Analysis Engine**
+- Reviews documents for gaps, inconsistencies, and ambiguities
+- Detects missing critical information
+- Identifies alignment issues between stakeholders
+
+### 3. **Plan Generation**
+- Uses pre-defined templates tailored to project scope
+- Incorporates success criteria and user context
+- Produces actionable implementation deliverables
+
+### 4. **Confidence Scoring**
+- Quantifies project readiness for implementation
+- Based on clarity, completeness, and alignment metrics
+- Tracks improvement over time
+
+### 5. **Agentic Interaction**
+- Conversational interface via MCP + ChatGPT App SDK
+- Ask questions, review drafts, surface ambiguity
+- Prepare for client and practice meetings
+
+### 6. **Continuous Feedback Loop**
+- Identifies missing information
+- Prompts further discovery activities
+- Updates plans and improves confidence scores iteratively
+
+## What's Most Important
+
+### 1. Clarity & Alignment
+Everyone (client, implementation team, dev) must be on the same page about what's being built, why it's being built, and how success will be measured.
+
+### 2. Actionable Output
+The tool must deliver usable deliverables (plans, next-step lists, ambiguity logs) — not just insights.
+
+### 3. Discovery as Foundation
+Weak discovery leads to project risk. By strengthening discovery and making it systematic, we reduce rework, mis-scope, and mismatch.
+
+### 4. Augmenting Humans
+This is not about replacing discovery leads or PMs — it's about amplifying their capability, surfacing things they might miss, making their job smoother.
+
+### 5. Maintainability & Scalability
+Architect the system so we can add new document types, new project templates, new agents/workflows without large rewrites.
+
+## Architecture Overview
+
+```
+Discovery Artifacts → Ingestion → Analysis → Plan Generation → Confidence Scoring
+                                      ↓
+                              Agentic Interface (MCP)
+                                      ↓
+                              Feedback & Iteration
+```
 
 ## Quick Start
 
 ### Prerequisites
-
 - Python 3.8 or higher
+- Access to discovery document sources (Google Drive or local files)
 
 ### Installation
 
-1. **Clone this template:**
-
+1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
-   cd simple-chatgpt-template
+   git clone <repo-url>
+   cd offbench-shopify
    ```
 
 2. **Set up Python environment:**
-
    ```bash
    cd mcp
    python -m venv venv
@@ -34,7 +92,6 @@ A minimal template for building ChatGPT apps using FastMCP. This template demons
    ```
 
 3. **Start the MCP server:**
-
    ```bash
    python src/main.py
    ```
@@ -42,153 +99,34 @@ A minimal template for building ChatGPT apps using FastMCP. This template demons
 4. **Connect to ChatGPT:**
    - Open ChatGPT
    - Go to Settings → Apps → Add App
-   - Enter your server URL: `https://your-ngrok-url.ngrok.io/mcp`
-   - Test the tools!
-
-## Local Development with ChatGPT
-
-For local development, ChatGPT needs to access your MCP server over the internet. Use ngrok to create a secure tunnel to your local server.
-
-## Available Tools
-
-### `add_numbers`
-
-Adds two numbers together and returns a formatted result.
-
-**Example:**
-
-```text
-Use the add_numbers tool to calculate 5 + 3
-```
-
-### `hello_world_widget`
-
-Displays a custom UI widget inline in ChatGPT conversation.
-
-**Example:**
-
-```text
-Use the hello_world_widget tool to show the demo widget
-```
-
-## How to Extend
-
-### Adding a New Tool
-
-1. **Create a new tool file** in `mcp/src/tools/`:
-
-   ```python
-   # my_tools.py
-   from fastmcp import FastMCP
-   
-   def register_my_tools(mcp: FastMCP):
-       @mcp.tool(
-           name="my_tool",
-           title="My Tool",
-           description="What my tool does"
-       )
-       def my_tool(param: str) -> str:
-           return f"Result: {param}"
-   ```
-
-2. **Import and register** in `main.py`:
-
-   ```python
-   from tools.my_tools import register_my_tools
-   
-   # In main.py
-   register_my_tools(mcp)
-   ```
-
-3. **Test your tool** in ChatGPT!
-
-### Adding a Custom Widget
-
-1. **Create widget HTML** in your tool file:
-
-   ```python
-   @mcp.resource(
-       uri="ui://widget/my-widget.html",
-       name="my-widget",
-       title="My Widget",
-       description="My custom widget",
-       mime_type="text/html+skybridge"
-   )
-   def my_widget_resource():
-       return """
-       <!DOCTYPE html>
-       <html>
-       <head><title>My Widget</title></head>
-       <body>
-           <h1>Hello from my widget!</h1>
-       </body>
-       </html>
-       """
-   ```
-
-2. **Create tool** that uses the widget:
-
-   ```python
-   @mcp.tool(
-       name="my_widget",
-       title="My Widget",
-       description="Display my custom widget",
-       meta={
-           "openai/outputTemplate": "ui://widget/my-widget.html"
-       }
-   )
-   def my_widget():
-       return {"content": [{"type": "text", "text": "Widget loaded!"}]}
-   ```
+   - Enter your server URL (use ngrok for local development)
+   - Start your discovery analysis!
 
 ## Project Structure
 
-```text
-simple-chatgpt-template/
-├── README.md                 # This file
+```
+offbench-shopify/
+├── README.md                 # Project overview (this file)
+├── AGENTS.md                # Developer context and principles
 └── mcp/                     # MCP server implementation
     ├── src/
     │   ├── main.py          # Main server entry point
-    │   └── tools/
-    │       ├── math_tools.py    # Math operations
-    │       └── ux_widget.py     # Hello world widget
-    ├── requirements.txt     # Python dependencies
-    └── README.md           # MCP-specific documentation
+    │   └── tools/           # Tool implementations
+    └── requirements.txt     # Python dependencies
 ```
 
-## Development
+## Development Status
 
-### Testing with ChatGPT
+🚧 **Active Development** - This tool is being built iteratively. Current focus areas:
+- Document ingestion pipeline
+- Analysis engine for gap detection
+- Confidence scoring algorithm
+- Template-based plan generation
 
-1. Start your MCP server
-2. Expose it with ngrok: `ngrok http 8123`
-3. In ChatGPT, go to Settings → Apps
-4. Add a new app with URL: `https://your-ngrok-url.ngrok.io/mcp`
-5. Test your tools in conversation
+## For Developers
 
-## Troubleshooting
-
-### Server Won't Start
-
-- Check Python version (3.8+ required)
-- Verify all dependencies installed: `pip install -r requirements.txt`
-
-### ChatGPT Can't Connect
-
-- Verify server is running: `curl http://localhost:8123/mcp`
-- Verify ngrok tunnel is open
-- Check firewall settings
-
-### Tools Not Working
-
-- Check server logs for errors
-- Verify tool registration in `main.py`
-- Test tools individually
+See `AGENTS.md` for detailed development principles, core concepts, and system component guidance.
 
 ## License
 
-MIT License - feel free to use this template for your own projects!
-
----
-
-**LFG!** 🚀
+Proprietary - Lazer Technologies
