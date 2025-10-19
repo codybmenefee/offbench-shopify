@@ -1,21 +1,21 @@
 # TECHNICAL SPECIFICATIONS
-## [PROJECT_NAME] - [SYSTEM_A] ↔ [SYSTEM_B] Integration
+## [PROJECT_NAME] - [SYSTEM_A] ↔ [SYSTEM_B] Integration <!-- same as other docs -->
 
-**Project ID**: [PROJECT_ID]  
-**Client**: [CLIENT_NAME]  
-**Integration Type**: [INTEGRATION_TYPE]  
-**Lead Engineer**: [LEAD_ENGINEER]  
-**Created**: [DATE]  
-**Version**: [VERSION]  
+**Project ID**: [PROJECT_ID] <!-- project.project_id -->  
+**Client**: [CLIENT_NAME] <!-- analysis.client_name -->  
+**Integration Type**: [INTEGRATION_TYPE] <!-- detected integration type -->  
+**Lead Engineer**: [LEAD_ENGINEER] <!-- TBD or from assignment -->  
+**Created**: [DATE] <!-- current date -->  
+**Version**: [VERSION] <!-- default: "1.0" -->  
 
 ---
 
 ## 1. SYSTEM ARCHITECTURE OVERVIEW
 
 ### 1.1 Architecture Pattern
-**Pattern**: [ARCHITECTURE_PATTERN - e.g., "Event-driven", "Scheduled batch", "Real-time webhook-based"]
+**Pattern**: [ARCHITECTURE_PATTERN - e.g., "Event-driven", "Scheduled batch", "Real-time webhook-based"] <!-- infer from sync frequency requirements -->
 
-**Justification**: [ARCHITECTURE_RATIONALE]
+**Justification**: [ARCHITECTURE_RATIONALE] <!-- explain why this pattern based on requirements -->
 
 ### 1.2 High-Level Architecture Diagram (Text-Based)
 

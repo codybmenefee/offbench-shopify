@@ -13,8 +13,8 @@ Date: October 19, 2025
 1. **find_project_folders()** - Discover available project scenarios
 2. **ingest_documents(project_id)** - Load and parse discovery documents
 3. **analyze_discovery(project_id)** - Detect gaps, ambiguities, conflicts + calculate confidence
-4. **get_template(template_type)** - Load SOW/plan templates
-5. **fill_template(project_id, template_type)** - Populate templates with discovery data
+4. **get_template(template_type)** - Load SOW/plan templates (for reference)
+5. **prepare_deliverable(project_id, template_type)** - Get template + analysis + mapping guide for deliverable generation
 6. **extract_open_questions(project_id)** - Generate prioritized clarifying questions
 7. **update_project_context(project_id, info)** - Accept answers and new information
 8. **recalculate_confidence(project_id)** - Re-analyze with updated context
@@ -101,7 +101,7 @@ Agent (autonomous chain of tools):
 → ingest_documents("scenario-1-cozyhome")
 → analyze_discovery("scenario-1-cozyhome")
 → extract_open_questions("scenario-1-cozyhome")
-→ fill_template("scenario-1-cozyhome", "sow")
+→ prepare_deliverable("scenario-1-cozyhome", "sow") [generates SOW]
 
 Agent responds:
 "I've analyzed CozyHome's discovery (4 documents). Confidence: 81%.
@@ -126,7 +126,7 @@ User: "QuickBooks is source of truth. Refunds sync daily."
 Agent (autonomous):
 → update_project_context()
 → recalculate_confidence()
-→ fill_template() [updated]
+→ prepare_deliverable() [regenerates SOW with new data]
 
 Agent: "Confidence improved to 85%. SOW updated. 2 questions remain..."
 ```

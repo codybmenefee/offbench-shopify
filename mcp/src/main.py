@@ -409,7 +409,11 @@ def get_template(template_type: str) -> Dict:
         template_type: Type of template ('sow', 'implementation-plan', 'technical-specs')
     
     Returns:
-        Template content as string
+        Template content as string with placeholder markers
+    
+    Note: For ChatGPT/HTTP clients that need complete guidance, use 
+    prepare_deliverable() instead. It returns the template plus analysis 
+    data and mapping guide in one call, making it easier to fill templates.
     """
     try:
         template_files = {
@@ -447,14 +451,174 @@ def get_template(template_type: str) -> Dict:
         return {"error": f"Error loading template: {str(e)}"}
 
 
-# Template tools removed - templates now serve as reference examples for AI agents
-# AI agents should call get_template() to see the structure, then write their own version
-# based on the analysis data, rather than rigid placeholder filling
+@mcp.tool()
+def prepare_deliverable(project_id: str, template_type: str) -> Dict:
+    """
+    Prepare all information needed to generate a deliverable document.
+    Returns template structure, project analysis data, and mapping guidance.
+    
+    This is a convenience tool for AI agents (especially ChatGPT/HTTP clients)
+    that combines template + analysis + mapping guide in one call.
+    
+    Args:
+        project_id: Project identifier (e.g., 'scenario-1-cozyhome')
+        template_type: Type of template ('sow', 'implementation-plan', 'technical-specs')
+    
+    Returns:
+        Complete package with template, analysis, and mapping guidance for
+        the AI agent to generate a filled deliverable document
+    
+    Workflow:
+        1. AI calls this tool
+        2. AI receives template + data + mapping guide
+        3. AI fills template using the data and guide
+        4. AI outputs completed document to user (for copy/paste)
+    """
+    import traceback
+    import sys
+    
+    try:
+        print(f"[DEBUG] prepare_deliverable called with project_id={project_id}, template_type={template_type}", file=sys.stderr)
+        
+        # Get template
+        template_result = get_template(template_type)
+        if "error" in template_result:
+            print(f"[DEBUG] Template error: {template_result}", file=sys.stderr)
+            return template_result
+        
+        # Get project analysis (if available)
+        state_manager = ProjectStateManager()
+        project = state_manager.get_project(project_id)
+        
+        analysis_data = None
+        if project and project.analysis:
+            analysis_data = {
+                "project_id": project.project_id,
+                "project_name": project.project_name,
+                "project_description": project.project_description,
+                "analysis": project.analysis.to_dict(),
+                "additional_context": project.additional_context
+            }
+        else:
+            return {
+                "error": f"Project analysis not found for {project_id}. "
+                        f"Run ingest_documents() and analyze_discovery() first."
+            }
+        
+        # Load mapping guide
+        mapping_guide_path = Path(TEMPLATES_PATH) / "PLACEHOLDER-MAPPING-GUIDE.md"
+        mapping_guide = ""
+        if mapping_guide_path.exists():
+            with open(mapping_guide_path, 'r') as f:
+                mapping_guide = f.read()
+        
+        # Detect integration type
+        integration_type = _detect_integration_type(
+            analysis_data["analysis"]["systems_identified"],
+            "\n".join([doc.content for doc in project.documents])
+        )
+        
+        return {
+            "project_id": project_id,
+            "template_type": template_type,
+            "template": {
+                "filename": template_result["template_file"],
+                "content": template_result["content"]
+            },
+            "analysis": analysis_data,
+            "integration_type": integration_type,
+            "mapping_guide": mapping_guide,
+            "instructions": (
+                f"Use the template structure as a guide. Fill placeholders with data from "
+                f"the analysis. Refer to the mapping_guide for how to map analysis fields "
+                f"to template placeholders. Include only sections relevant to the "
+                f"'{integration_type}' integration type. Output the completed document "
+                f"to the user for copy/paste."
+            ),
+            "message": f"Ready to generate {template_type} for {project.project_name}"
+        }
+    
+    except Exception as e:
+        return {"error": f"Error preparing deliverable: {str(e)}"}
+
+
+# Note: Rigid template filling tools removed - templates now serve as reference examples
+# AI agents should use prepare_deliverable() to get everything needed, then generate
+# natural, contextual documents rather than mechanical placeholder filling
 
 
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
+
+def _detect_integration_type(systems: List[str], content: str) -> str:
+    """
+    Detect the primary integration type based on systems and content.
+    
+    Args:
+        systems: List of identified system names
+        content: Combined content from all documents
+    
+    Returns:
+        Integration type: 'accounting', 'marketing', 'fulfillment', 'inventory', 'pos', or 'general'
+    """
+    content_lower = content.lower()
+    systems_lower = [s.lower() for s in systems]
+    
+    # Accounting systems
+    accounting_systems = ['quickbooks', 'xero', 'netsuite', 'freshbooks', 'sage']
+    accounting_keywords = ['invoice', 'accounting', 'financial', 'reconciliation', 'payment']
+    
+    # Marketing systems
+    marketing_systems = ['klaviyo', 'mailchimp', 'hubspot', 'activecampaign', 'sendgrid']
+    marketing_keywords = ['email', 'marketing', 'campaign', 'segmentation', 'newsletter']
+    
+    # Fulfillment systems
+    fulfillment_systems = ['shipstation', 'shipbob', 'shippo', 'easypost', 'ordoro']
+    fulfillment_keywords = ['shipping', 'fulfillment', 'tracking', 'label', 'carrier']
+    
+    # POS systems
+    pos_systems = ['square', 'clover', 'toast', 'lightspeed', 'revel']
+    pos_keywords = ['point of sale', 'pos', 'retail location', 'in-store']
+    
+    # Inventory keywords (not system-specific)
+    inventory_keywords = ['inventory', 'stock', 'multi-location', 'warehouse', 'stock level']
+    
+    # Count matches for each type
+    accounting_score = sum(1 for s in systems_lower if any(a in s for a in accounting_systems))
+    accounting_score += sum(1 for k in accounting_keywords if k in content_lower)
+    
+    marketing_score = sum(1 for s in systems_lower if any(m in s for m in marketing_systems))
+    marketing_score += sum(1 for k in marketing_keywords if k in content_lower)
+    
+    fulfillment_score = sum(1 for s in systems_lower if any(f in s for f in fulfillment_systems))
+    fulfillment_score += sum(1 for k in fulfillment_keywords if k in content_lower)
+    
+    pos_score = sum(1 for s in systems_lower if any(p in s for p in pos_systems))
+    pos_score += sum(1 for k in pos_keywords if k in content_lower)
+    
+    inventory_score = sum(1 for k in inventory_keywords if k in content_lower)
+    
+    # Determine primary type (highest score)
+    scores = {
+        'accounting': accounting_score,
+        'marketing': marketing_score,
+        'fulfillment': fulfillment_score,
+        'pos': pos_score,
+        'inventory': inventory_score
+    }
+    
+    max_score = max(scores.values())
+    if max_score == 0:
+        return 'general'
+    
+    # Return the type with highest score
+    for type_name, score in scores.items():
+        if score == max_score:
+            return type_name
+    
+    return 'general'
+
 
 def _parse_email(file_path: Path) -> Document:
     """Parse an email file."""

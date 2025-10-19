@@ -110,22 +110,24 @@ Loads a template from the templates directory.
 
 **Returns**: Template content
 
-### 5. `fill_template(project_id: str, template_type: str)`
+### 5. `prepare_deliverable(project_id: str, template_type: str)`
 
-Fills a template with analyzed discovery data.
+Prepares all information needed to generate a deliverable document. Returns template, analysis data, and mapping guidance in one call.
 
 **Args**:
 - `project_id`: Project identifier
-- `template_type`: Template to fill
+- `template_type`: "sow", "implementation-plan", or "technical-specs"
 
-**Returns**: Filled template with placeholders populated
+**Returns**: Complete package with:
+- Template content with placeholders
+- Project analysis data
+- Integration type detection
+- Mapping guide for filling placeholders
+- Instructions for AI agent
 
-**Smart Extraction**:
-- Client name from email headers
-- Systems from mentions (Shopify, QuickBooks, etc.)
-- Pain points from problem statements
-- Business objectives from goal statements
-- Unfilled fields marked as `[NEEDS_CLARIFICATION: reason]`
+**For AI Agents**:
+- **ChatGPT/HTTP clients**: Use this to get everything needed, then generate the filled document
+- **Cursor/Claude**: Can use this or call `get_template()` + `analyze_discovery()` separately
 
 ### 6. `extract_open_questions(project_id: str)`
 
@@ -190,11 +192,8 @@ Agent autonomously:
 4. extract_open_questions("scenario-1-cozyhome")
    → Generates 6 prioritized questions
 
-5. get_template("sow")
-   → Loads SOW template
-
-6. fill_template("scenario-1-cozyhome", "sow")
-   → Generates SOW draft with 105 of 118 placeholders filled
+5. prepare_deliverable("scenario-1-cozyhome", "sow")
+   → Gets template + analysis + mapping guide, generates SOW draft
 
 Agent responds to user:
 "I've analyzed CozyHome's discovery documents. Current confidence: 81%.
@@ -213,8 +212,8 @@ Agent autonomously:
    → Confidence: 81% → 85% (improved 4%)
    → 2 gaps resolved, 4 remain
 
-9. fill_template("scenario-1-cozyhome", "sow")
-   → Updates SOW with new information
+9. prepare_deliverable("scenario-1-cozyhome", "sow")
+   → Regenerates SOW with new context included
 
 Agent: "Great! Confidence improved to 85%. Updated the SOW. 4 questions remain..."
 ```

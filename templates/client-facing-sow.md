@@ -1,9 +1,9 @@
 # STATEMENT OF WORK
 
-**Project**: [PROJECT_NAME]  
-**Client**: [CLIENT_NAME]  
-**Contact**: [CLIENT_CONTACT_NAME], [CLIENT_CONTACT_TITLE]  
-**Date**: [DATE]  
+**Project**: [PROJECT_NAME] <!-- analysis.systems_identified joined with "-", e.g. "Shopify-QuickBooks Integration" -->  
+**Client**: [CLIENT_NAME] <!-- analysis.client_name -->  
+**Contact**: [CLIENT_CONTACT_NAME], [CLIENT_CONTACT_TITLE] <!-- manual fill or from user -->  
+**Date**: [DATE] <!-- current date -->  
 **Prepared by**: Lazer Technologies  
 
 ---
@@ -12,20 +12,22 @@
 
 ### 1.1 Business Context
 <!-- Brief description of client's business and current state -->
-[CLIENT_NAME] is [BUSINESS_DESCRIPTION]. Currently, [CURRENT_PAIN_POINTS].
+[CLIENT_NAME] is [BUSINESS_DESCRIPTION] <!-- project.project_description or infer from documents -->. Currently, [CURRENT_PAIN_POINTS] <!-- analysis.pain_points[] as prose -->.
 
 ### 1.2 Business Objectives
 This project will deliver the following business outcomes:
 
-- [OBJECTIVE_1]
-- [OBJECTIVE_2]
-- [OBJECTIVE_3]
-- [ADDITIONAL_OBJECTIVES]
+<!-- analysis.business_objectives[] - list each objective -->
+- [OBJECTIVE_1] <!-- analysis.business_objectives[0] -->
+- [OBJECTIVE_2] <!-- analysis.business_objectives[1] -->
+- [OBJECTIVE_3] <!-- analysis.business_objectives[2] -->
+- [ADDITIONAL_OBJECTIVES] <!-- remaining objectives if more than 3 -->
 
 ### 1.3 Success Metrics
 Success will be measured by:
 
-- [SUCCESS_METRIC_1]
+<!-- If gaps exist for "success_criteria", note as TBD in Open Questions -->
+- [SUCCESS_METRIC_1] <!-- quantifiable metric from objectives or gaps -->
 - [SUCCESS_METRIC_2]
 - [SUCCESS_METRIC_3]
 
@@ -36,16 +38,16 @@ Success will be measured by:
 ### 2.1 Systems Integration
 This project integrates the following systems:
 
-**System A**: [SYSTEM_A]
-- Role: [SYSTEM_A_ROLE]
-- Current usage: [SYSTEM_A_USAGE_DETAILS]
+**System A**: [SYSTEM_A] <!-- analysis.systems_identified[0] -->
+- Role: [SYSTEM_A_ROLE] <!-- describe system's role from context -->
+- Current usage: [SYSTEM_A_USAGE_DETAILS] <!-- from documents -->
 
-**System B**: [SYSTEM_B]
-- Role: [SYSTEM_B_ROLE]
-- Current usage: [SYSTEM_B_USAGE_DETAILS]
+**System B**: [SYSTEM_B] <!-- analysis.systems_identified[1] -->
+- Role: [SYSTEM_B_ROLE] <!-- describe system's role from context -->
+- Current usage: [SYSTEM_B_USAGE_DETAILS] <!-- from documents -->
 
 ### 2.2 Integration Overview
-[HIGH_LEVEL_INTEGRATION_DESCRIPTION]
+[HIGH_LEVEL_INTEGRATION_DESCRIPTION] <!-- 2-3 sentence synthesis of what data flows and why -->
 
 {{#if accounting}}
 ### 2.3 Financial Data Handling
@@ -90,9 +92,10 @@ This project integrates the following systems:
 ### 2.4 Data Synchronization
 The following data will be synchronized:
 
+<!-- Infer data types from integration type and systems -->
 | Data Type | Source | Destination | Frequency | Notes |
 |-----------|--------|-------------|-----------|-------|
-| [DATA_TYPE_1] | [SOURCE_1] | [DEST_1] | [FREQ_1] | [NOTES_1] |
+| [DATA_TYPE_1] | [SOURCE_1] | [DEST_1] | [FREQ_1] <!-- check gaps for "sync frequency" --> | [NOTES_1] |
 | [DATA_TYPE_2] | [SOURCE_2] | [DEST_2] | [FREQ_2] | [NOTES_2] |
 | [DATA_TYPE_3] | [SOURCE_3] | [DEST_3] | [FREQ_3] | [NOTES_3] |
 
@@ -261,15 +264,15 @@ After the support period, the Monthly Support Fee (Section 5.3) covers:
 <!-- This section is auto-populated by the discovery analysis engine -->
 The following items require clarification before development begins:
 
-[OPEN_QUESTIONS]
+[OPEN_QUESTIONS] <!-- analysis.gaps[] where answered=false, formatted as numbered list with priority -->
 
 ### 10.2 Assumptions Requiring Validation
 <!-- This section highlights areas where we've made assumptions that should be confirmed -->
 
-[ASSUMPTIONS_TO_VALIDATE]
+[ASSUMPTIONS_TO_VALIDATE] <!-- analysis.ambiguities[] formatted as list, plus any conflicts from analysis.conflicts[] -->
 
 ### 10.3 Discovery Confidence Score
-**Current Implementation Readiness**: [CONFIDENCE_SCORE]%
+**Current Implementation Readiness**: [CONFIDENCE_SCORE]% <!-- analysis.overall_confidence rounded to integer -->
 
 {{#if CONFIDENCE_SCORE < 70}}
 ⚠️ **Recommendation**: We recommend additional discovery activities to improve clarity before proceeding to development. See Section 10.1 for specific questions.

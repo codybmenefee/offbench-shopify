@@ -1,47 +1,49 @@
 # IMPLEMENTATION PLAN
-## [PROJECT_NAME] - [SYSTEM_A] ↔ [SYSTEM_B] Integration
+## [PROJECT_NAME] - [SYSTEM_A] ↔ [SYSTEM_B] Integration <!-- same as SOW -->
 
-**Project ID**: [PROJECT_ID]  
-**Client**: [CLIENT_NAME]  
-**Integration Type**: [INTEGRATION_TYPE]  
-**Lead Engineer**: [LEAD_ENGINEER]  
-**Project Manager**: [PROJECT_MANAGER]  
-**Created**: [DATE]  
-**Status**: [STATUS]
+**Project ID**: [PROJECT_ID] <!-- project.project_id -->  
+**Client**: [CLIENT_NAME] <!-- analysis.client_name -->  
+**Integration Type**: [INTEGRATION_TYPE] <!-- detected: accounting, marketing, fulfillment, inventory, pos -->  
+**Lead Engineer**: [LEAD_ENGINEER] <!-- TBD or from assignment -->  
+**Project Manager**: [PROJECT_MANAGER] <!-- TBD or from assignment -->  
+**Created**: [DATE] <!-- current date -->  
+**Status**: [STATUS] <!-- default: "Planning" -->
 
 ---
 
 ## EXECUTIVE SUMMARY
 
-[ONE_PARAGRAPH_SUMMARY - This should capture: what we're building, why it matters to the client's business, expected impact, and timeline]
+[ONE_PARAGRAPH_SUMMARY - This should capture: what we're building, why it matters to the client's business, expected impact, and timeline] <!-- Synthesize from pain_points + objectives + systems -->
 
 **Key Facts**:
-- **Timeline**: [TOTAL_TIMELINE]
-- **Systems**: [SYSTEM_A] → [SYSTEM_B]
-- **Data Volume**: [VOLUME_ESTIMATE]
-- **Confidence Score**: [CONFIDENCE_SCORE]%
+- **Timeline**: [TOTAL_TIMELINE] <!-- based on confidence score and complexity -->
+- **Systems**: [SYSTEM_A] → [SYSTEM_B] <!-- analysis.systems_identified -->
+- **Data Volume**: [VOLUME_ESTIMATE] <!-- from documents if mentioned -->
+- **Confidence Score**: [CONFIDENCE_SCORE]% <!-- analysis.overall_confidence -->
 
 ---
 
 ## 1. PROJECT CONTEXT & WHY THIS MATTERS
 
 ### 1.1 Business Problem
-[CLIENT_NAME] is currently [CURRENT_STATE_DESCRIPTION]. This creates the following problems:
+[CLIENT_NAME] is currently [CURRENT_STATE_DESCRIPTION] <!-- describe current manual process from documents -->. This creates the following problems:
 
-- **Pain Point 1**: [PAIN_POINT_1]
-- **Pain Point 2**: [PAIN_POINT_2]
-- **Pain Point 3**: [PAIN_POINT_3]
+<!-- analysis.pain_points[] - expand into detailed problem statements -->
+- **Pain Point 1**: [PAIN_POINT_1] <!-- analysis.pain_points[0] -->
+- **Pain Point 2**: [PAIN_POINT_2] <!-- analysis.pain_points[1] -->
+- **Pain Point 3**: [PAIN_POINT_3] <!-- analysis.pain_points[2] -->
 
 ### 1.2 Business Impact
 By implementing this integration, we enable:
 
-- [BUSINESS_IMPACT_1]
+<!-- Reframe analysis.business_objectives[] as impact statements -->
+- [BUSINESS_IMPACT_1] <!-- objective → impact -->
 - [BUSINESS_IMPACT_2]
 - [BUSINESS_IMPACT_3]
 
-**Estimated Time Savings**: [TIME_SAVINGS]  
-**Estimated Error Reduction**: [ERROR_REDUCTION]  
-**Expected ROI**: [ROI_ESTIMATE]
+**Estimated Time Savings**: [TIME_SAVINGS] <!-- calculate from pain_points if "hours" mentioned -->  
+**Estimated Error Reduction**: [ERROR_REDUCTION] <!-- estimate based on automation -->  
+**Expected ROI**: [ROI_ESTIMATE] <!-- calculate if time savings known -->
 
 ### 1.3 Why This Approach
 We're taking this approach because:

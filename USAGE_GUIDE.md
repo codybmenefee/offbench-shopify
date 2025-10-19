@@ -124,7 +124,7 @@ Once connected, you interact **naturally** - the agent calls tools autonomously.
 2. Calls `ingest_documents("scenario-1-cozyhome")` → loads 4 docs
 3. Calls `analyze_discovery("scenario-1-cozyhome")` → analyzes
 4. Calls `extract_open_questions("scenario-1-cozyhome")` → generates questions
-5. Calls `fill_template("scenario-1-cozyhome", "sow")` → generates SOW
+5. Calls `prepare_deliverable("scenario-1-cozyhome", "sow")` → gets template + data, generates SOW
 
 **Agent responds:**
 ```
@@ -175,7 +175,7 @@ Refunds should sync as credit memos within 24 hours."
 **Agent does (autonomously):**
 1. Calls `update_project_context("scenario-1-cozyhome", "...")`
 2. Calls `recalculate_confidence("scenario-1-cozyhome")`
-3. Calls `fill_template("scenario-1-cozyhome", "sow")` → updates SOW
+3. Calls `prepare_deliverable("scenario-1-cozyhome", "sow")` → regenerates SOW with new context
 
 **Agent responds:**
 ```
@@ -210,8 +210,8 @@ The Statement of Work has been updated with your answers.
 ```
 
 **Agent does:**
-1. Calls `fill_template("scenario-1-cozyhome", "implementation-plan")`
-2. Calls `fill_template("scenario-1-cozyhome", "technical-specs")`
+1. Calls `prepare_deliverable("scenario-1-cozyhome", "implementation-plan")` → generates plan
+2. Calls `prepare_deliverable("scenario-1-cozyhome", "technical-specs")` → generates specs
 
 **Agent responds:**
 ```
