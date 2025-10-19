@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+mcp/venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/tmp/
+
+# Test files
+mcp/test_*.py
+*.test.py
+
+# Documentation (optional - include if you want docs accessible)
+# *.md
+
+# Git
+.git/
+.gitignore
+
