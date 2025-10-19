@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Git
+.git/
+.gitignore
+
+# Documentation (deployment only needs code)
+*.md
+!README.md
+
+# Local development
+.env
+.env.local
+*.log
+
+# Vercel (not needed for Railway)
+.vercel/
+api/
+
+# Deployment configs for other platforms
+vercel.json
+.vercelignore
+

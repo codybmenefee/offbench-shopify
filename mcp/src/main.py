@@ -720,7 +720,7 @@ def _parse_client_doc(file_path: Path) -> Document:
 if __name__ == "__main__":
     # Support both transports via command line
     # stdio for Cursor/Claude Desktop
-    # http for ChatGPT apps
+    # http for ChatGPT apps (and Railway deployment)
     
     transport = "http"  # default
     if len(sys.argv) > 1 and sys.argv[1] == "--stdio":
@@ -730,8 +730,10 @@ if __name__ == "__main__":
         # For Cursor and Claude Desktop
         mcp.run(transport="stdio")
     else:
-        # For ChatGPT apps
+        # For ChatGPT apps and Railway deployment
+        # Railway provides PORT environment variable
+        port = int(os.getenv("PORT", 8123))
         mcp.run(
             transport="http",
-            port=8123
+            port=port
         )
