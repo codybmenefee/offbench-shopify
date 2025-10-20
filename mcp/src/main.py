@@ -33,8 +33,20 @@ BASE_PATH = Path(__file__).parent.parent.parent  # Go up to repo root
 TEST_DATA_PATH = str(BASE_PATH / "test-data")
 TEMPLATES_PATH = str(BASE_PATH / "templates")
 
-# Initialize storage provider (default to local for prototype)
-storage = get_storage_provider("local", base_path=TEST_DATA_PATH)
+# Detect environment
+IS_RAILWAY = os.getenv("RAILWAY_ENVIRONMENT") is not None or os.getenv("PORT") is not None
+IS_LOCAL = not IS_RAILWAY
+
+# Initialize storage provider based on environment
+if IS_RAILWAY:
+    # Railway deployment - use test-data folder (now included in deployment)
+    print("🚀 Railway environment detected - using test-data folder")
+    storage = get_storage_provider("local", base_path=TEST_DATA_PATH)
+    print(f"📁 Test data path: {TEST_DATA_PATH}")
+else:
+    # Local development - use test-data folder
+    print("🏠 Local environment detected - using test-data folder")
+    storage = get_storage_provider("local", base_path=TEST_DATA_PATH)
 
 # Initialize Convex sync (optional - only if configured)
 convex_sync = None
