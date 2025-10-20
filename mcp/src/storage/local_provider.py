@@ -331,7 +331,9 @@ class LocalStorageProvider(StorageProvider):
             for subfolder in ["emails", "transcripts", "client-docs"]:
                 subfolder_path = project_path / subfolder
                 if subfolder_path.exists():
-                    documents.extend(subfolder_path.glob("*.txt"))
+                    # Use rglob for nested files
+                    documents.extend(subfolder_path.rglob("*.txt"))
         
-        return documents
+        # Sort for consistent ordering
+        return sorted(documents)
 

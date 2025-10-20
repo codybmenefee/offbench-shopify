@@ -228,13 +228,22 @@ def ingest(
         ingest(project_id="cozyhome", source="google_drive", location="folder_id_xyz")
     """
     try:
+        # For local storage, check if project folder exists
         if not storage.project_exists(project_id):
-            return {"error": f"Project {project_id} not found. Create it first with manage_project(action='create')"}
+            available_projects = [p['project_id'] for p in storage.list_projects()]
+            return {
+                "error": f"Project folder '{project_id}' not found in {storage.base_path}. "
+                        f"Available projects: {available_projects}"
+            }
+        
+        # Get project metadata from storage
+        project_meta = storage.get_project(project_id)
+        project_name = project_meta.get('name', project_id.replace("-", " ").title()) if project_meta else project_id.replace("-", " ").title()
         
         state_manager = ProjectStateManager()
         project = state_manager.get_or_create(
             project_id=project_id,
-            project_name=project_id.replace("-", " ").title()
+            project_name=project_name
         )
         
         # Clear existing documents if not appending
@@ -381,11 +390,31 @@ def analyze(
         state_manager = ProjectStateManager()
         project = state_manager.get_project(project_id)
         
+        # Auto-load documents if project exists in storage but not in memory
+        if not project and storage.project_exists(project_id):
+            # Project folder exists but not initialized - auto-ingest
+            ingest_result = ingest(project_id=project_id, source="local", location="")
+            if "error" in ingest_result:
+                return {"error": f"Failed to auto-load documents: {ingest_result['error']}"}
+            project = state_manager.get_project(project_id)
+        elif project and not project.documents:
+            # Project exists but no documents loaded - auto-ingest
+            ingest_result = ingest(project_id=project_id, source="local", location="", append=True)
+            if "error" not in ingest_result:
+                project = state_manager.get_project(project_id)
+        
         if not project:
-            return {"error": f"Project {project_id} not found. Run ingest() first."}
+            available_projects = [p['project_id'] for p in storage.list_projects()]
+            return {
+                "error": f"Project '{project_id}' not found in {TEST_DATA_PATH}. "
+                        f"Available projects: {available_projects}"
+            }
         
         if not project.documents:
-            return {"error": f"No documents found for {project_id}. Run ingest() first."}
+            return {
+                "error": f"No documents found for {project_id}. "
+                        f"Check that .txt files exist in {storage.base_path / project_id}"
+            }
         
         # Store previous confidence for comparison
         previous_confidence = None
