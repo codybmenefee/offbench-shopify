@@ -4,7 +4,6 @@ import httpx
 import time
 from typing import Dict, Any, Optional, List
 from config import config
-from auth import ApiKeyAuthProvider
 
 
 class ConvexClient:
