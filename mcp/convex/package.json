@@ -1,0 +1,18 @@
+{
+  "name": "discovery-agent-convex",
+  "version": "0.1.0",
+  "description": "Convex backend for Discovery Agent MCP",
+  "scripts": {
+    "dev": "convex dev",
+    "deploy": "convex deploy --cmd 'npm run build'",
+    "predev": "convex dev --until-success"
+  },
+  "dependencies": {
+    "convex": "^1.17.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
+

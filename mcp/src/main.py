@@ -21,6 +21,10 @@ from models.project_state import ProjectState, ProjectConfig
 from core.state_manager import ProjectStateManager
 from core.analyzer import DiscoveryAnalyzer
 
+# Import Convex integration
+from config import config
+from persistence import ConvexSync
+
 # Create FastMCP instance
 mcp = FastMCP(name="Discovery Agent")
 
@@ -31,6 +35,15 @@ TEMPLATES_PATH = str(BASE_PATH / "templates")
 
 # Initialize storage provider (default to local for prototype)
 storage = get_storage_provider("local", base_path=TEST_DATA_PATH)
+
+# Initialize Convex sync (optional - only if configured)
+convex_sync = None
+if config.is_convex_enabled():
+    try:
+        convex_sync = ConvexSync()
+    except Exception as e:
+        print(f"Warning: Could not initialize Convex sync: {e}")
+        convex_sync = None
 
 
 # ============================================================================
@@ -819,6 +832,117 @@ def generate(
     
     except Exception as e:
         return {"error": f"Error generating deliverable: {str(e)}"}
+
+
+@mcp.tool()
+def sync_to_convex(
+    project_id: str,
+    sync_type: str = "full",
+    components: Optional[List[str]] = None
+) -> Dict:
+    """
+    Sync project data to Convex for admin portal observability.
+    
+    Args:
+        project_id: Project identifier
+        sync_type: Type of sync ("full", "metadata", "analysis", "questions", "documents")
+        components: Specific components to sync (optional, for partial syncs)
+    
+    Returns:
+        Sync results with details of what was synced
+    
+    Sync Types:
+        - full: Sync everything (metadata, analysis, questions, documents, events)
+        - metadata: Only project metadata and counts
+        - analysis: Only gaps, conflicts, ambiguities
+        - questions: Only extracted questions
+        - documents: Only document metadata
+    
+    Examples:
+        # Full sync after analysis
+        sync_to_convex(project_id="cozyhome", sync_type="full")
+        
+        # Just update questions
+        sync_to_convex(project_id="cozyhome", sync_type="questions")
+        
+        # Partial sync of specific components
+        sync_to_convex(project_id="cozyhome", sync_type="full", 
+                      components=["metadata", "questions"])
+    """
+    try:
+        if not convex_sync:
+            return {
+                "error": "Convex not configured. Set CONVEX_DEPLOYMENT_URL and CONVEX_ADMIN_KEY in environment.",
+                "convex_enabled": False
+            }
+        
+        state_manager = ProjectStateManager()
+        project = state_manager.get_project(project_id)
+        
+        if not project:
+            return {"error": f"Project {project_id} not found"}
+        
+        results = {
+            "project_id": project_id,
+            "sync_type": sync_type,
+            "synced_components": []
+        }
+        
+        # Determine which components to sync
+        if sync_type == "full":
+            sync_components = components or ["metadata", "analysis", "documents", "questions"]
+        elif sync_type == "metadata":
+            sync_components = ["metadata"]
+        elif sync_type == "analysis":
+            sync_components = ["analysis"]
+        elif sync_type == "questions":
+            sync_components = ["questions"]
+        elif sync_type == "documents":
+            sync_components = ["documents"]
+        else:
+            return {"error": f"Unknown sync_type: {sync_type}. Valid: full, metadata, analysis, questions, documents"}
+        
+        # Perform sync operations
+        convex_project_id = None
+        
+        if "metadata" in sync_components:
+            convex_project_id = convex_sync.sync_project_metadata(project)
+            results["convex_project_id"] = convex_project_id
+            results["synced_components"].append("metadata")
+        
+        # Get convex project ID for other operations
+        if not convex_project_id and project.analysis:
+            # Need to sync metadata first to get the ID
+            convex_project_id = convex_sync.sync_project_metadata(project)
+            results["convex_project_id"] = convex_project_id
+        
+        if convex_project_id:
+            if "analysis" in sync_components and project.analysis:
+                gaps_ids = convex_sync.sync_gaps(convex_project_id, project.analysis.gaps)
+                conflicts_ids = convex_sync.sync_conflicts(convex_project_id, project.analysis.conflicts)
+                ambiguities_ids = convex_sync.sync_ambiguities(convex_project_id, project.analysis.ambiguities)
+                
+                results["gaps_synced"] = len(gaps_ids)
+                results["conflicts_synced"] = len(conflicts_ids)
+                results["ambiguities_synced"] = len(ambiguities_ids)
+                results["synced_components"].append("analysis")
+            
+            if "questions" in sync_components and project.analysis:
+                questions = _extract_questions_from_analysis(project.analysis)
+                questions_ids = convex_sync.sync_questions(convex_project_id, questions)
+                results["questions_synced"] = len(questions_ids)
+                results["synced_components"].append("questions")
+            
+            if "documents" in sync_components:
+                doc_ids = convex_sync.sync_documents(convex_project_id, project)
+                results["documents_synced"] = len(doc_ids)
+                results["synced_components"].append("documents")
+        
+        results["message"] = f"Successfully synced {len(results['synced_components'])} component(s) to Convex"
+        return results
+    
+    except Exception as e:
+        return {"error": f"Error syncing to Convex: {str(e)}"}
 
 
 @mcp.tool()

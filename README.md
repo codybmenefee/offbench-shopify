@@ -42,6 +42,13 @@ Transform weak, scattered discovery into systematic, high-confidence implementat
 - Prompts further discovery activities
 - Updates plans and improves confidence scores iteratively
 
+### 7. **Admin Portal Integration (Convex)**
+- Persistent storage for project observability
+- Real-time dashboard for tracking all projects
+- View gaps, questions, conflicts across teams
+- Timeline of project activities and changes
+- Seamless data sync from MCP to admin portal
+
 ## What's Most Important
 
 ### 1. Clarity & Alignment
@@ -126,10 +133,47 @@ offbench-shopify/
 ## Development Status
 
 🚧 **Active Development** - This tool is being built iteratively. Current focus areas:
-- Document ingestion pipeline
-- Analysis engine for gap detection
-- Confidence scoring algorithm
-- Template-based plan generation
+- ✅ Document ingestion pipeline
+- ✅ Analysis engine for gap detection
+- ✅ Confidence scoring algorithm
+- ✅ Template-based plan generation
+- ✅ **Convex integration for admin portal observability**
+
+## Convex Integration (Admin Portal)
+
+The MCP now includes Convex integration to enable a separate admin portal for project observability.
+
+### Quick Start
+
+1. **Set up Convex** (see `mcp/CONVEX_SETUP.md` for detailed guide):
+   ```bash
+   cd mcp/convex
+   npm install
+   convex dev
+   ```
+
+2. **Configure environment**:
+   ```bash
+   cd mcp
+   cp .env.example .env
+   # Edit .env with your Convex credentials
+   ```
+
+3. **Use the sync tool**:
+   ```python
+   # After running analysis
+   analyze(project_id="cozyhome", mode="full")
+   sync_to_convex(project_id="cozyhome", sync_type="full")
+   ```
+
+The admin portal (separate repo) reads from Convex to display:
+- All projects with confidence scores
+- Gaps, conflicts, and ambiguities
+- Open questions across projects
+- Document metadata with links
+- Activity timeline
+
+See `mcp/CONVEX_SETUP.md` for complete setup instructions.
 
 ## For Developers
 
