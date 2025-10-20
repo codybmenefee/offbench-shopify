@@ -196,8 +196,7 @@ def manage_project(
         return {"error": f"Error in manage_project: {str(e)}"}
 
 
-@mcp.tool()
-def ingest(
+def _ingest_documents(
     project_id: str,
     source: str = "local",
     location: str = "",
@@ -205,7 +204,7 @@ def ingest(
     append: bool = True
 ) -> Dict:
     """
-    Universal document ingestion from any source.
+    Internal function to ingest documents.
     
     Args:
         project_id: Project identifier
@@ -216,16 +215,6 @@ def ingest(
     
     Returns:
         Summary of ingested documents
-    
-    Examples:
-        # Ingest from local folder (current behavior)
-        ingest(project_id="cozyhome", source="local", location="/path/to/discovery/docs")
-        
-        # Add a single text note
-        ingest(project_id="cozyhome", source="text", location="Client confirmed...", doc_type="note")
-        
-        # Future: Google Drive
-        ingest(project_id="cozyhome", source="google_drive", location="folder_id_xyz")
     """
     try:
         # For local storage, check if project folder exists
@@ -331,75 +320,71 @@ def ingest(
 
 
 @mcp.tool()
-def analyze(
-    project_id: Union[str, List[str]],
+def ingest(
+    project_id: str,
+    source: str = "local",
+    location: str = "",
+    doc_type: Optional[str] = None,
+    append: bool = True
+) -> Dict:
+    """
+    Universal document ingestion from any source.
+    
+    Args:
+        project_id: Project identifier
+        source: Source type ("local", "text", "google_drive", "url")
+        location: Source location (path, folder ID, URL, or raw text)
+        doc_type: Override document type detection ("email", "transcript", "sow", "note")
+        append: If True, add to existing docs. If False, replace all docs.
+    
+    Returns:
+        Summary of ingested documents
+    
+    Examples:
+        # Ingest from local folder (current behavior)
+        ingest(project_id="cozyhome", source="local", location="/path/to/discovery/docs")
+        
+        # Add a single text note
+        ingest(project_id="cozyhome", source="text", location="Client confirmed...", doc_type="note")
+        
+        # Future: Google Drive
+        ingest(project_id="cozyhome", source="google_drive", location="folder_id_xyz")
+    """
+    return _ingest_documents(project_id, source, location, doc_type, append)
+
+
+def _analyze_project(
+    project_id: str,
     mode: str = "full",
     focus: Optional[List[str]] = None,
     compare_to: Optional[str] = None
 ) -> Dict:
     """
-    Comprehensive analysis engine with multiple modes.
+    Internal function to analyze a project.
     
     Args:
-        project_id: Project identifier (or list for batch mode)
-        mode: Analysis mode ("full", "quick", "gaps_only", "questions_only", "confidence_only", "compare")
-        focus: Specific categories to focus on (["business_rules", "technical_constraints"])
-        compare_to: Another project ID to compare against (for mode="compare")
+        project_id: Project identifier
+        mode: Analysis mode
+        focus: Specific categories to focus on
+        compare_to: Another project ID to compare against
     
     Returns:
         Analysis results based on mode
-    
-    Modes:
-        - full: Complete analysis with all findings
-        - quick: Confidence score only
-        - gaps_only: Just gap detection
-        - questions_only: Prioritized clarifying questions
-        - confidence_only: Score without detailed findings
-        - compare: Compare this project to another
-    
-    Examples:
-        # Full analysis
-        analyze(project_id="cozyhome", mode="full")
-        
-        # Quick confidence check
-        analyze(project_id="cozyhome", mode="quick")
-        
-        # Just get questions for client meeting
-        analyze(project_id="cozyhome", mode="questions_only")
-        
-        # Compare two projects
-        analyze(project_id="cozyhome", mode="compare", compare_to="brewcrew")
-        
-        # Batch analysis
-        analyze(project_id=["cozyhome", "brewcrew"], mode="quick")
     """
     try:
-        # Batch mode
-        if isinstance(project_id, list):
-            results = []
-            for pid in project_id:
-                result = analyze(pid, mode=mode, focus=focus, compare_to=compare_to)
-                results.append(result)
-            return {
-                "batch_mode": True,
-                "projects_analyzed": len(results),
-                "results": results
-            }
-        
-        # Single project analysis
         state_manager = ProjectStateManager()
         project = state_manager.get_project(project_id)
         
         # Auto-load documents if project exists in storage but not in memory
         if not project and storage.project_exists(project_id):
             # Project folder exists but not initialized - auto-ingest
-            ingest_result = ingest(project_id=project_id, source="local", location="")
+            ingest_result = _ingest_documents(project_id=project_id, source="local", location="")
             if "error" in ingest_result:
                 return {"error": f"Failed to auto-load documents: {ingest_result['error']}"}
             project = state_manager.get_project(project_id)
         elif project and not project.documents:
             # Project exists but no documents loaded - auto-ingest
-            ingest_result = ingest(project_id=project_id, source="local", location="", append=True)
+            ingest_result = _ingest_documents(project_id=project_id, source="local", location="", append=True)
             if "error" not in ingest_result:
                 project = state_manager.get_project(project_id)
         
@@ -523,6 +508,65 @@ def analyze(
 
 
 @mcp.tool()
+def analyze(
+    project_id: Union[str, List[str]],
+    mode: str = "full",
+    focus: Optional[List[str]] = None,
+    compare_to: Optional[str] = None
+) -> Dict:
+    """
+    Comprehensive analysis engine with multiple modes.
+    
+    Args:
+        project_id: Project identifier (or list for batch mode)
+        mode: Analysis mode ("full", "quick", "gaps_only", "questions_only", "confidence_only", "compare")
+        focus: Specific categories to focus on (["business_rules", "technical_constraints"])
+        compare_to: Another project ID to compare against (for mode="compare")
+    
+    Returns:
+        Analysis results based on mode
+    
+    Modes:
+        - full: Complete analysis with all findings
+        - quick: Confidence score only
+        - gaps_only: Just gap detection
+        - questions_only: Prioritized clarifying questions
+        - confidence_only: Score without detailed findings
+        - compare: Compare this project to another
+    
+    Examples:
+        # Full analysis
+        analyze(project_id="cozyhome", mode="full")
+        
+        # Quick confidence check
+        analyze(project_id="cozyhome", mode="quick")
+        
+        # Just get questions for client meeting
+        analyze(project_id="cozyhome", mode="questions_only")
+        
+        # Compare two projects
+        analyze(project_id="cozyhome", mode="compare", compare_to="brewcrew")
+        
+        # Batch analysis
+        analyze(project_id=["cozyhome", "brewcrew"], mode="quick")
+    """
+    # Batch mode
+    if isinstance(project_id, list):
+        results = []
+        for pid in project_id:
+            result = _analyze_project(pid, mode=mode, focus=focus, compare_to=compare_to)
+            results.append(result)
+        return {
+            "batch_mode": True,
+            "projects_analyzed": len(results),
+            "results": results
+        }
+    
+    # Single project mode
+    return _analyze_project(project_id, mode=mode, focus=focus, compare_to=compare_to)
+
+
+@mcp.tool()
 def update(
     project_id: str,
     type: str,
@@ -642,7 +686,7 @@ def update(
         
         if should_reanalyze and project.analysis:
             # Re-analyze to update confidence
-            result = analyze(project_id, mode="quick")
+            result = _analyze_project(project_id, mode="quick")
             if "confidence" in result:
                 new_confidence = result["confidence"]
         
