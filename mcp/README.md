@@ -4,14 +4,22 @@ Autonomous agent tools for processing discovery documents and generating impleme
 
 ## Overview
 
-This MCP server provides 8 composable tools that work together to enable autonomous discovery-to-implementation workflows. An AI agent can chain these tools to:
+This MCP server provides **6 general-purpose tools** with storage abstraction for seamless Google Drive integration. An AI agent can chain these tools to:
 
-1. Find and ingest discovery documents (emails, transcripts, SOWs)
-2. Analyze for gaps, ambiguities, and conflicts
-3. Calculate confidence scores
-4. Generate implementation deliverables (SOW, implementation plans)
-5. Extract clarifying questions
-6. Accept answers and iteratively improve confidence
+1. Manage projects and configurations
+2. Ingest documents from any source (local, Drive, text input)
+3. Analyze with multiple modes (full, quick, compare, etc.)
+4. Update context and answer questions
+5. Generate any deliverable type
+6. Query project information conversationally
+
+### Key Features
+
+- **Storage Abstraction**: Ready for Google Drive, OneDrive, Notion via unified interface
+- **Flexible Tools**: Each tool supports multiple modes/actions
+- **Batch Operations**: Analyze or ingest multiple projects at once
+- **Configuration Management**: Per-project settings for thresholds and patterns
+- **Backward Compatible**: Old tool names still work (deprecated)
 
 ## Quick Start
 
@@ -42,162 +50,209 @@ This validates all tools using the CozyHome test scenario.
 
 ## Available Tools
 
-### 1. `find_project_folders()`
+### 1. `manage_project()` - Project Management
 
-Scans the test-data directory for available project scenarios.
+Unified tool for all project operations.
 
-**Returns**: List of projects with metadata
+**Actions**:
+- `list`: Show all available projects
+- `create`: Create new project with folder structure (discovery/, implementation/, working/)
+- `get`: Retrieve project metadata and status
+- `delete`: Remove project
+- `configure`: Update project settings
 
-**Example Agent Flow**:
+**Examples**:
+```python
+# List all projects
+manage_project(action="list")
+
+# Create new project
+manage_project(action="create", project_id="cozyhome", project_name="CozyHome Integration")
+
+# Get project status
+manage_project(action="get", project_id="cozyhome")
+
+# Configure project
+manage_project(action="configure", project_id="cozyhome", config={
+    "confidence_threshold": 85.0,
+    "auto_reanalyze": True
+})
 ```
-Agent sees: "scenario-1-cozyhome", "scenario-2-brewcrew", etc.
+
+### 2. `ingest()` - Universal Document Ingestion
+
+Flexible document ingestion from any source.
+
+**Sources**:
+- `local`: Local filesystem (current/legacy structure)
+- `text`: Direct text input (for notes, context)
+- `google_drive`: Google Drive folder (coming soon)
+- `url`: Web URL (coming soon)
+
+**Examples**:
+```python
+# Ingest from local folder
+ingest(project_id="cozyhome", source="local", location="/path/to/docs")
+
+# Add text note
+ingest(project_id="cozyhome", source="text", location="Client confirmed refunds...", doc_type="note")
+
+# Replace all documents
+ingest(project_id="cozyhome", source="local", location="/new/path", append=False)
 ```
 
-### 2. `ingest_documents(project_id: str)`
+### 3. `analyze()` - Comprehensive Analysis Engine
 
-Loads and parses all discovery documents from a project folder.
+Multi-mode analysis tool.
 
-**Args**:
-- `project_id`: e.g., "scenario-1-cozyhome"
+**Modes**:
+- `full`: Complete analysis with all findings
+- `quick`: Confidence score only
+- `gaps_only`: Just gap detection
+- `questions_only`: Prioritized clarifying questions
+- `confidence_only`: Score without detailed findings
+- `compare`: Compare this project to another
 
-**Returns**: Document count and summary
+**Supports batch operations**: Pass list of project IDs
 
-**What it does**:
-- Recursively scans emails/, transcripts/, client-docs/
-- Extracts metadata (dates, participants, subjects)
-- Classifies document types
-- Stores in ProjectState
+**Examples**:
+```python
+# Full analysis
+analyze(project_id="cozyhome", mode="full")
 
-### 3. `analyze_discovery(project_id: str)`
+# Quick confidence check
+analyze(project_id="cozyhome", mode="quick")
 
-Analyzes documents for gaps, ambiguities, and conflicts. Calculates confidence score.
+# Just questions for meeting
+analyze(project_id="cozyhome", mode="questions_only")
 
-**Args**:
-- `project_id`: Project identifier
+# Compare projects
+analyze(project_id="cozyhome", mode="compare", compare_to="brewcrew")
 
-**Returns**: Analysis results with confidence score (0-100%)
+# Batch analyze
+analyze(project_id=["proj1", "proj2", "proj3"], mode="quick")
+```
 
 **Scoring Algorithm**:
 - **Clarity** (40%): Fewer ambiguous terms = higher score
 - **Completeness** (40%): Fewer gaps = higher score
 - **Alignment** (20%): Fewer conflicts = higher score
 
-**Gap Detection**:
-- Missing refund/return handling
-- Undefined tax logic
-- No error handling defined
-- Vague sync frequency
-- Missing success criteria
-- Undefined API rate limits
-- Authentication not specified
+### 4. `update()` - Context and Override Management
 
-**Ambiguity Detection**:
-- "real-time" without specific timing
-- "fast" without metrics
-- "simple" without definition
-- Other vague terms
+Add information, answer questions, override findings.
 
-**Conflict Detection**:
-- Stakeholders disagree on system of record
-- Contradicting requirements
+**Types**:
+- `context`: Add general information
+- `answer`: Answer specific gap/question by ID
+- `override`: Correct wrong analysis finding
+- `resolve`: Mark ambiguity/gap as resolved
 
-### 4. `get_template(template_type: str)`
+**Features**:
+- Saves updates to working/ folder for traceability
+- Auto-reanalyzes if configured
+- Returns new confidence score
 
-Loads a template from the templates directory.
+**Examples**:
+```python
+# Add context
+update(project_id="cozyhome", type="context", content="Client uses QB Online")
 
-**Args**:
-- `template_type`: "sow", "implementation-plan", or "technical-specs"
+# Answer specific gap
+update(project_id="cozyhome", type="answer", content="Refunds create credit memos", target_id="gap_refund")
 
-**Returns**: Template content
+# Override incorrect finding
+update(project_id="cozyhome", type="override", content="Klaviyo not involved", target_id="system_klaviyo")
+```
 
-### 5. `prepare_deliverable(project_id: str, template_type: str)`
+### 5. `generate()` - Deliverable Generation
 
-Prepares all information needed to generate a deliverable document. Returns template, analysis data, and mapping guidance in one call.
+Generate any deliverable type with multiple formats.
 
-**Args**:
-- `project_id`: Project identifier
-- `template_type`: "sow", "implementation-plan", or "technical-specs"
+**Output Types**:
+- `sow`: Client-facing Statement of Work
+- `implementation_plan`: Internal implementation plan
+- `tech_specs`: Technical specifications
+- `questions_doc`: Formatted questions for meetings
+- `report`: Analysis summary with trends
+- `analysis_snapshot`: JSON export of full state
 
-**Returns**: Complete package with:
-- Template content with placeholders
-- Project analysis data
-- Integration type detection
-- Mapping guide for filling placeholders
-- Instructions for AI agent
+**Formats**: markdown, json, pdf, html
 
-**For AI Agents**:
-- **ChatGPT/HTTP clients**: Use this to get everything needed, then generate the filled document
-- **Cursor/Claude**: Can use this or call `get_template()` + `analyze_discovery()` separately
+**Templates**: standard, simplified, custom
 
-### 6. `extract_open_questions(project_id: str)`
+**Examples**:
+```python
+# Generate SOW
+generate(project_id="cozyhome", output_type="sow", template="simplified")
 
-Generates prioritized clarifying questions from analysis.
+# Generate questions doc
+generate(project_id="cozyhome", output_type="questions_doc", format="pdf")
 
-**Args**:
-- `project_id`: Project identifier
+# Export analysis
+generate(project_id="cozyhome", output_type="analysis_snapshot", format="json")
+```
 
-**Returns**: List of 5-10 questions with priority and context
+**Automatically saves** to implementation/ folder
 
-**Question Categories**:
-- Business rules
-- Technical constraints
-- Edge cases
-- Success criteria
+### 6. `query()` - Conversational Project Exploration
 
-### 7. `update_project_context(project_id: str, new_information: str)`
+Answer questions about project documents and analysis.
 
-Adds new information or answers to project context.
+**Examples**:
+```python
+# Search documents
+query(project_id="cozyhome", question="What did the client say about refunds?")
 
-**Args**:
-- `project_id`: Project identifier
-- `new_information`: Additional context or answers
+# Find mentions
+query(project_id="cozyhome", question="Which documents mention QuickBooks?")
 
-**Returns**: Confirmation
+# Get insights
+query(project_id="cozyhome", question="What are the main pain points?")
+query(project_id="cozyhome", question="Who are the stakeholders?")
+```
 
-**What it does**:
-- Stores new context
-- Marks related gaps as answered
-- Prepares for re-analysis
+**Returns**: Relevant excerpts from documents + analysis insights
 
-### 8. `recalculate_confidence(project_id: str)`
+---
 
-Re-runs analysis with updated context and recalculates confidence score.
+## Deprecated Tools (Still Work)
 
-**Args**:
-- `project_id`: Project identifier
+Old tool names are deprecated but still functional for backward compatibility:
 
-**Returns**: New confidence score and improvement metrics
+- `find_project_folders()` → use `manage_project(action="list")`
+- `ingest_documents(project_id)` → use `ingest(project_id, source="local")`
+- `analyze_discovery(project_id)` → use `analyze(project_id, mode="full")`
+- `extract_open_questions(project_id)` → use `analyze(project_id, mode="questions_only")`
+- `update_project_context(project_id, info)` → use `update(project_id, type="context", content=info)`
+- `recalculate_confidence(project_id)` → use `analyze(project_id, mode="quick")`
+- `get_template(type)` → use `generate(project_id, output_type=type)`
+- `prepare_deliverable(project_id, type)` → use `generate(project_id, output_type=type)`
 
-**Tracks**:
-- Previous vs new confidence
-- Delta improvement
-- Remaining gaps/ambiguities/conflicts
-
-## Example Agent Workflow
+## Example Agent Workflow (New Tools)
 
 ```
 User: "Help me prepare the CozyHome implementation"
 
 Agent autonomously:
-1. find_project_folders()
+1. manage_project(action="list")
    → Sees scenario-1-cozyhome available
 
-2. ingest_documents("scenario-1-cozyhome")
+2. ingest(project_id="scenario-1-cozyhome", source="local")
    → Loads 4 documents (2 emails, 1 SOW draft, 1 product catalog)
 
-3. analyze_discovery("scenario-1-cozyhome")
+3. analyze(project_id="scenario-1-cozyhome", mode="full")
    → Confidence: 81%
    → Found 2 gaps, 4 ambiguities, 1 conflict
+   → Returns prioritized questions
 
-4. extract_open_questions("scenario-1-cozyhome")
-   → Generates 6 prioritized questions
-
-5. prepare_deliverable("scenario-1-cozyhome", "sow")
-   → Gets template + analysis + mapping guide, generates SOW draft
+4. generate(project_id="scenario-1-cozyhome", output_type="sow", template="simplified")
+   → Generates SOW draft, saves to implementation/
 
 Agent responds to user:
 "I've analyzed CozyHome's discovery documents. Current confidence: 81%.
-I've drafted an initial SOW, but there are 6 critical questions:
+I've drafted an initial SOW (saved to implementation folder). 
+There are 6 critical questions:
 1. How should refunds and returns be handled?
 2. Which system is the source of truth for inventory?
 ..."
@@ -205,17 +260,52 @@ I've drafted an initial SOW, but there are 6 critical questions:
 User: "Inventory source of truth is QuickBooks. Refunds sync daily."
 
 Agent autonomously:
-7. update_project_context("scenario-1-cozyhome", "...")
-   → Stores answers
+5. update(project_id="scenario-1-cozyhome", type="context", 
+         content="Inventory source: QuickBooks. Refunds sync daily.")
+   → Stores answers to working/ folder
+   → Auto-reanalyzes: Confidence: 81% → 85% (improved 4%)
 
-8. recalculate_confidence("scenario-1-cozyhome")
-   → Confidence: 81% → 85% (improved 4%)
-   → 2 gaps resolved, 4 remain
-
-9. prepare_deliverable("scenario-1-cozyhome", "sow")
-   → Regenerates SOW with new context included
+6. generate(project_id="scenario-1-cozyhome", output_type="sow", template="simplified")
+   → Regenerates SOW with new context
 
 Agent: "Great! Confidence improved to 85%. Updated the SOW. 4 questions remain..."
+```
+
+### New Features in Action
+
+**Query for specific information**:
+```
+User: "What did the accountant say about invoice handling?"
+
+Agent:
+query(project_id="scenario-1-cozyhome", question="accountant invoice handling")
+→ Returns relevant excerpts from email thread
+
+Agent: "The accountant mentioned in email-02 that invoices should..."
+```
+
+**Compare projects**:
+```
+User: "How does CozyHome compare to BrewCrew?"
+
+Agent:
+analyze(project_id="scenario-1-cozyhome", mode="compare", compare_to="scenario-2-brewcrew")
+
+Agent: "CozyHome has 85% confidence vs BrewCrew's 72%. 
+       CozyHome is better defined but both have gaps in error handling..."
+```
+
+**Batch operations**:
+```
+User: "Give me a quick status on all projects"
+
+Agent:
+analyze(project_id=["scenario-1-cozyhome", "scenario-2-brewcrew", "scenario-3-petpawz"], mode="quick")
+
+Agent: "Project statuses:
+       - CozyHome: 85% confidence
+       - BrewCrew: 72% confidence  
+       - PetPawz: 68% confidence"
 ```
 
 ## State Management
