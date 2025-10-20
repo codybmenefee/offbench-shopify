@@ -62,15 +62,14 @@ if config.is_convex_enabled():
 # CORE TOOLS (5 General-Purpose Tools)
 # ============================================================================
 
-@mcp.tool()
-def manage_project(
+def _manage_project(
     action: str,
     project_id: Optional[str] = None,
     project_name: Optional[str] = None,
     config: Optional[Dict] = None
 ) -> Dict:
     """
-    Unified project management tool.
+    Internal function to manage projects.
     
     Args:
         action: Action to perform ("list", "create", "get", "delete", "configure")
@@ -80,13 +79,6 @@ def manage_project(
     
     Returns:
         Result of the action with relevant project data
-    
-    Actions:
-        - list: Show all available projects
-        - create: Create new project with folder structure
-        - get: Retrieve project metadata and status
-        - delete: Remove project
-        - configure: Update project settings (thresholds, patterns, etc.)
     """
     try:
         if action == "list":
@@ -146,7 +138,14 @@ def manage_project(
             result = {
                 "action": "get",
                 "project_id": project_id,
-                "project_meta": project_meta
+                "project_meta": project_meta,
+                "state": {
+                    "documents_loaded": 0,
+                    "has_analysis": False,
+                    "confidence": None,
+                    "config": None,
+                    "status": "not_initialized"
+                }
             }
             
             if project:
@@ -154,7 +153,8 @@ def manage_project(
                     "documents_loaded": len(project.documents),
                     "has_analysis": project.analysis is not None,
                     "confidence": round(project.analysis.overall_confidence, 1) if project.analysis else None,
-                    "config": project.config.to_dict()
+                    "config": project.config.to_dict() if project.config else None,
+                    "status": "initialized"
                 }
             
             return result
@@ -206,6 +206,39 @@ def manage_project(
     
     except Exception as e:
         return {"error": f"Error in manage_project: {str(e)}"}
+
+
+@mcp.tool()
+def manage_project(
+    action: str,
+    project_id: Optional[str] = None,
+    project_name: Optional[str] = None,
+    config: Optional[Dict] = None
+) -> Dict:
+    """
+    Unified project management tool.
+    
+    Args:
+        action: Action to perform ("list", "create", "get", "delete", "configure")
+        project_id: Project identifier (required for get/delete/configure)
+        project_name: Human-readable name (required for create)
+        config: Project configuration dict (for create/configure)
+    
+    Returns:
+        Result of the action with relevant project data
+    
+    Actions:
+        - list: Show all available projects
+        - create: Create new project with folder structure
+        - get: Retrieve project metadata and status (shows if project needs ingest())
+        - delete: Remove project
+        - configure: Update project settings (thresholds, patterns, etc.)
+    
+    Status Information:
+        - "not_initialized": Project exists in storage but not in memory (run ingest() first)
+        - "initialized": Project is loaded and ready for analysis
+    """
+    return _manage_project(action, project_id, project_name, config)
 
 
 def _ingest_documents(
@@ -352,15 +385,23 @@ def ingest(
     Returns:
         Summary of ingested documents
     
+    Prerequisites:
+        - Project folder must exist in storage (use manage_project(action="list") to see available projects)
+        - For local source: .txt files must exist in project subfolders (emails/, transcripts/, client-docs/)
+    
+    Next Steps:
+        - After successful ingestion, run analyze() to process the documents
+        - Use manage_project(action="get") to check project status
+    
     Examples:
-        # Ingest from local folder (current behavior)
-        ingest(project_id="cozyhome", source="local", location="/path/to/discovery/docs")
+        # Ingest from local folder (most common)
+        ingest(project_id="scenario-1-cozyhome", source="local")
         
         # Add a single text note
-        ingest(project_id="cozyhome", source="text", location="Client confirmed...", doc_type="note")
+        ingest(project_id="scenario-1-cozyhome", source="text", location="Client confirmed...", doc_type="note")
         
         # Future: Google Drive
-        ingest(project_id="cozyhome", source="google_drive", location="folder_id_xyz")
+        ingest(project_id="scenario-1-cozyhome", source="google_drive", location="folder_id_xyz")
     """
     return _ingest_documents(project_id, source, location, doc_type, append)
 
@@ -387,30 +428,18 @@ def _analyze_project(
         state_manager = ProjectStateManager()
         project = state_manager.get_project(project_id)
         
-        # Auto-load documents if project exists in storage but not in memory
-        if not project and storage.project_exists(project_id):
-            # Project folder exists but not initialized - auto-ingest
-            ingest_result = _ingest_documents(project_id=project_id, source="local", location="")
-            if "error" in ingest_result:
-                return {"error": f"Failed to auto-load documents: {ingest_result['error']}"}
-            project = state_manager.get_project(project_id)
-        elif project and not project.documents:
-            # Project exists but no documents loaded - auto-ingest
-            ingest_result = _ingest_documents(project_id=project_id, source="local", location="", append=True)
-            if "error" not in ingest_result:
-                project = state_manager.get_project(project_id)
-        
         if not project:
             available_projects = [p['project_id'] for p in storage.list_projects()]
             return {
-                "error": f"Project '{project_id}' not found in {TEST_DATA_PATH}. "
-                        f"Available projects: {available_projects}"
+                "error": f"Project '{project_id}' not found in memory. "
+                        f"Available projects: {available_projects}. "
+                        f"To analyze this project, first run: ingest(project_id='{project_id}', source='local')"
             }
         
         if not project.documents:
             return {
-                "error": f"No documents found for {project_id}. "
-                        f"Check that .txt files exist in {storage.base_path / project_id}"
+                "error": f"No documents loaded for {project_id}. "
+                        f"To analyze this project, first run: ingest(project_id='{project_id}', source='local')"
             }
         
         # Store previous confidence for comparison
@@ -538,6 +567,10 @@ def analyze(
     Returns:
         Analysis results based on mode
     
+    Prerequisites:
+        - Project must be loaded in memory (run ingest() first if needed)
+        - Documents must be ingested (run ingest() first if needed)
+    
     Modes:
         - full: Complete analysis with all findings
         - quick: Confidence score only
@@ -599,21 +632,52 @@ def update(
     Returns:
         Confirmation of update with impact
     
+    Prerequisites:
+        - Project must be loaded in memory (run ingest() first if needed)
+        - For answer/override/resolve: analysis must exist (run analyze() first)
+    
     Types:
-        - context: Add general information
-        - answer: Answer specific gap/question by ID
-        - override: Correct wrong analysis finding
-        - resolve: Mark ambiguity/gap as resolved
+        - context: Add general information (no prerequisites)
+        - answer: Answer specific gap/question by ID (requires analysis)
+        - override: Correct wrong analysis finding (requires analysis)
+        - resolve: Mark ambiguity/gap as resolved (requires analysis)
+    
+    Next Steps:
+        - After update, run analyze() to see updated confidence scores
+        - Use generate() to create updated deliverables
     
     Examples:
         # Add general context
-        update(project_id="cozyhome", type="context", content="Client uses QB Online, not Desktop")
+        update(project_id="scenario-1-cozyhome", type="context", content="Client uses QB Online, not Desktop")
         
         # Answer specific gap
-        update(project_id="cozyhome", type="answer", content="Refunds create credit memos", target_id="gap_refund_001")
+        update(project_id="scenario-1-cozyhome", type="answer", content="Refunds create credit memos", target_id="gap_refund_001")
         
         # Override incorrect finding
-        update(project_id="cozyhome", type="override", content="Klaviyo not involved", target_id="system_klaviyo")
+        update(project_id="scenario-1-cozyhome", type="override", content="Klaviyo not involved", target_id="system_klaviyo")
+    """
+    return _update_project(project_id, type, content, target_id, metadata)
+
+
+def _update_project(
+    project_id: str,
+    type: str,
+    content: str,
+    target_id: Optional[str] = None,
+    metadata: Optional[Dict] = None
+) -> Dict:
+    """
+    Internal function to update project context and analysis.
+    
+    Args:
+        project_id: Project identifier
+        type: Update type ("context", "answer", "override", "resolve")
+        content: Update content
+        target_id: Target gap/question/finding ID (for answer/override/resolve)
+        metadata: Optional metadata
+    
+    Returns:
+        Confirmation of update with impact
     """
     try:
         state_manager = ProjectStateManager()
@@ -737,23 +801,55 @@ def generate(
     Returns:
         Generated content and metadata
     
+    Prerequisites:
+        - Project must be loaded in memory (run ingest() first if needed)
+        - Analysis must exist (run analyze() first for most output types)
+        - Exception: analysis_snapshot can be generated without analysis
+    
     Output Types:
-        - sow: Client-facing Statement of Work
-        - implementation_plan: Internal implementation plan
-        - tech_specs: Technical specifications
-        - questions_doc: Formatted questions for client meeting
-        - report: Analysis summary with trends
-        - analysis_snapshot: JSON export of analysis state
+        - sow: Client-facing Statement of Work (requires analysis)
+        - implementation_plan: Internal implementation plan (requires analysis)
+        - tech_specs: Technical specifications (requires analysis)
+        - questions_doc: Formatted questions for client meeting (requires analysis)
+        - report: Analysis summary with trends (requires analysis)
+        - analysis_snapshot: JSON export of analysis state (no analysis required)
+    
+    Next Steps:
+        - Generated files are saved to the implementation folder
+        - Use manage_project(action="get") to see saved deliverables
     
     Examples:
         # Generate SOW
-        generate(project_id="cozyhome", output_type="sow", template="simplified")
+        generate(project_id="scenario-1-cozyhome", output_type="sow", template="simplified")
         
         # Generate questions doc for meeting
-        generate(project_id="cozyhome", output_type="questions_doc", format="pdf")
+        generate(project_id="scenario-1-cozyhome", output_type="questions_doc", format="pdf")
         
         # Export analysis as JSON
-        generate(project_id="cozyhome", output_type="analysis_snapshot", format="json")
+        generate(project_id="scenario-1-cozyhome", output_type="analysis_snapshot", format="json")
+    """
+    return _generate_deliverable(project_id, output_type, format, template, options)
+
+
+def _generate_deliverable(
+    project_id: str,
+    output_type: str,
+    format: str = "markdown",
+    template: str = "standard",
+    options: Optional[Dict] = None
+) -> Dict:
+    """
+    Internal function to generate deliverables.
+    
+    Args:
+        project_id: Project identifier
+        output_type: Type of deliverable
+        format: Output format
+        template: Template variant
+        options: Additional options
+    
+    Returns:
+        Generated content and metadata
     """
     try:
         state_manager = ProjectStateManager()
@@ -936,22 +1032,31 @@ def sync_to_convex(
     Returns:
         Sync results with details of what was synced
     
+    Prerequisites:
+        - Project must be loaded in memory (run ingest() first if needed)
+        - For analysis/questions sync: analysis must exist (run analyze() first)
+        - Convex must be configured (CONVEX_DEPLOYMENT_URL environment variable)
+    
     Sync Types:
         - full: Sync everything (metadata, analysis, questions, documents, events)
-        - metadata: Only project metadata and counts
-        - analysis: Only gaps, conflicts, ambiguities
-        - questions: Only extracted questions
-        - documents: Only document metadata
+        - metadata: Only project metadata and counts (no prerequisites)
+        - analysis: Only gaps, conflicts, ambiguities (requires analysis)
+        - questions: Only extracted questions (requires analysis)
+        - documents: Only document metadata (requires ingest)
+    
+    Next Steps:
+        - Check Convex admin portal to see synced data
+        - Use for team collaboration and project tracking
     
     Examples:
         # Full sync after analysis
-        sync_to_convex(project_id="cozyhome", sync_type="full")
+        sync_to_convex(project_id="scenario-1-cozyhome", sync_type="full")
         
         # Just update questions
-        sync_to_convex(project_id="cozyhome", sync_type="questions")
+        sync_to_convex(project_id="scenario-1-cozyhome", sync_type="questions")
         
         # Partial sync of specific components
-        sync_to_convex(project_id="cozyhome", sync_type="full", 
+        sync_to_convex(project_id="scenario-1-cozyhome", sync_type="full", 
                       components=["metadata", "questions"])
     """
     try:
@@ -1040,7 +1145,23 @@ def query(project_id: str, question: str) -> Dict:
         question: Question to answer
     
     Returns:
-        Answer with relevant excerpts
+        Answer with relevant excerpts from documents and analysis
+    
+    Prerequisites:
+        - Project must be loaded in memory (run ingest() first if needed)
+        - Documents must be ingested (run ingest() first if needed)
+        - For analysis insights: analysis must exist (run analyze() first)
+    
+    Use Cases:
+        - Search for specific information in documents
+        - Find mentions of systems, stakeholders, or topics
+        - Extract pain points and business objectives
+        - Get insights from analysis results
+    
+    Next Steps:
+        - Use results to answer user questions
+        - Use findings to update project context with update()
+        - Generate deliverables with generate()
     
     Examples:
         - "What did the client say about refunds?"

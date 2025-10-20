@@ -2,6 +2,23 @@
 
 A comprehensive list of test prompts organized by complexity level to validate the Discovery Agent's functionality with local test data.
 
+## Tool Dependencies & Workflow
+
+**Important**: The tools are designed to be composable. The agent should handle dependencies by calling tools in the proper order:
+
+- **`manage_project`** - Lists projects and shows status
+- **`ingest`** - Loads documents into memory (required before analysis)
+- **`analyze`** - Analyzes loaded documents (requires ingest first)
+- **`update`** - Adds context and updates analysis
+- **`generate`** - Creates deliverables (requires analysis first)
+
+**Common Workflow**:
+1. `manage_project(action="list")` - See available projects
+2. `manage_project(action="get", project_id="X")` - Check project status
+3. `ingest(project_id="X", source="local")` - Load documents (if needed)
+4. `analyze(project_id="X", mode="full")` - Run analysis
+5. `generate(project_id="X", output_type="sow")` - Create deliverables
+
 ---
 
 ## Level 1: Basic Operations (Getting Started)
@@ -29,7 +46,12 @@ Run a quick confidence check on scenario-1-cozyhome
 Show me the details of the scenario-2-brewcrew project
 ```
 
-**Expected Result**: Project metadata, document count, and status.
+**Expected Workflow**: 
+1. Call `manage_project(action="get", project_id="scenario-2-brewcrew")`
+2. If status is "not_initialized", call `ingest(project_id="scenario-2-brewcrew", source="local")`
+3. Call `analyze(project_id="scenario-2-brewcrew", mode="full")` for complete details
+
+**Expected Result**: Project metadata, document count, analysis results, and confidence scores.
 
 ---
 
