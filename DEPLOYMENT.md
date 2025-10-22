@@ -190,7 +190,7 @@ List all available projects
 1. **Deploy to Railway** (git push)
 2. **Test basic operations** (list projects)
 3. **Run analysis** (scenario-1-cozyhome)
-4. **Try all test prompts** from TEST_PROMPTS.md
+4. Try the test commands outlined above
 5. **Verify confidence scoring** works correctly
 
 ---
@@ -199,4 +199,3 @@ List all available projects
 **Test Data**: Included in deployment ✅  
 **424 Error**: Should be resolved ✅  
 **All Scenarios**: Available on Railway ✅
-

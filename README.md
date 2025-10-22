@@ -115,7 +115,6 @@ Discovery Artifacts → Ingestion → Analysis → Plan Generation → Confidenc
 offbench-shopify/
 ├── README.md                 # Project overview (this file)
 ├── AGENTS.md                # Developer context and principles
-├── SCENARIOS.md             # Test scenarios for validation
 ├── templates/               # Implementation document templates
 │   ├── README.md            # Template usage guide
 │   ├── client-facing-sow.md           # Statement of Work template
@@ -145,7 +144,7 @@ The MCP now includes Convex integration to enable a separate admin portal for pr
 
 ### Quick Start
 
-1. **Set up Convex** (see `mcp/CONVEX_SETUP.md` for detailed guide):
+1. **Set up Convex** (see `mcp/convex/README.md` for detailed guide):
    ```bash
    cd mcp/convex
    npm install
@@ -173,7 +172,7 @@ The admin portal (separate repo) reads from Convex to display:
 - Document metadata with links
 - Activity timeline
 
-See `mcp/CONVEX_SETUP.md` for complete setup instructions.
+See `mcp/convex/README.md` for complete setup instructions.
 
 ## For Developers
 

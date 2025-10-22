@@ -1,6 +1,7 @@
 """Convex HTTP API client wrapper."""
 
 import httpx
+import os
 import time
 from typing import Dict, Any, Optional, List
 from config import config
@@ -30,8 +31,10 @@ class ConvexClient:
             "Content-Type": "application/json",
         }
         
-        # For now, Convex functions are publicly accessible
-        # Auth will be added directly in Convex functions when needed
+        # Optional auth header (if portal requires it). Use CONVEX_ADMIN_KEY if provided.
+        admin_key = os.getenv("CONVEX_ADMIN_KEY")
+        if admin_key:
+            headers["Authorization"] = f"Bearer {admin_key}"
         
         return headers
 
@@ -166,4 +169,3 @@ class ConvexClient:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
         self.close()
-

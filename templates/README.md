@@ -230,8 +230,7 @@ Submit improvements via PR with rationale and examples.
 
 - **AGENTS.md** - Developer guide for building the discovery tool
 - **README.md** - Project overview
-- **SCENARIOS.md** - Test scenarios for validation
-- **test-data/** - Example discovery documents
+- **test-data/README.md** - Scenario descriptions and usage
 - **templates/examples/** - Example generated documents
 
 ---

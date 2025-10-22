@@ -17,6 +17,10 @@ class Config:
     # Convex configuration
     CONVEX_DEPLOYMENT_URL: Optional[str] = os.getenv("CONVEX_DEPLOYMENT_URL")
     
+    # Optional multi-tenant context passed on writes
+    MCP_USER_ID: Optional[str] = os.getenv("MCP_USER_ID")
+    MCP_ORG_ID: Optional[str] = os.getenv("MCP_ORG_ID")
+    
     # Sync behavior
     AUTO_SYNC_ON_ANALYZE: bool = os.getenv("AUTO_SYNC_ON_ANALYZE", "false").lower() == "true"
     AUTO_SYNC_ON_UPDATE: bool = os.getenv("AUTO_SYNC_ON_UPDATE", "false").lower() == "true"
@@ -30,4 +34,3 @@ class Config:
 
 # Singleton config instance
 config = Config()
-

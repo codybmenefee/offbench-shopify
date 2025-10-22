@@ -268,7 +268,7 @@ These test documents are successful if they:
 ## Questions?
 
 For questions about test data or to report issues:
-- Check `SCENARIOS.md` for scenario descriptions
+- See scenario descriptions in this README
 - Review `AGENTS.md` for development principles
 - See `README.md` (root) for project overview
 
@@ -276,4 +276,3 @@ For questions about test data or to report issues:
 
 Last Updated: January 2024  
 Maintained by: Lazer Technologies Implementation Team
-
