@@ -45,8 +45,17 @@ class DiscoveryAnalyzer:
         """Analyze discovery documents and return analysis result."""
         result = AnalysisResult()
         
-        # Combine all document content
-        all_content = "\n\n".join([doc.content for doc in documents])
+        # Combine all document content, preferring summaries for integration documents
+        content_parts = []
+        for doc in documents:
+            if doc.summary and doc.source == "integration":
+                # Use summary for integration documents
+                content_parts.append(f"[SUMMARY: {doc.file_path}]\n{doc.summary}")
+            else:
+                # Use full content for local documents or when no summary available
+                content_parts.append(f"[DOCUMENT: {doc.file_path}]\n{doc.content}")
+        
+        all_content = "\n\n".join(content_parts)
         if additional_context:
             all_content += "\n\n" + "\n".join(additional_context)
         

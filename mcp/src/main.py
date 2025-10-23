@@ -38,11 +38,25 @@ IS_RAILWAY = os.getenv("RAILWAY_ENVIRONMENT") is not None or os.getenv("PORT") i
 IS_LOCAL = not IS_RAILWAY
 
 # Initialize storage provider based on environment
-if IS_RAILWAY:
-    # Railway deployment - use test-data folder (now included in deployment)
-    print("🚀 Railway environment detected - using test-data folder")
-    storage = get_storage_provider("local", base_path=TEST_DATA_PATH)
-    print(f"📁 Test data path: {TEST_DATA_PATH}")
+if config.USE_INTEGRATION_STORAGE and config.is_convex_enabled() and config.MERGE_API_KEY:
+    # Integration mode - use Convex + Merge
+    try:
+        from integration.merge_client import MergeClient
+        from persistence.convex_client import ConvexClient
+        
+        merge_client = MergeClient(api_key=config.MERGE_API_KEY)
+        convex_client = ConvexClient()
+        
+        storage = get_storage_provider(
+            "integration",
+            convex_client=convex_client,
+            merge_client=merge_client
+        )
+        print("🔗 Integration storage enabled - using Convex + Merge API")
+    except Exception as e:
+        print(f"Warning: Could not initialize integration storage: {e}")
+        print("Falling back to local storage")
+        storage = get_storage_provider("local", base_path=TEST_DATA_PATH)
 else:
     # Local development - use test-data folder
     print("🏠 Local environment detected - using test-data folder")
@@ -339,8 +353,49 @@ def _ingest_documents(
                 "type": doc_type_enum.value
             })
         
+        elif source == "integration":
+            # NEW: Fetch from Google Drive via integration
+            # 1. Get project from Convex (has integration link)
+            # 2. Resolve integration credentials via Convex query
+            # 3. Fetch folder documents via Merge API
+            # 4. Download each document content
+            # 5. Store metadata in Convex (no summary yet)
+            # 6. Load into memory for agent to process
+            
+            try:
+                # Use integration storage provider to sync documents
+                if hasattr(storage, 'sync_documents_from_integration'):
+                    synced_documents = storage.sync_documents_from_integration(project_id)
+                    
+                    # Add documents to project state
+                    for doc in synced_documents:
+                        project.add_document(doc)
+                        documents_found.append({
+                            "file": doc.file_path,
+                            "type": doc.doc_type.value,
+                            "external_id": doc.external_id,
+                            "convex_document_id": doc.convex_document_id
+                        })
+                    
+                    # Update state
+                    state_manager.update_project(project)
+                    
+                    return {
+                        "project_id": project_id,
+                        "source": "integration",
+                        "documents_loaded": len(documents_found),
+                        "total_documents": len(project.documents),
+                        "documents": documents_found,
+                        "message": f"Successfully ingested {len(documents_found)} document(s). "
+                                   f"Run analyze() next - it will request summaries if needed."
+                    }
+                else:
+                    return {"error": "Integration storage not available. Use local storage instead."}
+            except Exception as e:
+                return {"error": f"Failed to ingest from integration: {str(e)}"}
+        
         elif source == "google_drive":
-            return {"error": "Google Drive ingestion not yet implemented. Coming soon!"}
+            return {"error": "Google Drive ingestion not yet implemented. Use source='integration' instead."}
         
         elif source == "url":
             return {"error": "URL ingestion not yet implemented. Coming soon!"}
@@ -441,6 +496,32 @@ def _analyze_project(
                 "error": f"No documents loaded for {project_id}. "
                         f"To analyze this project, first run: ingest(project_id='{project_id}', source='local')"
             }
+        
+        # Check for missing summaries in full analysis mode
+        if mode == "full":
+            docs_without_summaries = [
+                d for d in project.documents 
+                if not d.summary and d.source == "integration"
+            ]
+            
+            if docs_without_summaries:
+                return {
+                    "status": "summaries_required",
+                    "project_id": project_id,
+                    "message": f"{len(docs_without_summaries)} document(s) need summaries before analysis",
+                    "documents_needing_summaries": [
+                        {
+                            "document_id": d.convex_document_id or d.file_path,
+                            "name": os.path.basename(d.file_path),
+                            "type": d.doc_type.value,
+                            "content_preview": d.content[:500] + "..." if len(d.content) > 500 else d.content,
+                            "full_content": d.content
+                        }
+                        for d in docs_without_summaries
+                    ],
+                    "next_action": "Call summarize_document() for each document with a summary containing: "
+                                  "key entities, main topics, and critical requirements. Then re-run analyze()."
+                }
         
         # Store previous confidence for comparison
         previous_confidence = None
@@ -609,6 +690,85 @@ def analyze(
     
     # Single project mode
     return _analyze_project(project_id, mode=mode, focus=focus, compare_to=compare_to)
+
+
+@mcp.tool()
+def summarize_document(
+    project_id: str,
+    document_id: str,
+    summary: str
+) -> Dict:
+    """
+    Store AI-generated summary for a document.
+    
+    The agent should analyze the document content and provide a summary containing:
+    - Key entities (systems, stakeholders, dates)
+    - Main topics (business requirements, technical constraints, pain points)
+    - Critical requirements (must-haves, success criteria, edge cases)
+    
+    Args:
+        project_id: Project identifier
+        document_id: Document identifier (Convex ID or filename)
+        summary: AI-generated summary of the document
+    
+    Returns:
+        Confirmation of summary storage
+    """
+    return _summarize_document(project_id, document_id, summary)
+
+
+def _summarize_document(
+    project_id: str,
+    document_id: str,
+    summary: str
+) -> Dict:
+    """Store agent-generated summary for a document."""
+    try:
+        # Validate summary length
+        if len(summary) < 100:
+            return {"error": "Summary too short. Please provide at least 100 characters."}
+        if len(summary) > 4000:
+            return {"error": "Summary too long. Please keep under 4000 characters."}
+        
+        state_manager = ProjectStateManager()
+        project = state_manager.get_project(project_id)
+        
+        if not project:
+            return {"error": f"Project {project_id} not found"}
+        
+        # Find document in project
+        doc = None
+        for d in project.documents:
+            if d.convex_document_id == document_id or d.file_path.endswith(document_id):
+                doc = d
+                break
+        
+        if not doc:
+            return {"error": f"Document {document_id} not found in project"}
+        
+        # Update document summary
+        doc.summary = summary
+        state_manager.update_project(project)
+        
+        # Sync to Convex if available
+        if convex_sync and doc.convex_document_id:
+            try:
+                convex_sync.client.mutation(
+                    "mutations/documents:updateDocumentSummary",
+                    {"documentId": doc.convex_document_id, "summary": summary}
+                )
+            except Exception as e:
+                print(f"Warning: Could not sync summary to Convex: {e}")
+        
+        return {
+            "project_id": project_id,
+            "document_id": document_id,
+            "summary_length": len(summary),
+            "message": "Summary stored successfully"
+        }
+    
+    except Exception as e:
+        return {"error": f"Error storing summary: {str(e)}"}
 
 
 @mcp.tool()

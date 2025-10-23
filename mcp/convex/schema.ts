@@ -133,7 +133,7 @@ export default defineSchema({
     name: v.string(),
     type: v.string(),
     uploadDate: v.number(),
-    size: v.string(),
+    size: v.number(), // Changed from string to number (bytes)
     status: v.union(
       v.literal("processed"),
       v.literal("processing"),
@@ -141,9 +141,21 @@ export default defineSchema({
     ),
     sourceLink: v.optional(v.string()),
     metadata: v.optional(v.any()),
+    // New fields for integration-based storage
+    externalId: v.optional(v.string()), // Google Drive file ID
+    externalUrl: v.optional(v.string()), // Direct link from Merge API
+    integrationId: v.optional(v.string()), // Links to user's Google Drive integration
+    summary: v.optional(v.string()), // AI-generated summary (from agent)
+    source: v.union(
+      v.literal("upload"),
+      v.literal("integration"),
+      v.literal("local")
+    ),
   }).index("by_project", ["projectId"])
     .index("by_status", ["status"])
-    .index("by_type", ["type"]),
+    .index("by_type", ["type"])
+    .index("by_source", ["source"])
+    .index("by_externalId", ["externalId"]),
 
   // Context Events table - activity timeline
   contextEvents: defineTable({

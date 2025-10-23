@@ -30,6 +30,14 @@ class Document:
     participants: List[str] = field(default_factory=list)
     subject: Optional[str] = None
     
+    # New fields for integration-based storage
+    external_id: Optional[str] = None  # Google Drive file ID
+    external_url: Optional[str] = None  # Merge API URL
+    integration_id: Optional[str] = None  # Integration ID
+    summary: Optional[str] = None  # AI-generated summary (from agent)
+    source: str = "local"  # "local", "integration", "upload"
+    convex_document_id: Optional[str] = None  # Convex document ID for updates
+    
     def __post_init__(self):
         """Ensure doc_type is DocumentType enum."""
         if isinstance(self.doc_type, str):
@@ -45,5 +53,12 @@ class Document:
             "date": self.date.isoformat() if self.date else None,
             "participants": self.participants,
             "subject": self.subject,
+            # New fields for integration-based storage
+            "external_id": self.external_id,
+            "external_url": self.external_url,
+            "integration_id": self.integration_id,
+            "summary": self.summary,
+            "source": self.source,
+            "convex_document_id": self.convex_document_id,
         }
 

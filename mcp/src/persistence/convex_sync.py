@@ -292,10 +292,20 @@ class ConvexSync:
                 "uploadDate": upload_ts,
                 "size": size_bytes if size_bytes is not None else 0,
                 "status": "processed",
-                "source": "upload",
+                "source": getattr(doc, 'source', 'local'),
                 "metadata": doc.metadata,
                 **self._tenant_context(),
             }
+            
+            # Add integration-specific fields if available
+            if hasattr(doc, 'external_id') and doc.external_id:
+                args["externalId"] = doc.external_id
+            if hasattr(doc, 'external_url') and doc.external_url:
+                args["externalUrl"] = doc.external_url
+            if hasattr(doc, 'integration_id') and doc.integration_id:
+                args["integrationId"] = doc.integration_id
+            if hasattr(doc, 'summary') and doc.summary:
+                args["summary"] = doc.summary
             doc_id = self.client.mutation("mutations/documents:create", args)
             created_ids.append(doc_id if isinstance(doc_id, str) else doc_id.get("_id", doc_id))
         return created_ids

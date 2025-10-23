@@ -14,7 +14,7 @@ def get_storage_provider(
     Factory function to get appropriate storage provider.
     
     Args:
-        provider_type: Type of provider ("local", "google_drive", "merge_api")
+        provider_type: Type of provider ("local", "google_drive", "merge_api", "integration")
         **kwargs: Provider-specific arguments
         
     Returns:
@@ -36,6 +36,13 @@ def get_storage_provider(
             "merge_api",
             api_key="key",
             account_token="token"
+        )
+        
+        # Integration storage (Convex + Merge)
+        provider = get_storage_provider(
+            "integration",
+            convex_client=convex_client,
+            merge_client=merge_client
         )
     """
     if provider_type == "local":
@@ -61,10 +68,21 @@ def get_storage_provider(
             account_token=account_token
         )
     
+    elif provider_type == "integration":
+        convex_client = kwargs.get("convex_client")
+        merge_client = kwargs.get("merge_client")
+        if not convex_client or not merge_client:
+            raise ValueError("IntegrationStorageProvider requires 'convex_client' and 'merge_client' parameters")
+        from .integration_provider import IntegrationStorageProvider
+        return IntegrationStorageProvider(
+            convex_client=convex_client,
+            merge_client=merge_client
+        )
+    
     else:
         raise ValueError(
             f"Unknown storage provider: {provider_type}. "
-            f"Supported: 'local', 'google_drive', 'merge_api'"
+            f"Supported: 'local', 'google_drive', 'merge_api', 'integration'"
         )
 
 
