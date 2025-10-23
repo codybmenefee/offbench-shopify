@@ -76,6 +76,7 @@ export default defineSchema({
     identifiedDate: v.number(),
     conflictingStatements: v.array(v.string()),
     sources: v.array(v.string()),
+    resolution: v.optional(v.string()),
   }).index("by_project", ["projectId"])
     .index("by_status", ["status"])
     .index("by_priority", ["priority"])
@@ -92,6 +93,7 @@ export default defineSchema({
       v.literal("low")
     ),
     clarificationNeeded: v.string(),
+    clarification: v.optional(v.string()),
     status: v.union(
       v.literal("open"),
       v.literal("clarified"),

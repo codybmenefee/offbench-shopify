@@ -26,7 +26,7 @@ from config import config
 from persistence import ConvexSync
 
 # Create FastMCP instance
-mcp = FastMCP(name="Discovery Agent")
+mcp = FastMCP(name="OffBench")
 
 # Base paths - calculate relative to this file for portability
 BASE_PATH = Path(__file__).parent.parent.parent  # Go up to repo root
@@ -900,15 +900,59 @@ def _update_project(
             
             project.add_context(f"[Resolved {target_id}]: {content}", update_type="resolve")
             
-            # Mark in analysis
+            # Determine if resolving a conflict or ambiguity and update in analysis
+            resolved_item_type = None
+            resolved_item_id = None
+            
             if project.analysis:
-                for ambiguity in project.analysis.ambiguities:
-                    if target_id in ambiguity.term.lower():
-                        # Remove from list (mark as resolved)
-                        project.analysis.ambiguities.remove(ambiguity)
+                # Check conflicts
+                for conflict in project.analysis.conflicts:
+                    if target_id.lower() in conflict.topic.lower() or target_id.lower() in str(conflict.conflicting_statements).lower():
+                        conflict.resolution = content
+                        resolved_item_type = "conflict"
+                        # Try to sync to Convex if available
+                        if convex_sync:
+                            try:
+                                # Get project Convex ID
+                                project_convex_id = convex_sync._ensure_project(project_id, project.project_name)
+                                # Note: We'd need the conflict Convex ID to update it
+                                # For now, log an event
+                                convex_sync.log_event(
+                                    project_convex_id,
+                                    "conflict_resolved",
+                                    f"Conflict '{conflict.topic}' resolved: {content[:100]}",
+                                    {"resolution": content}
+                                )
+                            except Exception as e:
+                                print(f"Warning: Could not sync conflict resolution to Convex: {e}")
+                        break
+                
+                # Check ambiguities
+                if not resolved_item_type:
+                    for ambiguity in project.analysis.ambiguities:
+                        if target_id.lower() in ambiguity.term.lower() or target_id.lower() in ambiguity.context.lower():
+                            ambiguity.clarification = content
+                            resolved_item_type = "ambiguity"
+                            # Try to sync to Convex if available
+                            if convex_sync:
+                                try:
+                                    # Get project Convex ID
+                                    project_convex_id = convex_sync._ensure_project(project_id, project.project_name)
+                                    # Log an event
+                                    convex_sync.log_event(
+                                        project_convex_id,
+                                        "ambiguity_clarified",
+                                        f"Ambiguity '{ambiguity.term}' clarified: {content[:100]}",
+                                        {"clarification": content}
+                                    )
+                                except Exception as e:
+                                    print(f"Warning: Could not sync ambiguity clarification to Convex: {e}")
                         break
             
-            message = f"Resolved {target_id}"
+            if resolved_item_type:
+                message = f"Resolved {resolved_item_type}: {target_id}"
+            else:
+                message = f"Resolved {target_id} (no matching conflict or ambiguity found in analysis)"
         
         else:
             return {"error": f"Unknown type: {type}. Valid: context, answer, override, resolve"}

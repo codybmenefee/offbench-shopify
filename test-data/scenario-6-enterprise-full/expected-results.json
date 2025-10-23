@@ -1,0 +1,125 @@
+{
+  "scenario_name": "Enterprise Shopify Plus Migration",
+  "scenario_id": "scenario-6-enterprise-full",
+  "description": "Comprehensive test with conflicts, ambiguities, gaps, and their resolutions/clarifications",
+  
+  "expected_conflicts": [
+    {
+      "topic": "inventory system of record",
+      "description_contains": ["source of truth", "SAP", "Shopify"],
+      "should_have_resolution": true,
+      "resolution_contains": ["decision", "Shopify will be the source of truth", "final"],
+      "priority": "high",
+      "sources_count": 2
+    }
+  ],
+  
+  "expected_ambiguities": [
+    {
+      "term": "real-time",
+      "description_contains": ["inventory", "sync"],
+      "should_have_clarification": true,
+      "clarification_contains": ["30 seconds", "within"],
+      "priority": "medium"
+    },
+    {
+      "term": "fast",
+      "description_contains": ["performance", "website", "page"],
+      "should_have_clarification": true,
+      "clarification_contains": ["seconds", "under 2", "load time"],
+      "priority": "medium"
+    },
+    {
+      "term": "scalable",
+      "description_contains": ["volume", "growth"],
+      "should_have_clarification": true,
+      "clarification_contains": ["orders/month", "100,000", "250,000"],
+      "priority": "medium"
+    }
+  ],
+  
+  "expected_gaps": [
+    {
+      "category": "business_rules",
+      "description_contains": ["return", "refund"],
+      "impact_level": "high",
+      "should_be_found": true
+    },
+    {
+      "category": "business_rules",
+      "description_contains": ["tax"],
+      "impact_level": "high",
+      "should_be_found": true
+    },
+    {
+      "category": "error_handling",
+      "description_contains": ["error", "failure", "retry"],
+      "impact_level": "high",
+      "should_be_found": true
+    },
+    {
+      "category": "technical_constraints",
+      "description_contains": ["authentication"],
+      "impact_level": "medium",
+      "should_be_found": true
+    },
+    {
+      "category": "edge_cases",
+      "description_contains": ["edge case", "exception"],
+      "impact_level": "low",
+      "should_be_found": true
+    }
+  ],
+  
+  "confidence_range": {
+    "min": 55,
+    "max": 70,
+    "reasoning": "Some clarifications provided and conflict resolved, but significant gaps remain in requirements"
+  },
+  
+  "validation_rules": {
+    "no_hallucinated_resolutions": {
+      "description": "Resolution field should ONLY contain text from actual documents, never inferred",
+      "check": "resolution text must appear verbatim in source documents"
+    },
+    "no_hallucinated_clarifications": {
+      "description": "Clarification field should ONLY contain text from actual documents, never inferred",
+      "check": "clarification text must appear verbatim in source documents"
+    },
+    "source_tracking": {
+      "description": "Each finding must reference correct source documents",
+      "check": "sources array contains actual document names"
+    },
+    "completeness": {
+      "description": "All expected conflicts, ambiguities, and gaps should be found",
+      "check": "found count matches expected count with ±1 tolerance"
+    }
+  },
+  
+  "systems_identified": [
+    "Shopify",
+    "SAP",
+    "Salesforce",
+    "Klaviyo",
+    "ShipStation",
+    "Stripe",
+    "PayPal"
+  ],
+  
+  "client_name": "TechStyle",
+  
+  "pain_points_expected": [
+    "slow platform",
+    "overselling",
+    "inventory management",
+    "manual tasks"
+  ],
+  
+  "business_objectives_expected": [
+    "real-time inventory",
+    "multi-brand support",
+    "shared customer accounts",
+    "improved performance"
+  ]
+}
+

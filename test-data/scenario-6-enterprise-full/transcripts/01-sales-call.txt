@@ -1,0 +1,66 @@
+SALES CALL TRANSCRIPT
+Date: January 22, 2024
+Participants: Sarah Chen (TechStyle), Mark Rodriguez (Sales Rep), Jennifer Wu (Technical Lead)
+
+[00:00] Mark: Thanks for taking the time today, Sarah. We received your RFP and are excited about the opportunity.
+
+[00:15] Sarah: Thanks for reaching out so quickly. We're really feeling the pain of our current platform. It's slow, hard to manage, and our tech team is spending way too much time on basic tasks.
+
+[00:30] Mark: I can understand that frustration. Can you tell me more about your current pain points?
+
+[00:45] Sarah: Sure. Our biggest issue is inventory management. Right now, each brand has its own inventory system, and we're constantly dealing with overselling or out-of-stock situations. We need real-time inventory sync.
+
+[01:05] Jennifer: When you say "real-time," what exactly does that mean for your business? Are we talking webhooks firing immediately, or is there an acceptable delay?
+
+[01:20] Sarah: Well, we need it to be as fast as possible. When a customer buys something on Brand A, that inventory count needs to update across all our brands immediately. Our current system has maybe a 5-minute delay, and that's causing problems.
+
+[01:45] Mark: Got it. And you mentioned in the RFP that you use SAP for ERP. Can you tell us more about that integration?
+
+[02:00] Sarah: Yes, SAP is our source of truth for inventory. Everything should sync from there to Shopify. Orders from Shopify need to go back to SAP for fulfillment processing.
+
+[02:20] Jennifer: Understood. And your Salesforce CRM - how does that fit into the picture?
+
+[02:35] Sarah: Salesforce is our master customer database. All customer data should flow from Salesforce to Shopify, not the other way around. Customer service reps work in Salesforce, so that's where the most up-to-date customer information lives.
+
+[03:00] Mark: Makes sense. What about the migration timeline? You mentioned Q2 launch in the RFP.
+
+[03:15] Sarah: Yes, ideally we'd like to be live by end of May, early June at the latest. We have a big promotional campaign planned for summer and need to be on the new platform by then.
+
+[03:30] Jennifer: That's approximately 4 months. For a migration of this size, that's quite ambitious. We'll need to move fast through discovery and start building quickly.
+
+[03:50] Sarah: I understand. Our executive team is committed to making this happen. Whatever resources you need from our side, we'll make available.
+
+[04:05] Mark: Great to hear. One more question about your brands - you mentioned shared customer database. Should a customer be able to use the same login across all four brands?
+
+[04:25] Sarah: Absolutely. That's critical. If someone creates an account on Brand A, they should be able to log in on Brand B, C, and D with the same credentials. And their loyalty points should be shareable across brands too.
+
+[04:45] Jennifer: Interesting. And for inventory - you said SAP is the source of truth. Should Shopify ever update inventory levels, or is it read-only?
+
+[05:00] Sarah: Hmm, good question. I think SAP should be the master, but if an order happens on Shopify, obviously that inventory needs to decrement. So I guess Shopify needs read-write access?
+
+[05:20] Jennifer: Okay, we'll need to define that data flow more clearly in the technical specs. What about your fulfillment process?
+
+[05:35] Sarah: Orders go to ShipStation, they handle all our 3PL coordination. We have warehouses on East Coast and West Coast.
+
+[05:50] Mark: Perfect. And payment processing - you mentioned Stripe and PayPal. Any specific requirements there?
+
+[06:05] Sarah: We need to support both, plus we want to add Apple Pay and Google Pay eventually. Our average order value is around $150, so checkout needs to be smooth and secure.
+
+[06:25] Jennifer: Makes sense. What about your subscription products? The RFP mentioned complex bundling.
+
+[06:40] Sarah: Yes, we have subscription boxes for three of our brands. Customers can customize what goes in the box, and we have different frequencies - monthly, quarterly, annual. We also have product bundles that change based on inventory availability.
+
+[07:00] Jennifer: That's going to require some custom logic. Do you currently have APIs for that, or is it built into your platform?
+
+[07:15] Sarah: It's built into our current platform. We'll need to replicate that functionality, but ideally make it more flexible. Our merchandising team wants to create new bundles without developer involvement.
+
+[07:35] Mark: Understood. One last thing - your success criteria mentioned "seamless customer experience." What does that look like for you?
+
+[07:50] Sarah: Customers shouldn't even notice we migrated. Same products, same URLs, same shopping experience. If anything, it should be better - faster page loads, easier checkout. And definitely no lost customer data or order history.
+
+[08:10] Mark: Absolutely. We'll put together a detailed proposal addressing all of this. Should have that to you by end of week.
+
+[08:25] Sarah: Perfect. Looking forward to it.
+
+[08:30] END OF CALL
+

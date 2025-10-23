@@ -131,12 +131,15 @@ offbench-shopify/
 
 ## Development Status
 
-🚧 **Active Development** - This tool is being built iteratively. Current focus areas:
+✅ **Latest Update** - Resolution & Clarification Support + Demo Mode Evaluation Framework
 - ✅ Document ingestion pipeline
 - ✅ Analysis engine for gap detection
 - ✅ Confidence scoring algorithm
 - ✅ Template-based plan generation
-- ✅ **Convex integration for admin portal observability**
+- ✅ Convex integration for admin portal observability
+- ✅ **Resolution & clarification field support**
+- ✅ **Demo mode for testing**
+- ✅ **Comprehensive evaluation framework**
 
 ## Convex Integration (Admin Portal)
 
@@ -174,9 +177,34 @@ The admin portal (separate repo) reads from Convex to display:
 
 See `mcp/convex/README.md` for complete setup instructions.
 
+## Evaluation & Testing
+
+### Resolution & Clarification Testing
+New features added to support resolution of conflicts and clarification of ambiguities, with comprehensive evaluation framework:
+
+**Quick Start**: [`docs/evaluation/START-HERE-EVAL.md`](docs/evaluation/START-HERE-EVAL.md)  
+**Demo Mode**: [`docs/demo-mode/DEMO-MODE-QUICK-START.md`](docs/demo-mode/DEMO-MODE-QUICK-START.md)  
+**Complete Docs**: [`docs/README.md`](docs/README.md)
+
+### Quick Test
+```bash
+# Enable demo mode
+export DEMO_MODE=true
+
+# Run automated test
+python test_resolution_workflow.py --run-full --demo
+
+# Or use AI agent prompts
+open agent-prompts/SCENARIO-A-BASIC-CONFLICT.md
+```
+
+See [`docs/`](docs/) for complete documentation organized by purpose.
+
 ## For Developers
 
 See `AGENTS.md` for detailed development principles, core concepts, and system component guidance.
+
+See [`docs/implementation/`](docs/implementation/) for technical implementation details and deliverables manifest.
 
 ## License
 

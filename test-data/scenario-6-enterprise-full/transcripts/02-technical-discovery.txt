@@ -1,0 +1,105 @@
+TECHNICAL DISCOVERY SESSION
+Date: January 29, 2024
+Participants: 
+- David Kim (TechStyle CTO)
+- Maria Santos (TechStyle Lead Developer)
+- Sarah Chen (TechStyle Director of E-Commerce)
+- Jennifer Wu (Our Technical Lead)
+- Alex Thompson (Our Solutions Architect)
+
+[00:00] Jennifer: Thanks everyone for joining. Today we want to dive deeper into your technical architecture and integration points.
+
+[00:15] David: Happy to help. Let me start with our current tech stack overview.
+
+[00:30] David: We have SAP for financials and order management, but actually, Shopify will be our inventory source of truth once we migrate. We want to move away from SAP managing inventory because it's too rigid and slow to update.
+
+[00:50] Sarah: Wait, David, I thought we agreed SAP was going to remain the master for inventory?
+
+[01:05] David: No, that was the old plan. After our internal tech review last week, we decided Shopify should be the master. SAP will receive inventory updates from Shopify, not the other way around. This gives us more flexibility and real-time accuracy.
+
+[01:30] Sarah: Hmm, okay. I must have missed that email. So Shopify is the inventory master then.
+
+[01:40] Alex: Just to clarify - this is a significant architectural decision. If Shopify is the source of truth for inventory, we need to ensure all your inventory management processes work through Shopify's interface or API.
+
+[01:58] David: Correct. Our warehouse management system will update Shopify directly via API, and then Shopify will sync to SAP for reporting purposes.
+
+[02:15] Maria: I should also mention our fulfillment workflow. Orders come into Shopify, they need to go to ShipStation, which then coordinates with our 3PLs. But for certain high-value orders over $500, we need manual review before fulfillment.
+
+[02:35] Jennifer: Okay, that's an important business rule. How do you handle that currently?
+
+[02:48] Maria: Currently our customer service team gets a notification and they approve or flag the order in our admin system. We'd need similar functionality in Shopify.
+
+[03:05] Alex: Got it. We can build that with order tagging and workflow apps. Now, about Salesforce - you mentioned it's your master customer database.
+
+[03:22] David: Yes, Salesforce is definitive for customer data. All customer information, purchase history, support tickets - everything lives there.
+
+[03:40] Sarah: Actually, purchase history should come from Shopify, right? Since that's where the orders happen?
+
+[03:52] David: Good point. Salesforce is master for customer profile data - name, email, phone, addresses. But order history needs to flow from Shopify to Salesforce.
+
+[04:08] Jennifer: So it's bidirectional? Customer profile from Salesforce to Shopify, and orders from Shopify back to Salesforce?
+
+[04:22] David: Exactly.
+
+[04:28] Alex: What about customer creation? If someone creates an account on Shopify, does that create a Salesforce record, or do they have to already exist in Salesforce?
+
+[04:45] Sarah: New customers on Shopify should automatically create a Salesforce record. Most of our customers come through the website, not through sales team outreach.
+
+[05:00] David: Agreed, though we'll need to make sure the data fields map correctly.
+
+[05:15] Maria: I want to bring up our subscription system. We have about 15,000 active subscribers across our brands. The subscription logic is complex - different products, different frequencies, ability to skip months, swap items.
+
+[05:35] Jennifer: Are you using a subscription app on your current platform, or is it custom built?
+
+[05:48] Maria: It's custom built. We've looked at Recharge and other Shopify subscription apps, but they don't support our level of customization. We'll probably need custom development.
+
+[06:05] Alex: Noted. That will likely be one of the more complex pieces. What about your product catalog - you mentioned 50,000 SKUs. Are these all standard products or do you have variants?
+
+[06:25] David: Mix of both. Some products have 20+ variants - different colors, sizes, materials. We also have configurable products where customers can choose custom options.
+
+[06:45] Jennifer: And those all need to migrate with their full variant structure and product relationships?
+
+[06:58] David: Yes, maintaining product relationships is critical. We have frequently bought together, product bundles, upsells - all of that needs to carry over.
+
+[07:15] Alex: Understood. Let's talk about performance requirements. Sarah mentioned "fast" in the initial call. Can we define specific performance targets?
+
+[07:35] Sarah: Our current site has a page load time of about 3-4 seconds, and we get customer complaints. We want to be under 2 seconds ideally.
+
+[07:50] David: Actually, industry best practice is under 1 second for page loads. We should target that.
+
+[08:05] Sarah: Is that realistic with all our product images and customization?
+
+[08:18] Alex: With proper optimization, lazy loading, and CDN configuration, we can definitely get close. We typically see Shopify Plus stores in the 1-2 second range for fully loaded pages.
+
+[08:35] David: Good. And checkout needs to be under 500 milliseconds per step.
+
+[08:48] Jennifer: That's aggressive but achievable. What about your data migration timeline?
+
+[09:00] Maria: We need to migrate in phases. Start with products, then customers, then we can go live. Orders can continue on old platform until cutover.
+
+[09:18] Sarah: Wait, I thought we were doing a full cutover all at once?
+
+[09:28] David: No, phased approach is safer. Reduces risk of data loss.
+
+[09:40] Sarah: Okay, as long as we hit the May launch date.
+
+[09:50] David: That's still the target. Aggressive, but doable.
+
+[10:05] Alex: We'll need to map out the phased approach in detail. Any other technical constraints we should know about?
+
+[10:20] Maria: We have some custom tax calculations based on product categories and customer location. Standard Shopify tax engine won't work for us.
+
+[10:38] Jennifer: Can you provide documentation on those tax rules?
+
+[10:48] Maria: Yes, I'll send that over. It's about 50 pages of tax logic across different states and countries.
+
+[11:05] David: One more thing - we need to maintain our current URL structure for SEO. We have thousands of pages indexed and can't lose that traffic.
+
+[11:22] Alex: Understood. We'll implement redirects for any URL changes and work to preserve as much structure as possible.
+
+[11:38] Jennifer: Great. I think we have what we need to put together a technical specification. We'll document all of this and send it over for review.
+
+[11:55] David: Perfect. Thanks for the thorough discussion.
+
+[12:00] END OF SESSION
+

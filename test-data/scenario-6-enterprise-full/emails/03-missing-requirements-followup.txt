@@ -1,0 +1,68 @@
+From: Jennifer Wu <jennifer.wu@lazertechnologies.com>
+To: Sarah Chen <sarah.chen@techstylecommerce.com>, David Kim <david.kim@techstylecommerce.com>
+Date: February 8, 2024
+Subject: Missing Requirements - Need Clarification Before Technical Spec
+
+Hi Sarah and David,
+
+As we're finalizing the technical specification, I've identified several areas where we need more information. These gaps could impact project scope and timeline:
+
+1. RETURN & REFUND HANDLING
+I don't see documentation on your return/refund process. Key questions:
+- What's your return window? (30 days, 60 days, 90 days?)
+- Do returns create store credit, refund to original payment method, or both?
+- How are partial returns handled?
+- Do you charge restocking fees?
+- How do returns affect inventory? (return to stock immediately or after inspection?)
+
+This is critical for SAP integration and customer experience.
+
+2. TAX CALCULATION
+Your RFP mentions "secure payment processing" but I don't see tax requirements:
+- Are you using Shopify's native tax engine or a third-party service (Avalara, TaxJar)?
+- Do you have nexus in multiple states?
+- Any special tax exemption rules for B2B customers?
+- How are tax calculations handled for subscriptions?
+
+Maria mentioned custom tax rules - we need that documentation ASAP.
+
+3. ERROR HANDLING & MONITORING
+What happens when integrations fail?
+- If Shopify → SAP order sync fails, how should we handle it?
+- If inventory sync from WMS fails, what's the fallback?
+- What's your acceptable downtime for each integration?
+- Who gets notified when something breaks?
+- Do you have existing monitoring tools we should integrate with?
+
+4. AUTHENTICATION & SECURITY
+- What OAuth flows do you support?
+- Any IP whitelisting requirements?
+- Data encryption requirements beyond standard HTTPS?
+- PCI compliance requirements?
+- API rate limiting preferences?
+
+5. EDGE CASES
+- How do you handle orders that span multiple warehouses?
+- What happens if a customer tries to use a gift card across multiple brands?
+- How are backorders managed?
+- What if a customer changes their subscription while an order is processing?
+
+6. SUCCESS METRICS
+Your RFP mentions "all integrations working properly" as success criteria. Can we define specific KPIs?
+- Order sync success rate? (99%? 99.9%?)
+- Inventory accuracy threshold? (99.5%?)
+- Acceptable data discrepancy rate between systems?
+- Page load time targets? (we have these now, thank you!)
+- Conversion rate targets?
+
+Without these details, we risk building something that doesn't meet your actual needs. Can we schedule a working session next week to address these gaps?
+
+Best regards,
+Jennifer
+
+---
+Jennifer Wu
+Technical Lead
+Lazer Technologies
+jennifer.wu@lazertechnologies.com
+

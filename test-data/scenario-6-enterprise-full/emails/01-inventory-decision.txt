@@ -1,0 +1,46 @@
+From: David Kim <david.kim@techstylecommerce.com>
+To: Sarah Chen <sarah.chen@techstylecommerce.com>, Maria Santos <maria.santos@techstylecommerce.com>, Jennifer Wu <jennifer.wu@lazertechnologies.com>
+Date: February 2, 2024
+Subject: DECISION: Inventory Source of Truth for Shopify Migration
+
+Team,
+
+After our technical discovery session and follow-up discussions with our infrastructure team, I want to clarify the final decision on inventory management architecture.
+
+DECISION: Shopify will be the source of truth for inventory levels.
+
+Here's the rationale:
+
+1. REAL-TIME ACCURACY
+Shopify's inventory management with webhooks provides true real-time updates across all channels. SAP's inventory module has a minimum 5-minute sync cycle, which causes the overselling issues we currently experience.
+
+2. CHANNEL CONSISTENCY
+With Shopify as master, all sales channels (web, mobile app, future marketplaces) pull from one source. This eliminates the sync delays and discrepancies we've been fighting.
+
+3. SIMPLIFIED INTEGRATION
+Our WMS (warehouse management system) already has native Shopify integration. Moving inventory master to Shopify means one less integration point to maintain.
+
+4. SCALABILITY
+As we expand to more brands and channels, Shopify's inventory system scales better than SAP's rigid structure.
+
+IMPLEMENTATION APPROACH:
+- WMS updates Shopify inventory via API (real-time)
+- Shopify pushes inventory snapshots to SAP every hour for financial reporting
+- SAP remains master for: financial data, purchase orders, vendor management
+- Shopify becomes master for: inventory levels, product catalog, pricing
+
+This decision is final and has executive approval from our COO and CFO.
+
+Sarah, I know this is different from our initial conversation, but after analyzing our pain points, this architecture solves more problems. The team agrees this is the right path forward.
+
+Jennifer, please update the technical specifications to reflect Shopify as inventory master. Let me know if you need any clarification.
+
+Thanks,
+David
+
+---
+David Kim
+Chief Technology Officer
+TechStyle Commerce
+david.kim@techstylecommerce.com
+

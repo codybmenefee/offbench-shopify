@@ -55,6 +55,7 @@ class Ambiguity:
     context: str
     clarification_needed: str
     priority: Priority
+    clarification: Optional[str] = None
     
     def to_dict(self) -> dict:
         """Convert to dictionary for serialization."""
@@ -63,6 +64,7 @@ class Ambiguity:
             "context": self.context,
             "clarification_needed": self.clarification_needed,
             "priority": self.priority.value,
+            "clarification": self.clarification,
         }
 
 
@@ -75,6 +77,7 @@ class Conflict:
     sources: List[str]
     resolution_needed: str
     priority: Priority
+    resolution: Optional[str] = None
     
     def to_dict(self) -> dict:
         """Convert to dictionary for serialization."""
@@ -84,6 +87,7 @@ class Conflict:
             "sources": self.sources,
             "resolution_needed": self.resolution_needed,
             "priority": self.priority.value,
+            "resolution": self.resolution,
         }
 
 

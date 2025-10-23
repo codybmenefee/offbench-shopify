@@ -1,0 +1,58 @@
+From: Sarah Chen <sarah.chen@techstylecommerce.com>
+To: Jennifer Wu <jennifer.wu@lazertechnologies.com>, Alex Thompson <alex.thompson@lazertechnologies.com>
+CC: David Kim <david.kim@techstylecommerce.com>
+Date: February 5, 2024
+Subject: RE: Clarification on Performance Requirements
+
+Hi Jennifer and Alex,
+
+Thanks for the follow-up questions on performance requirements. You're right that terms like "fast" and "real-time" need specific definitions. Here are the concrete requirements from our product team:
+
+INVENTORY SYNC TIMING:
+When I said "real-time inventory," here's what we actually need:
+- Inventory updates must propagate across all brands within 30 seconds maximum
+- Webhook triggers from WMS should fire within 5 seconds of inventory change
+- If an order is placed, inventory decrement must happen within 10 seconds
+- Customers should never see "Add to Cart" for out-of-stock items (immediate unavailability)
+
+PAGE LOAD PERFORMANCE:
+- Homepage: Under 2 seconds for full page load (including all images)
+- Product pages: Under 1.5 seconds
+- Collection pages: Under 2 seconds
+- Cart/Checkout: Under 1 second per step
+
+CHECKOUT SPEED:
+When I said checkout should be "quick," here are our targets:
+- Add to cart response: Under 500ms
+- Proceed to checkout: Under 300ms
+- Payment processing: Under 2 seconds
+- Order confirmation: Immediate (under 1 second)
+
+Our analytics show that every additional second of checkout time costs us 5% in conversion rate, so these targets are based on real business impact.
+
+API RESPONSE TIMES:
+- Product catalog API: Under 200ms for search/filter
+- Customer data API: Under 100ms
+- Order submission API: Under 500ms
+
+SCALABILITY TARGETS:
+You asked what "scalable" means for us. Here are our projections:
+- Current: 50,000 orders/month average, 5,000 peak day
+- Year 1: 100,000 orders/month, 10,000 peak day
+- Year 3: 250,000 orders/month, 25,000 peak day (Black Friday/Cyber Monday)
+- Concurrent users during peak: 5,000-10,000
+
+The system needs to handle 3x our current volume without performance degradation.
+
+Does this give you the specificity you need for the technical specs?
+
+Best,
+Sarah
+
+---
+Sarah Chen
+Director of E-Commerce
+TechStyle Commerce
+sarah.chen@techstylecommerce.com
+(415) 555-0123
+

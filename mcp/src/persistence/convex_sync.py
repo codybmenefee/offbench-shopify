@@ -31,11 +31,20 @@ class ConvexSync:
         return priority_value.lower()
 
     def _tenant_context(self) -> Dict[str, Any]:
+        """Get tenant context, respecting demo mode."""
         ctx: Dict[str, Any] = {}
-        if getattr(config, "MCP_USER_ID", None):
-            ctx["userId"] = config.MCP_USER_ID
-        if getattr(config, "MCP_ORG_ID", None):
-            ctx["orgId"] = config.MCP_ORG_ID
+        
+        # Check if demo mode is enabled
+        if config.is_demo_mode():
+            # Use demo context
+            ctx.update(config.get_demo_context())
+        else:
+            # Use regular tenant context
+            if getattr(config, "MCP_USER_ID", None):
+                ctx["userId"] = config.MCP_USER_ID
+            if getattr(config, "MCP_ORG_ID", None):
+                ctx["orgId"] = config.MCP_ORG_ID
+        
         return ctx
 
     def _ensure_project(self, scenario_id: str, name: str) -> str:
@@ -159,7 +168,8 @@ class ConvexSync:
             if gap.suggested_question:
                 args["suggestedQuestion"] = gap.suggested_question
             gap_id = self.client.mutation("mutations/gaps:create", args)
-            created_ids.append(gap_id if isinstance(gap_id, str) else gap_id.get("_id", gap_id))
+            if gap_id:
+                created_ids.append(gap_id if isinstance(gap_id, str) else gap_id.get("_id", gap_id))
         return created_ids
 
     def sync_conflicts(self, project_convex_id: str, conflicts: List[Conflict], identified_date: Optional[datetime] = None) -> List[str]:
@@ -181,20 +191,29 @@ class ConvexSync:
         
         created_ids: List[str] = []
         for conflict in conflicts:
+            # Determine status based on whether resolution exists
+            status = "resolved" if conflict.resolution else "open"
+            
             args = {
                 "projectId": project_convex_id,
                 "category": conflict.topic,
                 "description": conflict.resolution_needed,
                 "impact": self._map_impact(conflict.priority.value),
                 "priority": self._map_priority(conflict.priority.value),
-                "status": "open",
+                "status": status,
                 "identifiedDate": timestamp,
                 "conflictingStatements": conflict.conflicting_statements,
                 "sources": conflict.sources,
                 **self._tenant_context(),
             }
+            
+            # Include resolution if present
+            if conflict.resolution:
+                args["resolution"] = conflict.resolution
+            
             conflict_id = self.client.mutation("mutations/conflicts:create", args)
-            created_ids.append(conflict_id if isinstance(conflict_id, str) else conflict_id.get("_id", conflict_id))
+            if conflict_id:
+                created_ids.append(conflict_id if isinstance(conflict_id, str) else conflict_id.get("_id", conflict_id))
         return created_ids
 
     def sync_ambiguities(self, project_convex_id: str, ambiguities: List[Ambiguity], identified_date: Optional[datetime] = None) -> List[str]:
@@ -216,19 +235,28 @@ class ConvexSync:
         
         created_ids: List[str] = []
         for ambiguity in ambiguities:
+            # Determine status based on whether clarification exists
+            status = "clarified" if ambiguity.clarification else "open"
+            
             args = {
                 "projectId": project_convex_id,
                 "category": "clarity",
                 "description": ambiguity.term,
                 "impact": self._map_impact(ambiguity.priority.value),
                 "clarificationNeeded": ambiguity.clarification_needed,
-                "status": "open",
+                "status": status,
                 "identifiedDate": timestamp,
                 "context": ambiguity.context,
                 **self._tenant_context(),
             }
+            
+            # Include clarification if present
+            if ambiguity.clarification:
+                args["clarification"] = ambiguity.clarification
+            
             amb_id = self.client.mutation("mutations/ambiguities:create", args)
-            created_ids.append(amb_id if isinstance(amb_id, str) else amb_id.get("_id", amb_id))
+            if amb_id:
+                created_ids.append(amb_id if isinstance(amb_id, str) else amb_id.get("_id", amb_id))
         return created_ids
 
     def sync_questions(self, project_convex_id: str, questions: List[Dict[str, Any]]) -> List[str]:
@@ -259,7 +287,8 @@ class ConvexSync:
             if "why_it_matters" in q:
                 args["whyItMatters"] = q["why_it_matters"]
             q_id = self.client.mutation("mutations/questions:add", args)
-            created_ids.append(q_id if isinstance(q_id, str) else q_id.get("_id", q_id))
+            if q_id:
+                created_ids.append(q_id if isinstance(q_id, str) else q_id.get("_id", q_id))
         return created_ids
 
     def sync_documents(self, project_convex_id: str, project: ProjectState) -> List[str]:
@@ -307,8 +336,75 @@ class ConvexSync:
             if hasattr(doc, 'summary') and doc.summary:
                 args["summary"] = doc.summary
             doc_id = self.client.mutation("mutations/documents:create", args)
-            created_ids.append(doc_id if isinstance(doc_id, str) else doc_id.get("_id", doc_id))
+            if doc_id:
+                created_ids.append(doc_id if isinstance(doc_id, str) else doc_id.get("_id", doc_id))
         return created_ids
+
+    def update_conflict_resolution(self, conflict_id: str, resolution: str, project_id: str) -> str:
+        """
+        Update an existing conflict with a resolution.
+        
+        Args:
+            conflict_id: Convex conflict ID
+            resolution: Resolution text
+            project_id: Project ID for event logging
+            
+        Returns:
+            Conflict ID
+        """
+        result = self.client.mutation(
+            "mutations/conflicts:updateConflictResolution",
+            {
+                "conflictId": conflict_id,
+                "resolution": resolution,
+            }
+        )
+        
+        # Log event
+        try:
+            self.log_event(
+                project_id,
+                "conflict_resolved",
+                f"Conflict resolved: {resolution[:100]}...",
+                {"conflict_id": conflict_id}
+            )
+        except Exception:
+            pass
+        
+        return result
+
+    def update_ambiguity_clarification(self, ambiguity_id: str, clarification: str, project_id: str) -> str:
+        """
+        Update an existing ambiguity with a clarification.
+        
+        Args:
+            ambiguity_id: Convex ambiguity ID
+            clarification: Clarification text
+            project_id: Project ID for event logging
+            
+        Returns:
+            Ambiguity ID
+        """
+        result = self.client.mutation(
+            "mutations/ambiguities:updateAmbiguityClarification",
+            {
+                "ambiguityId": ambiguity_id,
+                "clarification": clarification,
+            }
+        )
+        
+        # Log event
+        try:
+            self.log_event(
+                project_id,
+                "ambiguity_clarified",
+                f"Ambiguity clarified: {clarification[:100]}...",
+                {"ambiguity_id": ambiguity_id}
+            )
+        except Exception:
+            pass
+        
+        return result
 
     def log_event(
         self,

@@ -10,6 +10,7 @@ export const syncAmbiguities = mutation({
         description: v.string(),
         impact: v.union(v.literal("high"), v.literal("medium"), v.literal("low")),
         clarificationNeeded: v.string(),
+        clarification: v.optional(v.string()),
         status: v.union(
           v.literal("open"),
           v.literal("clarified"),
@@ -49,6 +50,42 @@ export const updateAmbiguityStatus = mutation({
       status: args.status,
     });
     return args.ambiguityId;
+  },
+});
+
+export const updateAmbiguityClarification = mutation({
+  args: {
+    ambiguityId: v.id("ambiguities"),
+    clarification: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.ambiguityId, {
+      clarification: args.clarification,
+      status: "clarified",
+    });
+    return args.ambiguityId;
+  },
+});
+
+export const create = mutation({
+  args: {
+    projectId: v.id("projects"),
+    category: v.string(),
+    description: v.string(),
+    impact: v.union(v.literal("high"), v.literal("medium"), v.literal("low")),
+    clarificationNeeded: v.string(),
+    clarification: v.optional(v.string()),
+    status: v.union(
+      v.literal("open"),
+      v.literal("clarified"),
+      v.literal("resolved")
+    ),
+    identifiedDate: v.number(),
+    context: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const ambiguityId = await ctx.db.insert("ambiguities", args);
+    return ambiguityId;
   },
 });
 

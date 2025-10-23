@@ -1,0 +1,67 @@
+TECHSTYLE COMMERCE
+Brand Guidelines Summary
+Updated: December 2023
+
+BRAND PORTFOLIO
+
+Brand A: "Luxe Living" - Premium home goods
+Brand B: "Active Edge" - Athletic wear and fitness
+Brand C: "Urban Style" - Contemporary fashion
+Brand D: "Eco Essentials" - Sustainable lifestyle products
+
+SHARED BRAND PRINCIPLES
+
+1. Customer-Centric Design
+All brands prioritize user experience. Navigation should be simple and intuitive across all properties.
+
+2. Mobile-First Approach
+70% of our traffic is mobile. Every design decision must prioritize mobile experience.
+
+3. Trust & Security
+Payment pages must display trust badges prominently. Customer data security is non-negotiable.
+
+TECHNICAL REQUIREMENTS
+
+Logo Assets:
+- SVG format for web (scalable, fast loading)
+- PNG fallbacks for email
+- Minimum size: 120px width
+
+Color Consistency:
+- Brand A: #2C3E50 (navy), #E8B84A (gold)
+- Brand B: #FF6B35 (coral), #004E89 (blue)
+- Brand C: #1A1A1A (black), #FFFFFF (white)
+- Brand D: #2D6A4F (green), #F4A261 (tan)
+
+Typography:
+- Headings: Montserrat (Google Fonts)
+- Body: Open Sans (Google Fonts)
+- Load fonts asynchronously to avoid blocking page render
+
+Performance Impact:
+- Total brand assets (logos, fonts, icons) should load in under 500ms
+- Use CDN for all brand assets
+- Implement lazy loading for below-fold images
+
+CROSS-BRAND FEATURES
+
+Shared Customer Accounts:
+Customers can use one login across all brands. Profile page should show orders from all brands with brand-specific styling.
+
+Loyalty Program:
+Points earned on any brand can be redeemed on any other brand. Badge display should adapt to current brand colors.
+
+Customer Service:
+Live chat should be available 24/7. Chat widget should match brand colors but remain consistent in functionality.
+
+MIGRATION REQUIREMENTS
+
+During migration, maintain brand consistency throughout process:
+- No broken images or missing logos
+- Preserve all brand-specific landing pages
+- Maintain SEO structure for brand-specific URLs
+- Test cross-brand account sharing thoroughly before launch
+
+Contact: Michelle Torres, Brand Director
+Email: michelle.torres@techstylecommerce.com
+

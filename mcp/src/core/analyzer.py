@@ -246,7 +246,7 @@ class DiscoveryAnalyzer:
         return gaps
     
     def _detect_ambiguities(self, content: str) -> List[Ambiguity]:
-        """Detect ambiguous or vague terms."""
+        """Detect ambiguous or vague terms and search for clarifications."""
         ambiguities = []
         
         for term in self.AMBIGUOUS_TERMS:
@@ -257,7 +257,7 @@ class DiscoveryAnalyzer:
             for match in matches:
                 context = match.group(1).strip()
                 
-                clarifications = {
+                clarifications_needed = {
                     "real-time": "Please specify exact sync timing: instant webhooks, sub-second, within 5 minutes?",
                     "fast": "What is the specific performance requirement? Response time in milliseconds?",
                     "quick": "What is the specific time requirement?",
@@ -267,22 +267,74 @@ class DiscoveryAnalyzer:
                     "approximately": "What is the exact figure or acceptable range?",
                 }
                 
-                clarification = clarifications.get(term.lower(), 
+                clarification_needed = clarifications_needed.get(term.lower(), 
                                                   f"Please provide specific details instead of '{term}'")
+                
+                # Search for clarification in the content
+                clarification_found = self._search_for_clarification(term, content)
                 
                 ambiguity = Ambiguity(
                     term=term,
                     context=context,
-                    clarification_needed=clarification,
-                    priority=Priority.MEDIUM
+                    clarification_needed=clarification_needed,
+                    priority=Priority.MEDIUM,
+                    clarification=clarification_found
                 )
                 ambiguities.append(ambiguity)
                 break  # Only report each term once
         
         return ambiguities
     
+    def _search_for_clarification(self, term: str, content: str) -> str:
+        """
+        Search for clarification of an ambiguous term in documents.
+        Only returns clarification if explicitly stated, never infers.
+        
+        Args:
+            term: The ambiguous term to clarify
+            content: All document content to search
+            
+        Returns:
+            Clarification text if found, None otherwise
+        """
+        # Look for clarification patterns near the term
+        # Pattern: term followed by specific details
+        clarification_patterns = {
+            "real-time": [
+                rf'{term}.{{0,100}}(?:within|under|less than)\s+(\d+\s*(?:seconds?|minutes?|milliseconds?))',
+                rf'{term}.{{0,100}}(?:webhook|instant|immediately)',
+            ],
+            "fast": [
+                rf'{term}.{{0,100}}(?:within|under|less than)\s+(\d+\s*(?:seconds?|minutes?|milliseconds?))',
+                rf'{term}.{{0,100}}(?:response time|load time|performance).{{0,50}}(\d+\s*(?:ms|seconds?))',
+            ],
+            "scalable": [
+                rf'{term}.{{0,100}}(?:up to|support|handle)\s+([\d,]+)\s*(?:orders?|users?|transactions?|requests?)',
+            ],
+            "soon": [
+                rf'{term}.{{0,100}}(?:within|in|by)\s+(\d+\s*(?:days?|weeks?|months?))',
+            ],
+        }
+        
+        patterns = clarification_patterns.get(term.lower(), [])
+        for pattern in patterns:
+            match = re.search(pattern, content, re.IGNORECASE | re.DOTALL)
+            if match:
+                # Extract the surrounding context (200 chars) that contains the clarification
+                match_pos = match.start()
+                start = max(0, match_pos - 100)
+                end = min(len(content), match_pos + 200)
+                clarification_context = content[start:end].strip()
+                
+                # Clean up and return
+                clarification_context = " ".join(clarification_context.split())
+                if len(clarification_context) > 20:  # Only return if substantial
+                    return clarification_context
+        
+        return None
+    
     def _detect_conflicts(self, documents: List[Document]) -> List[Conflict]:
-        """Detect conflicting information between documents/stakeholders."""
+        """Detect conflicting information between documents/stakeholders and search for resolutions."""
         conflicts = []
         
         # Look for conflicting statements about system of record
@@ -299,18 +351,81 @@ class DiscoveryAnalyzer:
                             if "source" in sentence.lower() or "master" in sentence.lower():
                                 inventory_mentions.append({
                                     "statement": sentence.strip(),
-                                    "source": doc.file_path
+                                    "source": doc.file_path,
+                                    "doc": doc
                                 })
         
         if len(inventory_mentions) > 1:
+            # Search for resolution
+            resolution = self._search_for_resolution("inventory system of record", documents)
+            
             conflict = Conflict(
                 topic="Inventory System of Record",
                 conflicting_statements=[m["statement"] for m in inventory_mentions],
                 sources=[m["source"] for m in inventory_mentions],
                 resolution_needed="Clarify which system is the definitive source of truth for inventory levels",
-                priority=Priority.HIGH
+                priority=Priority.HIGH,
+                resolution=resolution
             )
             conflicts.append(conflict)
         
         return conflicts
+    
+    def _search_for_resolution(self, conflict_topic: str, documents: List[Document]) -> str:
+        """
+        Search for resolution of a conflict in documents.
+        Only returns resolution if explicitly stated, never infers.
+        
+        Args:
+            conflict_topic: The topic of the conflict
+            documents: List of documents to search
+            
+        Returns:
+            Resolution text if found, None otherwise
+        """
+        # Look for resolution patterns
+        resolution_keywords = [
+            "decided", "decision", "agreed", "final decision", "conclusion",
+            "resolved", "settled on", "confirmed", "ultimately", "clarification"
+        ]
+        
+        all_content = "\n\n".join([doc.content for doc in documents])
+        
+        # Search for resolution statements related to the conflict topic
+        for keyword in resolution_keywords:
+            # Look for sentences containing both the keyword and topic-related terms
+            pattern = rf'([^.]*{keyword}[^.]*{conflict_topic.split()[0]}[^.]*\.)'
+            matches = re.finditer(pattern, all_content, re.IGNORECASE | re.DOTALL)
+            
+            for match in matches:
+                resolution_text = match.group(1).strip()
+                # Ensure it's substantial (not just a passing mention)
+                if len(resolution_text) > 30:
+                    # Extract surrounding context for better clarity
+                    match_pos = match.start()
+                    start = max(0, match_pos - 50)
+                    end = min(len(all_content), match_pos + 300)
+                    context = all_content[start:end].strip()
+                    context = " ".join(context.split())
+                    return context
+        
+        # Also look for "we will use X" or "X will be" statements
+        decision_patterns = [
+            rf'(?:we will use|using|use)\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)\s+(?:as|for).{{0,50}}{conflict_topic.split()[0]}',
+            rf'{conflict_topic.split()[0]}.{{0,30}}(?:will be|is)\s+([A-Z][a-zA-Z]+)',
+        ]
+        
+        for pattern in decision_patterns:
+            match = re.search(pattern, all_content, re.IGNORECASE)
+            if match:
+                # Extract context around the match
+                match_pos = match.start()
+                start = max(0, match_pos - 50)
+                end = min(len(all_content), match_pos + 200)
+                context = all_content[start:end].strip()
+                context = " ".join(context.split())
+                if len(context) > 30:
+                    return context
+        
+        return None
 
