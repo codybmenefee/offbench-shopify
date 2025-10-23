@@ -73,6 +73,7 @@ class ConvexSync:
         create_args = {
             "name": name,
             "scenarioId": scenario_id,
+            "confidence": 0,  # Default confidence for new projects
             "status": "active",
             **self._tenant_context(),
         }
